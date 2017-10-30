@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "506662140461",
+    "firebase_url": "https://wefit-project.firebaseio.com",
+    "project_id": "wefit-project",
+    "storage_bucket": "wefit-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506662140461:android:32af0d1b96428ee9",
+        "android_client_info": {
+          "package_name": "wefit.com.wefit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506662140461-frgoq1ifllblne9bhejqeee7f6djbqnl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "wefit.com.wefit",
+            "certificate_hash": "ca94fc9bcb126705dbae93b4ebde0a83f46ad9d0"
+          }
+        },
+        {
+          "client_id": "506662140461-ub4nvuncdgmj8sarb13manpfd1ekcilp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF9U9Kq0pecWyr87x5uC0AWs4_owMuBQs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506662140461-ub4nvuncdgmj8sarb13manpfd1ekcilp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

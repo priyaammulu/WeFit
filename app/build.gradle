@@ -34,4 +34,8 @@ dependencies {
 
     // facebook login dependency
     compile 'com.facebook.android:facebook-login:4.27.0'
+
 }
+
+// firebase
+apply plugin: 'com.google.gms.google-services'
