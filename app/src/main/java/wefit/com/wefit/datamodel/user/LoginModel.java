@@ -1,5 +1,6 @@
-package wefit.com.wefit.datamodel;
+package wefit.com.wefit.datamodel.user;
 
+import android.content.Intent;
 import android.view.View;
 
 import java.util.Map;
@@ -16,6 +17,8 @@ public interface LoginModel {
     void configure(Map<LoginViewModel.Configuration, Object> configuration);
 
     void setHandlers(Map<LoginViewModel.Handlers, View> handlers);
+
+    void passActivityResults(int requestCode, int resultCode, Intent data);
 
 
 

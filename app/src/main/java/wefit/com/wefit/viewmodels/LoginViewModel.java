@@ -1,8 +1,11 @@
 package wefit.com.wefit.viewmodels;
 
+import android.content.Intent;
+import android.view.View;
+
 import java.util.Map;
 
-import wefit.com.wefit.datamodel.LoginModel;
+import wefit.com.wefit.datamodel.user.LoginModel;
 
 /**
  * Created by lorenzo on 10/28/17.
@@ -23,6 +26,14 @@ public class LoginViewModel {
 
         this.mLoginModel.configure(configuration);
 
+    }
+
+    public void passActivityResults(int requestCode, int resultCode, Intent data) {
+        mLoginModel.passActivityResults(requestCode, resultCode, data);
+    }
+
+    public void setHandlers(Map<LoginViewModel.Handlers, View> handlers) {
+        this.mLoginModel.setHandlers(handlers);
     }
 
     public enum Configuration {

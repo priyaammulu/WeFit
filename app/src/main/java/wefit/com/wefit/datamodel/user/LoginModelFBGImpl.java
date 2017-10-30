@@ -1,7 +1,7 @@
-package wefit.com.wefit.datamodel;
+package wefit.com.wefit.datamodel.user;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
@@ -12,7 +12,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import java.util.List;
 import java.util.Map;
 
 import wefit.com.wefit.viewmodels.LoginViewModel;
@@ -23,9 +22,16 @@ import wefit.com.wefit.viewmodels.LoginViewModel;
 
 public class LoginModelFBGImpl implements LoginModel {
 
-    // facebook handling
+    /**
+     * Facebook request handling
+     */
     CallbackManager fbCallbackManager;
-    // FacebookCallback<LoginResult> loginResultFacebookCallback;
+
+    /**
+     * Current logged user
+     */
+    FBUserImpl loggedUser;
+
 
     @Override
     public boolean isAuth() {
@@ -44,6 +50,13 @@ public class LoginModelFBGImpl implements LoginModel {
         
         configureFacebookLoginButtonAction((LoginButton) handlers.get(LoginViewModel.Handlers.FACEBOOK_HANDLER));
 
+    }
+
+    @Override
+    public void passActivityResults(int requestCode, int resultCode, Intent data) {
+
+        //Log.i("DATA USEFUL", data.);
+        fbCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void configureFacebookSDK(Context context) {
@@ -69,10 +82,12 @@ public class LoginModelFBGImpl implements LoginModel {
         @Override
         public void onSuccess(LoginResult loginResult) {
 
-            Log.i("LOGIN FB SUCCESS", "login success\n " +
-                    loginResult.getAccessToken().getUserId() + "\n" +
+            loggedUser = new FBUserImpl(
+                    loginResult.getAccessToken().getUserId(),
                     loginResult.getAccessToken().getToken()
             );
+
+            Log.i("LOGIN FB SUCCESS", loggedUser.toString());
 
         }
 
@@ -85,8 +100,7 @@ public class LoginModelFBGImpl implements LoginModel {
 
         @Override
         public void onError(FacebookException error) {
-            // donno what to do
-            //throw new
+            Log.i("ERROR", "i really donno");
         }
     }
 

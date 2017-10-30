@@ -1,9 +1,8 @@
-package wefit.com.wefit.datamodel;
+package wefit.com.wefit.datamodel.user;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
 
-import java.util.List;
 import java.util.Map;
 
 import wefit.com.wefit.viewmodels.LoginViewModel;
@@ -26,6 +25,11 @@ public class LoginModelImpl implements LoginModel {
 
     @Override
     public void setHandlers(Map<LoginViewModel.Handlers, View> handlers) {
+
+    }
+
+    @Override
+    public void passActivityResults(int requestCode, int resultCode, Intent data) {
 
     }
 

@@ -2,8 +2,8 @@ package wefit.com.wefit;
 
 import android.app.Application;
 
-import wefit.com.wefit.datamodel.LoginModel;
-import wefit.com.wefit.datamodel.LoginModelImpl;
+import wefit.com.wefit.datamodel.user.LoginModel;
+import wefit.com.wefit.datamodel.user.LoginModelFBGImpl;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
 /**
@@ -11,10 +11,15 @@ import wefit.com.wefit.viewmodels.LoginViewModel;
  */
 
 public class WefitApplication extends Application {
+
     private final LoginModel mLoginModel;
 
     public WefitApplication() {
-        mLoginModel = new LoginModelImpl();
+        //mLoginModel = new LoginModelImpl();
+
+        // model for login handling with FB and
+        mLoginModel = new LoginModelFBGImpl();
+
     }
 
     public LoginViewModel getLoginViewModel() {
