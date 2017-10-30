@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // facebook handling graphics
-        mFbLoginButton = (LoginButton) findViewById(R.id.facebook_login_btn);
+        mFbLoginButton = (LoginButton) this.findViewById(R.id.facebook_login_btn);
         //mLoginFacebookOutputText = (TextView) findViewById(R.id.facebook_status_textview);
 
         Map<LoginViewModel.Handlers, View> loginLayoutHandlers = new TreeMap<>();
