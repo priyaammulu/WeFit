@@ -12,7 +12,7 @@ buildscript {
         // in the individual module build.gradle files
 
         // firebase dependency
-        //classpath 'com.google.gms:google-services:3.1.1'
+        classpath 'com.google.gms:google-services:3.1.1'
     }
 }
 
