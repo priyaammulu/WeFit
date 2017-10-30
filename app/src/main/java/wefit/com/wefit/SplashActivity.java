@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import wefit.com.wefit.viewmodels.LoginViewModel;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override

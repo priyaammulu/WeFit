@@ -4,6 +4,7 @@ import android.app.Application;
 
 import wefit.com.wefit.datamodel.LoginModel;
 import wefit.com.wefit.datamodel.LoginModelImpl;
+import wefit.com.wefit.viewmodels.LoginViewModel;
 
 /**
  * Created by lorenzo on 10/28/17.

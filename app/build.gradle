@@ -35,6 +35,8 @@ dependencies {
     // facebook login dependency
     compile 'com.facebook.android:facebook-login:4.27.0'
 
+    // firebase login dep
+    compile 'com.google.firebase:firebase-auth:11.4.2'
 }
 
 // firebase
