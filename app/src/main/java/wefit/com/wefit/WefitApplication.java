@@ -16,11 +16,11 @@ public class WefitApplication extends Application {
         mLoginModel = new LoginModelImpl();
     }
 
-    public LoginModel getLoginModel() {
-        return mLoginModel;
-    }
-
     public LoginViewModel getLoginViewModel() {
         return new LoginViewModel(getLoginModel());
+    }
+
+    private LoginModel getLoginModel() {
+        return mLoginModel;
     }
 }
