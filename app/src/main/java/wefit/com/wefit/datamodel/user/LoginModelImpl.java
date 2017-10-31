@@ -1,18 +1,13 @@
 package wefit.com.wefit.datamodel.user;
 
-import android.content.Intent;
 import android.util.Log;
-import android.view.View;
 
-import java.util.Map;
-
-import wefit.com.wefit.viewmodels.LoginViewModel;
 
 /**
  * Created by lorenzo on 10/28/17.
  */
 
-public class LoginModelImpl implements LoginModel {
+public class LoginModelImpl extends LoginModel {
 
     private UserModel user;
 
@@ -26,6 +21,10 @@ public class LoginModelImpl implements LoginModel {
         user.setAuthKey(authKey);
         user.setUserId(userID);
         Log.i("INFO", user.getAuthKey() + "\n" + user.getUserId());
+
+        // notify the change
+        this.setChanged();
+        notifyObservers();
     }
 
     @Override

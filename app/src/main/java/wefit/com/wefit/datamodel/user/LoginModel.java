@@ -1,21 +1,17 @@
 package wefit.com.wefit.datamodel.user;
 
-import android.content.Intent;
-import android.view.View;
+import java.util.Observable;
 
-import java.util.Map;
-
-import wefit.com.wefit.viewmodels.LoginViewModel;
 
 /**
  * Created by lorenzo on 10/28/17.
  */
 
-public interface LoginModel {
+public abstract class LoginModel extends Observable {
 
-    void associateUser(String authKey, String userID);
+    public abstract void associateUser(String authKey, String userID);
 
-    boolean isAuth();
+    public abstract boolean isAuth();
 
     // void configure(Map<LoginViewModel.Configuration, Object> configuration);
 

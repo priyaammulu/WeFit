@@ -1,9 +1,6 @@
 package wefit.com.wefit.viewmodels;
 
-import android.content.Intent;
-import android.view.View;
-
-import java.util.Map;
+import java.util.Observer;
 
 import wefit.com.wefit.datamodel.user.LoginModel;
 
@@ -24,6 +21,10 @@ public class LoginViewModel {
 
     public boolean isAuth() {
         return mLoginModel.isAuth();
+    }
+
+    public void registerLoginWait(Observer observer) {
+        this.mLoginModel.addObserver(observer);
     }
 
 
