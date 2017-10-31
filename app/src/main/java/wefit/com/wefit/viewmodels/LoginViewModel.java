@@ -1,6 +1,9 @@
 package wefit.com.wefit.viewmodels;
 
+import android.content.Context;
+
 import wefit.com.wefit.datamodel.user.LoginModel;
+import wefit.com.wefit.datamodel.user.UserModel;
 
 /**
  * Created by lorenzo on 10/28/17.
@@ -13,17 +16,12 @@ public class LoginViewModel {
         this.mLoginModel = LoginModel;
     }
 
-    public void associateUser(String authKey,
-                              String userID,
-                              String gender,
-                              String birthday,
-                              String email) {
-        mLoginModel.associateUser(authKey, userID, gender, birthday, email);
+    public void associateUser(UserModel loggedUser) {
+        mLoginModel.associateUser(loggedUser);
     }
 
     public boolean isAuth() {
         return mLoginModel.isAuth();
     }
-
 
 }

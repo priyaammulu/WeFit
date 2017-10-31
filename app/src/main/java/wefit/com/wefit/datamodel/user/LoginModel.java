@@ -1,7 +1,5 @@
 package wefit.com.wefit.datamodel.user;
 
-import java.util.Observable;
-
 
 /**
  * Created by lorenzo on 10/28/17.
@@ -9,11 +7,7 @@ import java.util.Observable;
 
 public interface LoginModel {
 
-    void associateUser(String authKey,
-                       String userID,
-                       String gender,
-                       String name,
-                       String email);
+    void associateUser(UserModel loggedUser);
 
     boolean isAuth();
 

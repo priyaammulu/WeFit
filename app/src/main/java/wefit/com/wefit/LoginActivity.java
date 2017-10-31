@@ -7,24 +7,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
-import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -32,9 +29,12 @@ import com.google.android.gms.common.api.Status;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
+import wefit.com.wefit.datamodel.user.UserModel;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity{
@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity{
     /**
      * Facebook login button
      */
-    LoginButton mFacebookLogin;
+    Button mFacebookLogin;
 
     /**
      * G login button
@@ -71,74 +71,118 @@ public class LoginActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // retrieve viewmodel to communicate with
         this.loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
 
-        // google sign in configuration
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                //.requestServerAuthCode(getString(R.string.server_client_id))
-                .build();
+        // setup the services
+        setupGoogleLogin();
+        setupFacebookLogin();
 
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        // tODO non so cosa fare
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        // Initialize FacebookSDK (it's deprecated, but we're using an old version of the SDK)
-        // it has to be done before setContentView by specification
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        // create a callback manager
-        fbCallbackManager = CallbackManager.Factory.create();
 
         setContentView(R.layout.activity_login);
 
-        this.setupFacebookButton();
-
-        this.setupGoogleButton();
+        // bind the services to the buttons
+        this.bindFacebookButton();
+        this.bindGoogleButton();
 
 
     }
 
-    private void setupGoogleButton() {
+    /**
+     * FB login service initialization
+     */
+    private void setupFacebookLogin() {
+        // Initialize FacebookSDK (it's deprecated, but we're using an old version of the SDK)
+        // it has to be done before setContentView by specification
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        // create a FB callback manager
+        fbCallbackManager = CallbackManager.Factory.create();
+    }
+
+    /**
+     * Google login service initialization
+     */
+    private void setupGoogleLogin() {
+        // Initialize GoogleLogin SDK
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestId()
+                //.requestIdToken(getString(R.string.server_client_id))
+                .requestProfile()
+                .build();
+        // API handler for Google
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        // TODO handle graphically this retieve error
+                        Toast.makeText(LoginActivity.this,
+                                LoginActivity.this.getString(R.string.connection_failure_msg),
+                                Toast.LENGTH_LONG)
+                                .show();
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+    }
+
+    /**
+     * Connect the button on the layout to the Google login service
+     */
+    private void bindGoogleButton() {
 
         mGoogleLogin = (Button) findViewById(R.id.google_login_btn);
 
         mGoogleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                googleSignIn();
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
             }
         });
 
 
     }
-
-    private void googleSignIn() {
-
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
-
-
-    }
-
-    private void setupFacebookButton() {
+    /**
+     * Connect the button on the layout to the Facebook login service
+     */
+    private void bindFacebookButton() {
 
         // retrieve fb login button
-        mFacebookLogin = (LoginButton) this.findViewById(R.id.facebook_login_btn);
+        mFacebookLogin = (Button) this.findViewById(R.id.facebook_login_btn);
 
-        // bind callback
-        mFacebookLogin.registerCallback(fbCallbackManager, new FacebookLoginRequestCallback());
+        LoginManager.getInstance().registerCallback(fbCallbackManager, new FacebookLoginRequestCallback());
+
+        mFacebookLogin.setOnClickListener(new View.OnClickListener() {
+
+            // list of required permission from facebook
+            final List<String> requestedPermissions = Arrays.asList(
+                    "public_profile",
+                    "email");
+
+            @Override
+            public void onClick(View view) {
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, requestedPermissions);
+            }
+        });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // if the request has the specified code GOOGLE_REQ_LOGIN_CODE, it is related to google
+        if (requestCode == GOOGLE_REQ_LOGIN_CODE) { // google handling
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            googleLoginResultHandling(result);
+        } else { // facebook request has NO USER DEFINED CODEs
+            fbCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
 
     /**
-     * Callback for the login button
+     * Handle the login result from Facebook API
      */
     private class FacebookLoginRequestCallback implements FacebookCallback<LoginResult> {
 
@@ -153,37 +197,47 @@ public class LoginActivity extends AppCompatActivity{
 
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
+
+                            UserModel user = new UserModel();
                             JSONObject jsonObject = response.getJSONObject();
+
                             if (jsonObject != null) {
 
                                 String name, gender, email;
 
                                 try {
                                     name = jsonObject.getString("name");
+                                    Log.i("INFO", name);
                                 } catch (JSONException e) {
-                                    name = "Noname";
+                                    name = null;
                                 }
 
                                 try {
                                     email = jsonObject.getString("email");
+                                    Log.i("INFO", email);
                                 } catch (JSONException e) {
-                                    email = "Nomail";
+                                    email = null;
                                 }
 
                                 try {
                                     gender = jsonObject.getString("gender");
+                                    Log.i("INFO", gender);
                                 } catch (JSONException e) {
-                                    gender = "Nogender";
+                                    gender = null;
                                 }
 
-                                loginViewModel.associateUser(
-                                        loginResult.getAccessToken().getToken(),
-                                        loginResult.getAccessToken().getUserId(),
-                                        gender,
-                                        name,
-                                        email);
+                                // fill of the user pojo
+                                user.setAuthKey(loginResult.getAccessToken().getToken());
+                                user.setUserId(loginResult.getAccessToken().getUserId());
+                                user.setName(name);
+                                user.setGender(gender);
+                                user.setEmail(email);
+
+                                loginViewModel.associateUser(user);
+
 
                                 Log.i("INFO", "Now you can go chap!");
+                                Log.i("USER", user.toString());
 
                                 // go to main act
                                 startMainActivity();
@@ -211,49 +265,57 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    /**
+     * Handle the login result from Google API
+     * @param result Result of the call
+     */
+    private void googleLoginResultHandling(GoogleSignInResult result) {
+        Log.d("GOOGLE succes", "googleLoginResultHandling:" + result.isSuccess());
 
-        if (requestCode == GOOGLE_REQ_LOGIN_CODE) {
-            // google handling
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        } else {
-            fbCallbackManager.onActivityResult(requestCode, resultCode, data);
-        }
-
-    }
-
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d("GOOGLE succes", "handleSignInResult:" + result.isSuccess());
+        // if the request was successfull
         if (result.isSuccess()) {
 
             // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            //String authcode = acct != null ? acct.getServerAuthCode() : null;
-            Log.d("userinfo", acct.getId());
+            GoogleSignInAccount retrievedAccount = result.getSignInAccount();
 
-            // TODO signout
+
+            // creation of the user pojo
+            UserModel user = new UserModel();
+            user.setAuthKey(retrievedAccount.getIdToken());
+            user.setUserId(retrievedAccount.getId());
+            user.setName(retrievedAccount.getDisplayName());
+            user.setGender(null);
+            user.setEmail(retrievedAccount.getEmail());
+
+            loginViewModel.associateUser(user);
+
+            Log.d("userinfo", "account retrieved from the server");
+            Log.d("userinfo", user.toString());
+
+
+            // TODO signout, to remove
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                     new ResultCallback<Status>() {
                         @Override
                         public void onResult(Status status) {
                             Log.d("loggedout", "success");
+
                         }
                     });
 
-        } else {
+            startMainActivity();
+
+
+        } else { // error handling
+            // TODO handle graphically this retieve error
             Log.d("error", "cannot retrieveerror");
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        loginViewModel = null;
-    }
-
+    /**
+     * Launch the SplashSceen activity
+     * Useful after the login
+     */
     private void startMainActivity() {
         Intent activityChange = new Intent(getApplicationContext(), SplashActivity.class);
         startActivity(activityChange);

@@ -52,4 +52,15 @@ public class UserModel {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "authKey='" + authKey + '\'' +
+                ", userId='" + userId + '\'' +
+                ", gender='" + gender + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
