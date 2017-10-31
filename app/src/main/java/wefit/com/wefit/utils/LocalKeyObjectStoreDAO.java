@@ -35,5 +35,22 @@ public class LocalKeyObjectStoreDAO {
 
     }
 
+    public Object load(Context currentContext, String key, Class prototypeClass) {
+
+        Object retrieved = null;
+        String defaultvaule = "";
+
+        SharedPreferences preferences= currentContext.getSharedPreferences(PREFERENCES_CONTAINER_NAME, MODE_PRIVATE);
+        //editor.putString(key, marshaller.toJson(content));
+        String jsonObject = preferences.getString(key, defaultvaule);
+
+        if (!jsonObject.equals(defaultvaule)) {
+            retrieved = marshaller.fromJson(jsonObject, prototypeClass);
+        }
+
+        return retrieved;
+
+    }
+
 
 }

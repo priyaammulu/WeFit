@@ -241,7 +241,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.i("USER", user.toString());
 
                                 // TODO deve essere migliorato
-                                LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, "user", user);
+                                LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, LoginViewModel.ACCESS_STORED_USER, user);
 
                                 // TODO remove, this is for the authomatica logout
                                 LoginManager.getInstance().logOut();
@@ -303,7 +303,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("userinfo", user.toString());
 
             // TODO deve essere migliorato
-            LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, "user", user);
+            LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, LoginViewModel.ACCESS_STORED_USER, user);
 
 
             // TODO signout, to remove
