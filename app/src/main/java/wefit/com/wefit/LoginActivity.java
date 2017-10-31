@@ -3,76 +3,69 @@ package wefit.com.wefit;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
-import android.view.View;
-
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
-
-import java.util.Map;
-import java.util.TreeMap;
 
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
-
 public class LoginActivity extends AppCompatActivity {
 
-    LoginButton mFbLoginButton;
+    /**
+     * Facebook login button
+     */
+    LoginButton mFacebookLogin;
+
+    /**
+     * Handle login callback functions
+     */
+    CallbackManager fbCallbackManager;
+
+    /**
+     * Handle to the login VM
+     */
     LoginViewModel loginViewModel;
-    //TextView mLoginFacebookOutputText;
-    //CallbackManager callbackManager;
-    //private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // access to the login viewmodel
-        loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
+        // Initialize FacebookSDK (it's deprecated, but we're using an old version of the SDK)
+        // it has to be done before setContentView by specification
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        // create a callback manager
+        fbCallbackManager = CallbackManager.Factory.create();
 
-        // login sdk configurations parameters
-        Map<LoginViewModel.Configuration, Object> loginConfig = new TreeMap<>();
-        loginConfig.put(LoginViewModel.Configuration.FB_CONFIG, getApplicationContext());
-
-        // request configuration of login managers
-        loginViewModel.configure(loginConfig);
-
-        // buil the activity content
         setContentView(R.layout.activity_login);
 
-        // facebook handling graphics
-        mFbLoginButton = (LoginButton) this.findViewById(R.id.facebook_login_btn);
-        //mLoginFacebookOutputText = (TextView) findViewById(R.id.facebook_status_textview);
-
-        Map<LoginViewModel.Handlers, View> loginLayoutHandlers = new TreeMap<>();
-
-        loginLayoutHandlers.put(LoginViewModel.Handlers.FACEBOOK_HANDLER, mFbLoginButton);
-
-        loginViewModel.setHandlers(loginLayoutHandlers);
+        this.setupFacebookButton();
 
 
+    }
 
+    private void setupFacebookButton() {
 
-        /*
-        mFbLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        // retrieve fb login button
+        mFacebookLogin = (LoginButton) this.findViewById(R.id.facebook_login_btn);
+
+        Log.i("K", "sono qui");
+        // bind callback
+        mFacebookLogin.registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
-                mLoginFacebookOutputText.setText("login success\n " +
-                        loginResult.getAccessToken().getUserId() + "\n" +
-                        loginResult.getAccessToken().getToken()
-                );
-
-                handleFacebookToken(loginResult.getAccessToken());
-
+                Log.i("LOGIN FB OK", loginResult.getAccessToken().getToken());
 
             }
 
             @Override
             public void onCancel() {
-
-                mLoginFacebookOutputText.setText("Login cancelled");
-
+                Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
             }
 
             @Override
@@ -80,69 +73,40 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        */
-
-
-
-
+        Log.i("K", "assegnato");
     }
 
-    /*
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        mAuth = FirebaseAuth.getInstance();
+    /**
+     * Callback for the login button
+     */
+    private class FacebookLoginRequestCallback implements FacebookCallback<LoginResult> {
 
-    }
-    */
+        @Override
+        public void onSuccess(LoginResult loginResult) {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+            Log.i("LOGIN FB OK", loginResult.getAccessToken().getToken());
 
-        //FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        }
+
+        @Override
+        public void onCancel() {
+
+            Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
+
+        }
+
+        @Override
+        public void onError(FacebookException error) {
+            Log.i("ERROR", "i really donno");
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-        loginViewModel.passActivityResults(requestCode, resultCode, data);
-
+        fbCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
-
-
-    /*
-    private void handleFacebookToken(AccessToken token) {
-
-        // Log.d("", "handleFacebookAccessToken:" + token);
-
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-
-    }
-    */
 }
-
-
