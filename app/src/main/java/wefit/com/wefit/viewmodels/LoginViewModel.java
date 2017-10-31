@@ -19,8 +19,7 @@ public class LoginViewModel {
     }
 
     public void associateUser(UserModel loggedUser) {
-        if (loggedUser != null)
-            mLoginModel.associateUser(loggedUser);
+        mLoginModel.associateUser(loggedUser);
     }
 
     public boolean isAuth() {
