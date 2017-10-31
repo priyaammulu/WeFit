@@ -5,12 +5,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -59,8 +67,6 @@ public class LoginActivity extends AppCompatActivity implements Observer {
         // retrieve fb login button
         mFacebookLogin = (LoginButton) this.findViewById(R.id.facebook_login_btn);
 
-        loginViewModel.registerLoginWait(this);
-
         // bind callback
         mFacebookLogin.registerCallback(fbCallbackManager, new FacebookLoginRequestCallback());
     }
@@ -77,12 +83,59 @@ public class LoginActivity extends AppCompatActivity implements Observer {
     private class FacebookLoginRequestCallback implements FacebookCallback<LoginResult> {
 
         @Override
-        public void onSuccess(LoginResult loginResult) {
+        public void onSuccess(final LoginResult loginResult) {
             //Log.i("LOGIN FB OK", loginResult.getAccessToken().getToken());
 
-            loginViewModel.associateUser(
-                    loginResult.getAccessToken().getToken(),
-                    loginResult.getAccessToken().getUserId());
+
+            GraphRequest request = GraphRequest.newMeRequest(
+                    loginResult.getAccessToken(),
+                    new GraphRequest.GraphJSONObjectCallback() {
+
+                        @Override
+                        public void onCompleted(JSONObject object, GraphResponse response) {
+                            JSONObject jsonObject = response.getJSONObject();
+                            if (jsonObject != null) {
+
+                                String name, gender, email;
+
+                                try {
+                                    name = jsonObject.getString("name");
+                                } catch (JSONException e) {
+                                    name = "Noname";
+                                }
+
+                                try {
+                                    email = jsonObject.getString("email");
+                                } catch (JSONException e) {
+                                    email = "Nomail";
+                                }
+
+                                try {
+                                    gender = jsonObject.getString("gender");
+                                } catch (JSONException e) {
+                                    gender = "Nogender";
+                                }
+
+                                loginViewModel.associateUser(
+                                        loginResult.getAccessToken().getToken(),
+                                        loginResult.getAccessToken().getUserId(),
+                                        gender,
+                                        name,
+                                        email);
+
+                                        Log.i("INFO", "Now you can go chap!");
+
+                                // go to main act
+                                startMainActivity();
+
+                            }
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "email, gender, name");
+            request.setParameters(parameters);
+            request.executeAsync();
+
 
         }
 
@@ -109,6 +162,11 @@ public class LoginActivity extends AppCompatActivity implements Observer {
     protected void onStop() {
         super.onStop();
         loginViewModel = null;
+    }
+
+    private void startMainActivity() {
+        Intent activityChange = new Intent(getApplicationContext(), SplashActivity.class);
+        startActivity(activityChange);
     }
 
 

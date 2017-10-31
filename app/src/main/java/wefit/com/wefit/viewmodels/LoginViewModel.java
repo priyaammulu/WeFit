@@ -1,7 +1,5 @@
 package wefit.com.wefit.viewmodels;
 
-import java.util.Observer;
-
 import wefit.com.wefit.datamodel.user.LoginModel;
 
 /**
@@ -15,16 +13,16 @@ public class LoginViewModel {
         this.mLoginModel = LoginModel;
     }
 
-    public void associateUser(String authKey, String userId) {
-        mLoginModel.associateUser(authKey, userId);
+    public void associateUser(String authKey,
+                              String userID,
+                              String gender,
+                              String birthday,
+                              String email) {
+        mLoginModel.associateUser(authKey, userID, gender, birthday, email);
     }
 
     public boolean isAuth() {
         return mLoginModel.isAuth();
-    }
-
-    public void registerLoginWait(Observer observer) {
-        this.mLoginModel.addObserver(observer);
     }
 
 

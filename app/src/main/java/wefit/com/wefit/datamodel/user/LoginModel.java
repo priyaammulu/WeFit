@@ -7,18 +7,15 @@ import java.util.Observable;
  * Created by lorenzo on 10/28/17.
  */
 
-public abstract class LoginModel extends Observable {
+public interface LoginModel {
 
-    public abstract void associateUser(String authKey, String userID);
+    void associateUser(String authKey,
+                       String userID,
+                       String gender,
+                       String name,
+                       String email);
 
-    public abstract boolean isAuth();
-
-    // void configure(Map<LoginViewModel.Configuration, Object> configuration);
-
-    // void setHandlers(Map<LoginViewModel.Handlers, View> handlers);
-
-    // void passActivityResults(int requestCode, int resultCode, Intent data);
-
+    boolean isAuth();
 
 
 }

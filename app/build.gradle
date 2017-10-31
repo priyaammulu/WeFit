@@ -31,9 +31,20 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // facebook login dependency
     compile 'com.facebook.android:facebook-login:4.27.0'
+
+    // gmail login dependency
+    compile 'com.google.android.gms:play-services-auth:11.4.2'
+
     // firebase login dep
     compile 'com.google.firebase:firebase-auth:11.4.2'
+
+    //json handling
+    compile 'com.google.code.gson:gson:2.8.2'
+
+    // TODO remove, just for debugging
+    compile 'com.facebook.stetho:stetho:1.5.0'
 }
 
 // firebase
 apply plugin: 'com.google.gms.google-services'
+

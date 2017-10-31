@@ -2,6 +2,8 @@ package wefit.com.wefit;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import wefit.com.wefit.datamodel.user.LoginModel;
 import wefit.com.wefit.datamodel.user.LoginModelImpl;
 import wefit.com.wefit.viewmodels.LoginViewModel;
@@ -11,6 +13,13 @@ import wefit.com.wefit.viewmodels.LoginViewModel;
  */
 
 public class WefitApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // TODO remove
+        Stetho.initializeWithDefaults(this);
+    }
 
     private final LoginModel mLoginModel;
 
