@@ -1,9 +1,12 @@
 package wefit.com.wefit;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -16,6 +19,15 @@ import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +37,9 @@ import java.util.Observer;
 
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
-public class LoginActivity extends AppCompatActivity implements Observer {
+public class LoginActivity extends AppCompatActivity{
+
+    private static final int GOOGLE_REQ_LOGIN_CODE = 1;
 
     /**
      * Facebook login button
@@ -33,9 +47,19 @@ public class LoginActivity extends AppCompatActivity implements Observer {
     LoginButton mFacebookLogin;
 
     /**
+     * G login button
+     */
+    Button mGoogleLogin;
+
+    /**
      * Handle login callback functions
      */
     CallbackManager fbCallbackManager;
+
+    /**
+     * Google API manager client
+     */
+    private GoogleApiClient mGoogleApiClient;
 
     /**
      * Handle to the login VM
@@ -49,6 +73,23 @@ public class LoginActivity extends AppCompatActivity implements Observer {
 
         this.loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
 
+        // google sign in configuration
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                //.requestServerAuthCode(getString(R.string.server_client_id))
+                .build();
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        // tODO non so cosa fare
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
         // Initialize FacebookSDK (it's deprecated, but we're using an old version of the SDK)
         // it has to be done before setContentView by specification
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -58,6 +99,30 @@ public class LoginActivity extends AppCompatActivity implements Observer {
         setContentView(R.layout.activity_login);
 
         this.setupFacebookButton();
+
+        this.setupGoogleButton();
+
+
+    }
+
+    private void setupGoogleButton() {
+
+        mGoogleLogin = (Button) findViewById(R.id.google_login_btn);
+
+        mGoogleLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                googleSignIn();
+            }
+        });
+
+
+    }
+
+    private void googleSignIn() {
+
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
 
 
     }
@@ -69,11 +134,6 @@ public class LoginActivity extends AppCompatActivity implements Observer {
 
         // bind callback
         mFacebookLogin.registerCallback(fbCallbackManager, new FacebookLoginRequestCallback());
-    }
-
-    @Override
-    public void update(Observable observable, Object o) {
-        Log.i("Weee", "OSSERVATO");
     }
 
 
@@ -123,7 +183,7 @@ public class LoginActivity extends AppCompatActivity implements Observer {
                                         name,
                                         email);
 
-                                        Log.i("INFO", "Now you can go chap!");
+                                Log.i("INFO", "Now you can go chap!");
 
                                 // go to main act
                                 startMainActivity();
@@ -155,7 +215,37 @@ public class LoginActivity extends AppCompatActivity implements Observer {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        fbCallbackManager.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GOOGLE_REQ_LOGIN_CODE) {
+            // google handling
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        } else {
+            fbCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d("GOOGLE succes", "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            //String authcode = acct != null ? acct.getServerAuthCode() : null;
+            Log.d("userinfo", acct.getId());
+
+            // TODO signout
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                    new ResultCallback<Status>() {
+                        @Override
+                        public void onResult(Status status) {
+                            Log.d("loggedout", "success");
+                        }
+                    });
+
+        } else {
+            Log.d("error", "cannot retrieveerror");
+        }
     }
 
     @Override
