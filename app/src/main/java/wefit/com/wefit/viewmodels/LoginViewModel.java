@@ -1,5 +1,6 @@
 package wefit.com.wefit.viewmodels;
 
+
 import android.content.Context;
 
 import wefit.com.wefit.datamodel.user.LoginModel;
@@ -9,8 +10,10 @@ import wefit.com.wefit.datamodel.user.UserModel;
  * Created by lorenzo on 10/28/17.
  */
 
-public class LoginViewModel {
+public class LoginViewModel implements ViewModel {
+
     private LoginModel mLoginModel;
+    private Context context;
 
     public LoginViewModel(LoginModel LoginModel) {
         this.mLoginModel = LoginModel;
@@ -24,4 +27,10 @@ public class LoginViewModel {
         return mLoginModel.isAuth();
     }
 
+    @Override
+    public void setCurrentContext(Context context) {
+
+        this.context = context;
+
+    }
 }

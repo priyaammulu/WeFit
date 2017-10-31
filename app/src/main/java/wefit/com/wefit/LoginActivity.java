@@ -35,9 +35,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import wefit.com.wefit.datamodel.user.UserModel;
+import wefit.com.wefit.utils.LocalKeyObjectStoreDAO;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
 
     private static final int GOOGLE_REQ_LOGIN_CODE = 1;
 
@@ -143,6 +144,7 @@ public class LoginActivity extends AppCompatActivity{
 
 
     }
+
     /**
      * Connect the button on the layout to the Facebook login service
      */
@@ -186,11 +188,13 @@ public class LoginActivity extends AppCompatActivity{
      */
     private class FacebookLoginRequestCallback implements FacebookCallback<LoginResult> {
 
+        private static final String REQUESTED_FIELDS_KEY = "fields";
+        private static final String REQUESTED_FIELDS = "email, gender, name";
+
         @Override
         public void onSuccess(final LoginResult loginResult) {
-            //Log.i("LOGIN FB OK", loginResult.getAccessToken().getToken());
 
-
+            // request service callback handler
             GraphRequest request = GraphRequest.newMeRequest(
                     loginResult.getAccessToken(),
                     new GraphRequest.GraphJSONObjectCallback() {
@@ -205,23 +209,22 @@ public class LoginActivity extends AppCompatActivity{
 
                                 String name, gender, email;
 
+                                // cannot assume that the user has all the specified fields
+
                                 try {
                                     name = jsonObject.getString("name");
-                                    Log.i("INFO", name);
                                 } catch (JSONException e) {
                                     name = null;
                                 }
 
                                 try {
                                     email = jsonObject.getString("email");
-                                    Log.i("INFO", email);
                                 } catch (JSONException e) {
                                     email = null;
                                 }
 
                                 try {
                                     gender = jsonObject.getString("gender");
-                                    Log.i("INFO", gender);
                                 } catch (JSONException e) {
                                     gender = null;
                                 }
@@ -232,12 +235,16 @@ public class LoginActivity extends AppCompatActivity{
                                 user.setName(name);
                                 user.setGender(gender);
                                 user.setEmail(email);
-
                                 loginViewModel.associateUser(user);
-
 
                                 Log.i("INFO", "Now you can go chap!");
                                 Log.i("USER", user.toString());
+
+                                // TODO deve essere migliorato
+                                LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, "user", user);
+
+                                // TODO remove, this is for the authomatica logout
+                                LoginManager.getInstance().logOut();
 
                                 // go to main act
                                 startMainActivity();
@@ -245,8 +252,10 @@ public class LoginActivity extends AppCompatActivity{
                             }
                         }
                     });
+
+            // star the asyncronous request to the FB login service
             Bundle parameters = new Bundle();
-            parameters.putString("fields", "email, gender, name");
+            parameters.putString(REQUESTED_FIELDS_KEY, REQUESTED_FIELDS);
             request.setParameters(parameters);
             request.executeAsync();
 
@@ -267,6 +276,7 @@ public class LoginActivity extends AppCompatActivity{
 
     /**
      * Handle the login result from Google API
+     *
      * @param result Result of the call
      */
     private void googleLoginResultHandling(GoogleSignInResult result) {
@@ -292,6 +302,9 @@ public class LoginActivity extends AppCompatActivity{
             Log.d("userinfo", "account retrieved from the server");
             Log.d("userinfo", user.toString());
 
+            // TODO deve essere migliorato
+            LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, "user", user);
+
 
             // TODO signout, to remove
             Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
@@ -313,11 +326,11 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     /**
-     * Launch the SplashSceen activity
-     * Useful after the login
+     * Launch the Main activity
+     * Use after the login
      */
     private void startMainActivity() {
-        Intent activityChange = new Intent(getApplicationContext(), SplashActivity.class);
+        Intent activityChange = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(activityChange);
     }
 
