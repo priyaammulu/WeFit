@@ -18,31 +18,13 @@ public class LoginViewModel {
         this.mLoginModel = LoginModel;
     }
 
+    public void associateUser(String authKey, String userId) {
+        mLoginModel.associateUser(authKey, userId);
+    }
+
     public boolean isAuth() {
         return mLoginModel.isAuth();
     }
 
-    public void configure(Map<Configuration, Object> configuration) {
 
-        this.mLoginModel.configure(configuration);
-
-    }
-
-    public void passActivityResults(int requestCode, int resultCode, Intent data) {
-        mLoginModel.passActivityResults(requestCode, resultCode, data);
-    }
-
-    public void setHandlers(Map<LoginViewModel.Handlers, View> handlers) {
-        this.mLoginModel.setHandlers(handlers);
-    }
-
-    public enum Configuration {
-        FB_CONFIG,
-        G_COFIG
-    }
-    public enum Handlers {
-
-        FACEBOOK_HANDLER,
-        GOOGLE_HANDLERS
-    }
 }

@@ -54,26 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         // retrieve fb login button
         mFacebookLogin = (LoginButton) this.findViewById(R.id.facebook_login_btn);
 
-        Log.i("K", "sono qui");
         // bind callback
-        mFacebookLogin.registerCallback(fbCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.i("LOGIN FB OK", loginResult.getAccessToken().getToken());
-
-            }
-
-            @Override
-            public void onCancel() {
-                Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
-        Log.i("K", "assegnato");
+        mFacebookLogin.registerCallback(fbCallbackManager, new FacebookLoginRequestCallback());
     }
 
 
@@ -84,23 +66,24 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(LoginResult loginResult) {
+            //Log.i("LOGIN FB OK", loginResult.getAccessToken().getToken());
 
-            Log.i("LOGIN FB OK", loginResult.getAccessToken().getToken());
-
+            loginViewModel.associateUser(
+                    loginResult.getAccessToken().getToken(),
+                    loginResult.getAccessToken().getUserId());
 
         }
 
         @Override
         public void onCancel() {
-
             Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
-
         }
 
         @Override
         public void onError(FacebookException error) {
-            Log.i("ERROR", "i really donno");
+
         }
+
     }
 
     @Override
@@ -108,5 +91,17 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         fbCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        this.loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        loginViewModel = null;
     }
 }

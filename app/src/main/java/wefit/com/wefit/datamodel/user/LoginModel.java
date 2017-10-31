@@ -12,13 +12,16 @@ import wefit.com.wefit.viewmodels.LoginViewModel;
  */
 
 public interface LoginModel {
+
+    void associateUser(String authKey, String userID);
+
     boolean isAuth();
 
-    void configure(Map<LoginViewModel.Configuration, Object> configuration);
+    // void configure(Map<LoginViewModel.Configuration, Object> configuration);
 
-    void setHandlers(Map<LoginViewModel.Handlers, View> handlers);
+    // void setHandlers(Map<LoginViewModel.Handlers, View> handlers);
 
-    void passActivityResults(int requestCode, int resultCode, Intent data);
+    // void passActivityResults(int requestCode, int resultCode, Intent data);
 
 
 
