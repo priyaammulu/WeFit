@@ -1,11 +1,10 @@
-package wefit.com.wefit.datamodel.user;
+package wefit.com.wefit.pojo;
 
 /**
  * Created by gioacchino on 31/10/2017.
  */
 
-public class UserModel {
-
+public class User {
 
     private String authKey;
     private String userId;
@@ -55,7 +54,7 @@ public class UserModel {
 
     @Override
     public String toString() {
-        return "UserModel{" +
+        return "User{" +
                 "authKey='" + authKey + '\'' +
                 ", userId='" + userId + '\'' +
                 ", gender='" + gender + '\'' +

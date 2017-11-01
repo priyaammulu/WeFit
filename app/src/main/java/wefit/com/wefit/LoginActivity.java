@@ -1,9 +1,9 @@
 package wefit.com.wefit;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +14,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
@@ -32,17 +30,11 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
-import wefit.com.wefit.datamodel.user.UserModel;
+import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.LocalKeyObjectStoreDAO;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
@@ -226,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response) {
 
-                            UserModel user = new UserModel();
+                            User user = new User();
                             JSONObject jsonObject = response.getJSONObject();
 
                             if (jsonObject != null) {
@@ -294,7 +286,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onError(FacebookException error) {
-
+            Log.i("LOGIN FB ERROR", "sorry the user is shy");
         }
 
     }
@@ -312,8 +304,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Firebase success", "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            // TODO cosa fare ora?
+                            //FirebaseUser user = mAuth.getCurrentUser();
+                            startMainActivity();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("FAIL", "signInWithCredential:failure", task.getException());
@@ -339,7 +331,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
             // creation of the user pojo
-            UserModel user = new UserModel();
+            User user = new User();
             user.setAuthKey(retrievedAccount.getIdToken());
             user.setUserId(retrievedAccount.getId());
             user.setName(retrievedAccount.getDisplayName());
@@ -379,9 +371,6 @@ public class LoginActivity extends AppCompatActivity {
      * Use after the login
      */
     private void startMainActivity() {
-        Intent activityChange = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(activityChange);
+        startActivity(new Intent(this, MainActivity.class));
     }
-
-
 }

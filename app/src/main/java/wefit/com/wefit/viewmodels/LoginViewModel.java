@@ -1,8 +1,8 @@
 package wefit.com.wefit.viewmodels;
 
 
-import wefit.com.wefit.datamodel.user.LoginModel;
-import wefit.com.wefit.datamodel.user.UserModel;
+import wefit.com.wefit.datamodel.LoginModel;
+import wefit.com.wefit.pojo.User;
 
 /**
  * Created by lorenzo on 10/28/17.
@@ -18,7 +18,7 @@ public class LoginViewModel {
         this.mLoginModel = LoginModel;
     }
 
-    public void associateUser(UserModel loggedUser) {
+    public void associateUser(User loggedUser) {
         mLoginModel.associateUser(loggedUser);
     }
 
@@ -26,4 +26,7 @@ public class LoginViewModel {
         return mLoginModel.isAuth();
     }
 
+    public void signOut() {
+        mLoginModel.signOut();
+    }
 }
