@@ -30,6 +30,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -201,118 +202,25 @@ public class LoginActivity extends AppCompatActivity {
      */
     private class FacebookLoginRequestCallback implements FacebookCallback<LoginResult> {
 
-        private static final String REQUESTED_FIELDS_KEY = "fields";
-        private static final String REQUESTED_FIELDS = "email, gender, name";
-
         @Override
         public void onSuccess(final LoginResult loginResult) {
 
             handleFacebookAccessToken(loginResult.getAccessToken());
 
-            /*
-            // request service callback handler
-            GraphRequest request = GraphRequest.newMeRequest(
-                    loginResult.getAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback() {
-
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response) {
-
-                            User user = new User();
-                            JSONObject jsonObject = response.getJSONObject();
-
-                            if (jsonObject != null) {
-
-                                String name, gender, email;
-
-                                // cannot assume that the user has all the specified fields
-
-                                try {
-                                    name = jsonObject.getString("name");
-                                } catch (JSONException e) {
-                                    name = null;
-                                }
-
-                                try {
-                                    email = jsonObject.getString("email");
-                                } catch (JSONException e) {
-                                    email = null;
-                                }
-
-                                try {
-                                    gender = jsonObject.getString("gender");
-                                } catch (JSONException e) {
-                                    gender = null;
-                                }
-
-                                // fill of the user pojo
-                                user.setAuthKey(loginResult.getAccessToken().getToken());
-                                user.setUserId(loginResult.getAccessToken().getUserId());
-                                user.setName(name);
-                                user.setGender(gender);
-                                user.setEmail(email);
-                                loginViewModel.associateUser(user);
-
-                                Log.i("INFO", "Now you can go chap!");
-                                Log.i("USER", user.toString());
-
-                                // TODO deve essere migliorato
-                                LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, LoginViewModel.ACCESS_STORED_USER, user);
-
-                                // TODO remove, this is for the authomatica logout
-                                LoginManager.getInstance().logOut();
-
-                                // go to main act
-                                //startMainActivity();
-
-                            }
-                        }
-                    });
-
-            // star the asyncronous request to the FB login service
-            Bundle parameters = new Bundle();
-            parameters.putString(REQUESTED_FIELDS_KEY, REQUESTED_FIELDS);
-            request.setParameters(parameters);
-            request.executeAsync();
-            */
-
-
         }
 
         @Override
         public void onCancel() {
+            // TODO gestire meglio graficamente
             Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
         }
 
         @Override
         public void onError(FacebookException error) {
+            // TODO gestire meglio graficamente
             Log.i("LOGIN FB ERROR", "sorry the user is shy");
         }
 
-    }
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        buildFirebaseUser(credential);
-    }
-
-    private void buildFirebaseUser(AuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Firebase success", "signInWithCredential:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                            startMainActivity();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("FAIL", "signInWithCredential:failure", task.getException());
-                        }
-
-                    }
-                });
     }
 
     /**
@@ -365,6 +273,35 @@ public class LoginActivity extends AppCompatActivity {
             Log.d("error", "cannot retrieveerror");
         }
     }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        buildFirebaseUser(credential);
+    }
+
+    private void handleGoogleAccessToken(AccessToken token) {
+        // TODO gestire
+        //AuthCredential credential = GoogleAuthProvider.getCredential(token.getToken());
+        //buildFirebaseUser(credential);
+    }
+
+    private void buildFirebaseUser(AuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            startMainActivity();
+                        } else {
+                            // TODO gestire graficamente
+                            // If sign in fails, display a message to the user.
+                            Log.w("FAIL", "signInWithCredential:failure", task.getException());
+                        }
+
+                    }
+                });
+    }
+
 
     /**
      * Launch the Main activity

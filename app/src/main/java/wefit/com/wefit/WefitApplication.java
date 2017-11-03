@@ -18,21 +18,15 @@ public class WefitApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FirebaseApp.initializeApp(this);
-        // TODO remove
+
+        // TODO remove in the end (local storage debugging)
         Stetho.initializeWithDefaults(this);
-        mLoginModel = new FirebaseModel();
+
+        // initialise loginModel
+        mLoginModel = new FirebaseModel(this);
     }
 
     private LoginModel mLoginModel;
-
-    public WefitApplication() {
-        //mLoginModel = new FirebaseModel();
-
-        // model for login handling with FB and
-
-
-    }
 
     public LoginViewModel getLoginViewModel() {
         return new LoginViewModel(getLoginModel());

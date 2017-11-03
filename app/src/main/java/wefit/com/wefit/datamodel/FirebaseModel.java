@@ -1,8 +1,10 @@
 package wefit.com.wefit.datamodel;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.facebook.AccessToken;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -19,8 +21,12 @@ public class FirebaseModel implements LoginModel {
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
-    public FirebaseModel() {
+    public FirebaseModel(Context currentContext) {
+
+        // firebase initialization
+        FirebaseApp.initializeApp(currentContext);
         mAuth = FirebaseAuth.getInstance();
+
     }
 
     @Override
