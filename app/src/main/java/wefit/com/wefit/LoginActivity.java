@@ -22,8 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -35,8 +33,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Arrays;
 import java.util.List;
 
-import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.utils.LocalKeyObjectStoreDAO;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -120,10 +116,8 @@ public class LoginActivity extends AppCompatActivity {
     private void setupGoogleLogin() {
         // Initialize GoogleLogin SDK
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .requestId()
-                //.requestIdToken(getString(R.string.server_client_id))
-                .requestProfile()
                 .build();
         // API handler for Google
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -205,7 +199,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onSuccess(final LoginResult loginResult) {
 
-            handleFacebookAccessToken(loginResult.getAccessToken());
+            handleFacebookAccessTokenForFirebase(loginResult.getAccessToken());
 
         }
 
@@ -234,38 +228,7 @@ public class LoginActivity extends AppCompatActivity {
         // if the request was successfull
         if (result.isSuccess()) {
 
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount retrievedAccount = result.getSignInAccount();
-
-
-            // creation of the user pojo
-            User user = new User();
-            user.setAuthKey(retrievedAccount.getIdToken());
-            user.setUserId(retrievedAccount.getId());
-            user.setName(retrievedAccount.getDisplayName());
-            user.setGender(null);
-            user.setEmail(retrievedAccount.getEmail());
-
-            loginViewModel.associateUser(user);
-
-            Log.d("userinfo", "account retrieved from the server");
-            Log.d("userinfo", user.toString());
-
-            // TODO deve essere migliorato
-            LocalKeyObjectStoreDAO.getInstance().save(LoginActivity.this, LoginViewModel.ACCESS_STORED_USER, user);
-
-
-            // TODO signout, to remove
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(Status status) {
-                            Log.d("loggedout", "success");
-
-                        }
-                    });
-
-            startMainActivity();
+            handleGoogleAccessTokenForFirebase(result.getSignInAccount());
 
 
         } else { // error handling
@@ -274,17 +237,29 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
+    /**
+     * Access firebase with FB credential
+     * @param token Facebook access token
+     */
+    private void handleFacebookAccessTokenForFirebase(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         buildFirebaseUser(credential);
     }
 
-    private void handleGoogleAccessToken(AccessToken token) {
-        // TODO gestire
-        //AuthCredential credential = GoogleAuthProvider.getCredential(token.getToken());
-        //buildFirebaseUser(credential);
+    /**
+     * Access firebase with G credential
+     * @param account Google access token container
+     */
+    private void handleGoogleAccessTokenForFirebase(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        buildFirebaseUser(credential);
     }
 
+    /**
+     * Connect to the server
+     * If necessary it creates the user
+     * @param credential Wrapped User credential (facebook or google)
+     */
     private void buildFirebaseUser(AuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
