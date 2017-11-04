@@ -77,6 +77,8 @@ public class LoginActivity extends AppCompatActivity {
         // retrieve viewmodel to communicate with
         this.loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
 
+        hideActionBar();
+
         // setup the services
         setupFirebaseAuth();
         setupGoogleLogin();
@@ -90,6 +92,12 @@ public class LoginActivity extends AppCompatActivity {
         this.bindGoogleButton();
 
 
+    }
+
+    private void hideActionBar() {
+        if (getActionBar() != null) {
+            getActionBar().hide();
+        }
     }
 
     private void setupFirebaseAuth() {

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="loginbutton_height">55sp</dimen>
+    <dimen name="loginbutton_width">270sp</dimen>
+</resources>

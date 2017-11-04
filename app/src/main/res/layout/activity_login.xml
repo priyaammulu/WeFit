@@ -4,17 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="wefit.com.wefit.LoginActivity">
+    tools:context="wefit.com.wefit.LoginActivity"
+    style="@style/Theme.AppCompat.Light.DarkActionBar">
 
     <Button
         android:id="@+id/facebook_login_btn"
-        android:layout_width="270sp"
-        android:layout_height="50sp"
+        android:layout_width="@dimen/loginbutton_width"
+        android:layout_height="@dimen/loginbutton_height"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/login_button_fb"
-        android:elevation="0dp"
-        android:textAlignment="viewEnd"
         android:textAllCaps="false"
         app:layout_constraintBottom_toTopOf="@+id/google_login_btn"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +25,8 @@
 
     <Button
         android:id="@+id/google_login_btn"
-        android:layout_width="270sp"
-        android:layout_height="50sp"
+        android:layout_width="@dimen/loginbutton_width"
+        android:layout_height="@dimen/loginbutton_height"
         android:layout_marginBottom="84dp"
         android:background="@drawable/login_button_gmail"
         android:textAllCaps="false"

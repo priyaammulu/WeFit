@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     private EventAdapter mAdapter;
     private ListView mEventList;
 
+    private Button tmpEventDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,16 @@ public class MainActivity extends AppCompatActivity {
         stream.subscribe(
                 this::handleAdapter,
                 this::handleError);
+
+
+        // todo rimuovere
+        tmpEventDescription = (Button) findViewById(R.id.tmp_btn);
+        tmpEventDescription.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, EventDescriptionActivity.class));
+            }
+        });
     }
 
     private void handleError(Throwable error) {
