@@ -29,4 +29,5 @@ public class LoginViewModel {
     public void signOut() {
         mLoginModel.signOut();
     }
+
 }
