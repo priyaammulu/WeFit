@@ -1,0 +1,118 @@
+package wefit.com.wefit;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import java.util.List;
+import io.reactivex.Flowable;
+import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.viewmodels.MainViewModel;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link OnMainFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link MainFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class MainFragment extends Fragment {
+    private EventAdapter mAdapter;
+    private ListView mEventList;
+    private MainViewModel mMainViewModel;
+    private OnMainFragmentInteractionListener mListener;
+
+    public MainFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment MainFragment.
+     */
+    public static MainFragment newInstance() {
+        return new MainFragment();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        bind(view);
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMainViewModel = mListener.getMainViewModel();
+        Flowable<List<Event>> stream = mMainViewModel.getEvents();
+        stream.subscribe(
+                this::handleAdapter,
+                this::handleError);
+    }
+
+    private void bind(View view) {
+        mEventList = (ListView) view.findViewById(R.id.event_list);
+        // mEventList.setOnItemClickListener((adapterView, view, i, l) -> startActivity(new Intent(MainActivity.this, EventDescription.class)));
+    }
+
+    private void handleError(Throwable error) {
+        //todo implement
+    }
+
+    private void handleAdapter(List<Event> events) {
+        if (mAdapter == null) {
+            mAdapter = new EventAdapter(events, getActivity());
+            mEventList.setAdapter(mAdapter);
+        }
+        else
+            mAdapter.setEvents(events);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnMainFragmentInteractionListener) {
+            mListener = (OnMainFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnMainFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnMainFragmentInteractionListener {
+        // TODO: Update argument type and name
+        MainViewModel getMainViewModel();
+    }
+}

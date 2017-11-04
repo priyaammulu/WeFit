@@ -1,25 +1,17 @@
 package wefit.com.wefit;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
-import android.widget.ListView;
-
-import java.util.List;
-
-import io.reactivex.Flowable;
-import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnMainFragmentInteractionListener {
     private Button mSignOut;
     private LoginViewModel mLoginViewModel;
     private MainViewModel mMainViewModel;
-    private EventAdapter mAdapter;
-    private ListView mEventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,32 +19,23 @@ public class MainActivity extends AppCompatActivity {
         mLoginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
         mMainViewModel = ((WefitApplication) getApplication()).getMainViewModel();
         setContentView(R.layout.activity_main);
-        mEventList = (ListView) findViewById(R.id.event_list);
+        bind();
+    }
+
+    private void bind() {
         mSignOut = (Button) findViewById(R.id.sign_out);
-        mSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mLoginViewModel.signOut();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            }
+        mSignOut.setOnClickListener(view -> {
+            mLoginViewModel.signOut();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
         });
-        Flowable<List<Event>> stream = mMainViewModel.getEvents();
-        stream.subscribe(
-                this::handleAdapter,
-                this::handleError);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        MainFragment fragment = MainFragment.newInstance();
+        fragmentTransaction.add(R.id.main_fragment, fragment);
+        fragmentTransaction.commit();
     }
 
-    private void handleError(Throwable error) {
-
-    }
-
-    private void handleAdapter(List<Event> events) {
-        if (mAdapter == null) {
-            mAdapter = new EventAdapter(events, this);
-            mEventList.setAdapter(mAdapter);
-        }
-        else
-            mAdapter.setEvents(events);
-        mAdapter.notifyDataSetChanged();
+    @Override
+    public MainViewModel getMainViewModel() {
+        return mMainViewModel;
     }
 }

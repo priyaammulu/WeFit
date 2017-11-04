@@ -15,11 +15,10 @@
         android:text="Sign out"
         android:layout_alignParentRight="true"/>
 
-    <ListView
+    <fragment android:name="wefit.com.wefit.MainFragment"
+        android:id="@+id/main_fragment"
         android:layout_width="match_parent"
-        android:id="@+id/event_list"
-        android:layout_height="match_parent">
-    </ListView>
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:gravity="bottom"
