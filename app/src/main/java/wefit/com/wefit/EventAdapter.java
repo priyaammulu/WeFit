@@ -27,7 +27,8 @@ public class EventAdapter extends BaseAdapter {
     }
 
     public void setEvents(List<Event> events) {
-        this.events = events;
+        if (!this.events.equals(events))
+            this.events = events;
     }
 
     @Override
@@ -36,7 +37,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Event getItem(int position) {
         if (position >= events.size())
             throw new IllegalArgumentException(position + "exceeds" + events.size());
         return events.get(position);
@@ -59,22 +60,33 @@ public class EventAdapter extends BaseAdapter {
         }
 
         Event event = events.get(position);
-//        holder.text1.setText(event.getText1());
-//        holder.text2.setText(event.getText2());
+        holder.title.setText(event.getTitle());
+        holder.location.setText(event.getLocation().getName());
+        holder.monthDay.setText(event.getDate().toString());
+        holder.time.setText(event.getDate().toString());
+        holder.organizer.setText(event.getUser().getName());
+        holder.published.setText(event.getPublished().toString());
 //        Picasso.with(context).load(event.getImage()).into(holder.mImage);
-
         return convertView;
     }
 
     private static class SwipeViewHolder {
         private ImageView mImage;
-        private TextView text1;
-        private TextView text2;
+        private TextView title;
+        private TextView location;
+        private TextView monthDay;
+        private TextView time;
+        private TextView organizer;
+        private TextView published;
 
         SwipeViewHolder(View row) {
             //this.mImage = (ImageView) row.findViewById(R.id.imageWi);
-            this.text1 = (TextView) row.findViewById(R.id.hello);
-           // this.text2 = (TextView) row.findViewById(R.id.description);
+            this.title = (TextView) row.findViewById(R.id.event_title);
+            this.location = (TextView) row.findViewById(R.id.event_location);
+            this.monthDay = (TextView) row.findViewById(R.id.evet_month_day);
+            this.time = (TextView) row.findViewById(R.id.event_time);
+            this.organizer = (TextView) row.findViewById(R.id.event_organizer);
+            this.published = (TextView) row.findViewById(R.id.event_published);
         }
 
     }

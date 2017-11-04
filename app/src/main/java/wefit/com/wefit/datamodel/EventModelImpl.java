@@ -7,11 +7,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.User;
 
 
 /**
@@ -34,6 +37,15 @@ public class EventModelImpl implements EventModel {
             String key = mEventsReference.push().getKey();
             Event prova = new Event();
             prova.setDescription("jncdjnvj");
+            prova.setDate(new Date());
+            prova.setTitle("kdlerkfm");
+            Location loc = new Location();
+            loc.setName("prova");
+            prova.setLocation(loc);
+            prova.setPublished(new Date());
+            User user = new User();
+            user.setName("Lorenzo");
+            prova.setUser(user);
             mEventsReference.child(key).setValue(prova);
             // todo check what happens in case of initial error.
             mEventsReference.addValueEventListener(new ValueEventListener() {

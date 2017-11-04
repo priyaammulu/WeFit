@@ -1,6 +1,7 @@
 package wefit.com.wefit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,8 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import org.reactivestreams.Subscription;
+
 import java.util.List;
 import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -23,10 +28,13 @@ import wefit.com.wefit.viewmodels.MainViewModel;
  * create an instance of this fragment.
  */
 public class MainFragment extends Fragment {
+    public static final String EVENT = "selected";
     private EventAdapter mAdapter;
     private ListView mEventList;
     private MainViewModel mMainViewModel;
     private OnMainFragmentInteractionListener mListener;
+    // this should be handled by another class
+    private Disposable subscription;
 
     public MainFragment() {
         // Required empty public constructor
@@ -53,14 +61,20 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
-        stream.subscribe(
+        subscription = stream.subscribe(
                 this::handleAdapter,
                 this::handleError);
     }
 
     private void bind(View view) {
         mEventList = (ListView) view.findViewById(R.id.event_list);
-        // mEventList.setOnItemClickListener((adapterView, view, i, l) -> startActivity(new Intent(MainActivity.this, EventDescription.class)));
+        mEventList.setOnItemClickListener((adapterView, v, i, l)
+                -> {
+            Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
+            Event selected = mAdapter.getItem(i);
+            intent.putExtra(EVENT, selected);
+            startActivity(intent);
+        });
     }
 
     private void handleError(Throwable error) {
@@ -99,6 +113,13 @@ public class MainFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (subscription != null)
+            subscription.dispose();
     }
 
     /**
