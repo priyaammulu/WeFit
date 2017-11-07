@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import wefit.com.wefit.pojo.Event;
@@ -53,25 +55,29 @@ public class EventAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
         }
-        SwipeViewHolder holder = (SwipeViewHolder) convertView.getTag();
+        EventViewHolder holder = (EventViewHolder) convertView.getTag();
         if (holder == null) {
-            holder = new SwipeViewHolder(convertView);
+            holder = new EventViewHolder(convertView);
             convertView.setTag(holder);
         }
 
         Event event = events.get(position);
         holder.title.setText(event.getTitle());
         holder.location.setText(event.getLocation().getName());
-        holder.monthDay.setText(event.getDate().toString());
-        holder.time.setText(event.getDate().toString());
+        holder.monthDay.setText(event.getDate().toString().substring(5));
+        holder.time.setText(event.getDate().toString().substring(5));
         holder.organizer.setText(event.getUser().getName());
-        holder.published.setText(event.getPublished().toString());
-//        Picasso.with(context).load(event.getImage()).into(holder.mImage);
+        holder.published.setText(event.getPublished().toString().substring(5));
+        Picasso.with(context).load(R.mipmap.ic_launcher).into(holder.mEvent);
+        Picasso.with(context).load(R.mipmap.ic_launcher).into(holder.mUser);
+        Picasso.with(context).load(R.mipmap.ic_launcher).into(holder.mGame);
         return convertView;
     }
 
-    private static class SwipeViewHolder {
-        private ImageView mImage;
+    private static class EventViewHolder {
+        private ImageView mEvent;
+        private ImageView mUser;
+        private ImageView mGame;
         private TextView title;
         private TextView location;
         private TextView monthDay;
@@ -79,14 +85,16 @@ public class EventAdapter extends BaseAdapter {
         private TextView organizer;
         private TextView published;
 
-        SwipeViewHolder(View row) {
-            //this.mImage = (ImageView) row.findViewById(R.id.imageWi);
+        EventViewHolder(View row) {
             this.title = (TextView) row.findViewById(R.id.event_title);
             this.location = (TextView) row.findViewById(R.id.event_location);
             this.monthDay = (TextView) row.findViewById(R.id.evet_month_day);
             this.time = (TextView) row.findViewById(R.id.event_time);
             this.organizer = (TextView) row.findViewById(R.id.event_organizer);
             this.published = (TextView) row.findViewById(R.id.event_published);
+            this.mEvent = (ImageView) row.findViewById(R.id.event_image);
+            this.mUser = (ImageView) row.findViewById(R.id.event_user_image);
+            this.mGame = (ImageView) row.findViewById(R.id.event_game_image);
         }
 
     }

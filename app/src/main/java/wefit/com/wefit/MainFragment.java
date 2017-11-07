@@ -8,13 +8,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.reactivestreams.Subscription;
 
 import java.util.List;
+
 import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -34,7 +36,7 @@ public class MainFragment extends Fragment {
     private MainViewModel mMainViewModel;
     private OnMainFragmentInteractionListener mListener;
     // this should be handled by another class
-    private Disposable subscription;
+    private Subscription mSubscription;
 
     public MainFragment() {
         // Required empty public constructor
@@ -61,19 +63,40 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
-        subscription = stream.subscribe(
-                this::handleAdapter,
-                this::handleError);
+        stream.subscribe(new FlowableSubscriber<List<Event>>() {
+            @Override
+            public void onSubscribe(Subscription subscription) {
+                subscription.request(Long.MAX_VALUE);
+                mSubscription = subscription;
+            }
+
+            @Override
+            public void onNext(List<Event> events) {
+                handleAdapter(events);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                handleError(throwable);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     private void bind(View view) {
         mEventList = (ListView) view.findViewById(R.id.event_list);
-        mEventList.setOnItemClickListener((adapterView, v, i, l)
-                -> {
-            Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
-            Event selected = mAdapter.getItem(i);
-            intent.putExtra(EVENT, selected);
-            startActivity(intent);
+        mEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
+                Event selected = mAdapter.getItem(i);
+                intent.putExtra(EVENT, selected);
+                startActivity(intent);
+            }
         });
     }
 
@@ -85,8 +108,7 @@ public class MainFragment extends Fragment {
         if (mAdapter == null) {
             mAdapter = new EventAdapter(events, getActivity());
             mEventList.setAdapter(mAdapter);
-        }
-        else
+        } else
             mAdapter.setEvents(events);
         mAdapter.notifyDataSetChanged();
     }
@@ -118,8 +140,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (subscription != null)
-            subscription.dispose();
+        if (mSubscription != null)
+            mSubscription.cancel();
     }
 
     /**

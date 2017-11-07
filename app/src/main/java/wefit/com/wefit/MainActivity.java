@@ -2,8 +2,8 @@ package wefit.com.wefit;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 
 import wefit.com.wefit.viewmodels.LoginViewModel;
@@ -25,14 +25,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
 
     private void bind() {
         mSignOut = (Button) findViewById(R.id.sign_out);
-        mSignOut.setOnClickListener(view -> {
-            mLoginViewModel.signOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        mSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLoginViewModel.signOut();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
         });
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        MainFragment fragment = MainFragment.newInstance();
-        fragmentTransaction.add(R.id.main_fragment, fragment);
-        fragmentTransaction.commit();
     }
 
     @Override

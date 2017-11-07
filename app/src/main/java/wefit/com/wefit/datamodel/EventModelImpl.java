@@ -12,6 +12,8 @@ import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
@@ -32,37 +34,41 @@ public class EventModelImpl implements EventModel {
 
     @Override
     public Flowable<List<Event>> getEvents() {
-        return Flowable.create(subscriber -> {
-            // populate db (to remove)
-            String key = mEventsReference.push().getKey();
-            Event prova = new Event();
-            prova.setDescription("jncdjnvj");
-            prova.setDate(new Date());
-            prova.setTitle("kdlerkfm");
-            Location loc = new Location();
-            loc.setName("prova");
-            prova.setLocation(loc);
-            prova.setPublished(new Date());
-            User user = new User();
-            user.setName("Lorenzo");
-            prova.setUser(user);
-            mEventsReference.child(key).setValue(prova);
-            // todo check what happens in case of initial error.
-            mEventsReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    mEvents.clear();
-                    for (DataSnapshot a : dataSnapshot.getChildren()) {
-                        mEvents.add(a.getValue(Event.class));
+        return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
+            @Override
+            public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
+                // populate db (to remove)
+                String key = mEventsReference.push().getKey();
+                Event prova = new Event();
+                prova.setDescription("jncdjnvj");
+                prova.setDate(new Date());
+                prova.setTitle("kdlerkfm");
+                Location loc = new Location();
+                loc.setName("prova");
+                prova.setLocation(loc);
+                prova.setPublished(new Date());
+                User user = new User();
+                user.setName("Lorenzo");
+                prova.setUser(user);
+                mEventsReference.child(key).setValue(prova);
+                // todo check what happens in case of initial error.
+                mEventsReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mEvents.clear();
+                        for (DataSnapshot a : dataSnapshot.getChildren()) {
+                            mEvents.add(a.getValue(Event.class));
+                        }
+                        flowableEmitter.onNext(mEvents);
                     }
-                    subscriber.onNext(mEvents);
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    subscriber.onError(databaseError.toException());
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        flowableEmitter.onError(databaseError.toException());
+                    }
+                });
+            }
         }, BackpressureStrategy.BUFFER);
+
     }
 }
