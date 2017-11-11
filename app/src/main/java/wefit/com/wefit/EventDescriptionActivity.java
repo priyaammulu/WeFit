@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import wefit.com.wefit.pojo.Event;
 
-import static wefit.com.wefit.MainFragment.EVENT;
+import static wefit.com.wefit.main.MainFragment.EVENT;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package wefit.com.wefit;
+package wefit.com.wefit.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
+import wefit.com.wefit.EventAdapter;
+import wefit.com.wefit.EventDescriptionActivity;
+import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -24,32 +27,20 @@ import wefit.com.wefit.viewmodels.MainViewModel;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnMainFragmentInteractionListener} interface
+ * {@link FragmentsInteractionListener} interface
  * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class MainFragment extends Fragment {
     public static final String EVENT = "selected";
     private EventAdapter mAdapter;
     private ListView mEventList;
     private MainViewModel mMainViewModel;
-    private OnMainFragmentInteractionListener mListener;
+    private FragmentsInteractionListener mListener;
     // this should be handled by another class
     private Subscription mSubscription;
 
     public MainFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MainFragment.
-     */
-    public static MainFragment newInstance() {
-        return new MainFragment();
     }
 
     @Override
@@ -122,13 +113,18 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnMainFragmentInteractionListener) {
-            mListener = (OnMainFragmentInteractionListener) context;
+        if (context instanceof FragmentsInteractionListener) {
+            mListener = (FragmentsInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnMainFragmentInteractionListener");
+                    + " must implement FragmentsInteractionListener");
         }
     }
 
@@ -145,18 +141,4 @@ public class MainFragment extends Fragment {
             mSubscription.cancel();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnMainFragmentInteractionListener {
-        MainViewModel getMainViewModel();
-        void provideLocation();
-    }
 }
