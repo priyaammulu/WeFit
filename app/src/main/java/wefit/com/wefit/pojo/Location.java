@@ -6,8 +6,17 @@ package wefit.com.wefit.pojo;
 
 public class Location {
     private String name;
-    private int longitude;
-    private int latitude;
+    private double longitude;
+    private double latitude;
+
+    public Location(double latitude, double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Location() {
+
+    }
 
     public String getName() {
         return name;
@@ -17,19 +26,19 @@ public class Location {
         this.name = name;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(int longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(int latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 }

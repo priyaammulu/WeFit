@@ -62,6 +62,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
+        mListener.provideLocation();
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
@@ -155,7 +156,7 @@ public class MainFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnMainFragmentInteractionListener {
-        // TODO: Update argument type and name
         MainViewModel getMainViewModel();
+        void provideLocation();
     }
 }
