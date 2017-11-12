@@ -1,5 +1,6 @@
 package wefit.com.wefit;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,9 +11,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import wefit.com.wefit.viewmodels.LoginViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -24,8 +27,11 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mLoginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
         mMainViewModel = ((WefitApplication) getApplication()).getMainViewModel();
+
+
         if (!mLoginViewModel.isAuth())
             signOut();
 
@@ -58,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnMa
     public void provideLocation() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION);
 
         } else {
             enableGoogleApiClient();

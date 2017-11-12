@@ -121,4 +121,20 @@ public class Event implements Parcelable {
     public void setPublished(Date published) {
         this.published = published;
     }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "description='" + description + '\'' +
+                ", title='" + title + '\'' +
+                ", image='" + image + '\'' +
+                ", location=" + location +
+                ", user=" + user +
+                ", expire=" + expire +
+                ", published=" + published +
+                ", category=" + category +
+                ", participants=" + participants +
+                ", mData=" + mData +
+                '}';
+    }
 }

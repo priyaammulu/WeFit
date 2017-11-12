@@ -40,8 +40,8 @@ public class User {
         return name;
     }
 
-    public void setName(String birthDaay) {
-        this.name = birthDaay;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
