@@ -3,7 +3,6 @@ package wefit.com.wefit.utils.firebaseadapters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
 
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
@@ -41,7 +40,7 @@ public class EventFirebaseAdapter {
         this.description = adaptedEvent.getDescription();
         this.imageUrl = adaptedEvent.getImage();
         this.location = adaptedEvent.getLocation();
-        this.eventCreatorUserId = adaptedEvent.getUser().getUserId();
+        this.eventCreatorUserId = adaptedEvent.getCreator().getUserId();
         this.expiration = adaptedEvent.getExpire();
         this.publication = adaptedEvent.getPublished();
         this.eventCategory = adaptedEvent.getCategory();

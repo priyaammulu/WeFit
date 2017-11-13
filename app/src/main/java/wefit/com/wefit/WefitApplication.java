@@ -5,7 +5,7 @@ import android.app.Application;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.database.FirebaseDatabase;
 
-import wefit.com.wefit.datamodel.FirebaseModel;
+import wefit.com.wefit.datamodel.FirebaseLoginModel;
 import wefit.com.wefit.datamodel.LoginModel;
 import wefit.com.wefit.datamodel.EventModel;
 import wefit.com.wefit.datamodel.EventModelImpl;
@@ -27,7 +27,7 @@ public class WefitApplication extends Application {
         Stetho.initializeWithDefaults(this);
 
         // initialise loginModel
-        mLoginModel = new FirebaseModel(this);
+        mLoginModel = new FirebaseLoginModel(this);
         mEventModel = new EventModelImpl(FirebaseDatabase.getInstance());
     }
 

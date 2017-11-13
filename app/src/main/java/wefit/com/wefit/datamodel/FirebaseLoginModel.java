@@ -15,13 +15,13 @@ import wefit.com.wefit.pojo.User;
  * Created by lorenzo on 10/28/17.
  */
 
-public class FirebaseModel implements LoginModel {
+public class FirebaseLoginModel implements LoginModel {
 
     private User user;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
-    public FirebaseModel(Context currentContext) {
+    public FirebaseLoginModel(Context currentContext) {
 
         // firebase initialization
         FirebaseApp.initializeApp(currentContext);

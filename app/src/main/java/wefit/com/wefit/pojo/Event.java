@@ -34,11 +34,11 @@ public class Event implements Parcelable {
         this.description = description;
     }
 
-    public User getUser() {
+    public User getCreator() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setCreator(User user) {
         this.user = user;
     }
 

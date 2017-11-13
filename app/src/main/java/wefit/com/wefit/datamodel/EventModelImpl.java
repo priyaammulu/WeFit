@@ -11,13 +11,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
@@ -45,12 +48,12 @@ public class EventModelImpl implements EventModel {
     public Flowable<List<Event>> getEvents() {
         return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
             @Override
-            public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
+            public void subscribe(final FlowableEmitter<List<Event>> topEmitter) throws Exception {
 
 
                 // creation of a user in the database
                 String userKey = mUserStore.push().getKey();
-                User user = new User();
+                final User user = new User();
                 user.setUserId(userKey);
 
                 mUserStore.child(userKey).setValue(user);
@@ -65,9 +68,6 @@ public class EventModelImpl implements EventModel {
                 User partecipant2 = new User();
                 partecipant2.setUserId(userKey);
                 mUserStore.child(userKey).setValue(partecipant2);
-
-
-
 
 
                 // TODO populate db (to remove)
@@ -92,13 +92,13 @@ public class EventModelImpl implements EventModel {
                 testEvent.setImage("https://firebasestorage.googleapis.com/v0/b/wefit-project.appspot.com/o/nws-st-jaguar.jpg?alt=media&token=98fae503-72a4-4da5-99e0-8a79c7b550c5");
 
 
-                testEvent.setUser(user);
+                testEvent.setCreator(user);
                 partecipants.add(partecipant1);
                 partecipants.add(partecipant2);
 
                 testEvent.setParticipants(partecipants);
 
-                EventFirebaseAdapter event = new EventFirebaseAdapter(testEvent);
+                final EventFirebaseAdapter event = new EventFirebaseAdapter(testEvent);
 
                 // save in the db
                 mEventStore.child(newEventKey).setValue(event);
@@ -107,63 +107,153 @@ public class EventModelImpl implements EventModel {
                 Log.i("CREATO", "dovrebbe aver creato");
 
 
+                mEventStore.orderByChild("expiration")
+                        .startAt(today.toString())
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                mEventStore.orderByChild("expiration").startAt(today.toString()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                List<EventFirebaseAdapter> firebaseEvents = new ArrayList<>();
+                                final List<Event> applicationEvents = new ArrayList<>();
 
-                        List<EventFirebaseAdapter> firebaseEvents = new ArrayList<>();
-                        List<Event> applicationEvents = new ArrayList<>();
+                                final Set<String> userIds = new HashSet<>();
+                                final Set<User> userInfos = new HashSet<>();
 
-                        for (DataSnapshot a : dataSnapshot.getChildren()) {
-                            firebaseEvents.add(a.getValue(EventFirebaseAdapter.class));
-                        }
+                                //List<Flowable<List<User>>> promises = new ArrayList<>();
+                                //int numPremises = 0;
 
-                        Log.i("STORE", firebaseEvents.toString());
 
-                        // todo rimuovere
+                                // retrieve data of the events from the DB
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    firebaseEvents.add(snapshot.getValue(EventFirebaseAdapter.class));
+                                }
 
-                        for (EventFirebaseAdapter fEvent :
-                                firebaseEvents) {
 
-                            Event event1 = new Event();
-                            event1.setDescription(fEvent.getDescription());
-                            event1.setExpire(fEvent.getExpiration());
-                            event1.setTitle("test tile");
-                            //testLocation.setName("location name");
-                            event1.setLocation(fEvent.getLocation());
+                                // retrieve all the required user IDs
+                                for (EventFirebaseAdapter event : firebaseEvents) {
 
-                            event1.setPublished(fEvent.getPublication());
-                            event1.setExpire(fEvent.getExpiration());
-                            event1.setImage(fEvent.getImageUrl());
+                                    userIds.add(event.getEventCreatorUserId());
+                                    userIds.addAll(event.getPartecipantsUserIds());
 
-                            User creator = new User();
-                            creator.setUserId(fEvent.getEventCreatorUserId());
+                                }
 
-                            List<User> partecipants = new ArrayList<>();
+                                List<Flowable<User>> promises = new ArrayList<>();
 
-                            for (String userid :
-                                    fEvent.getPartecipantsUserIds()) {
-                                User partecipant = new User();
-                                partecipant.setUserId(userid);
-                                partecipants.add(partecipant);
+
+                                for (final String id : userIds) {
+
+                                    promises.add(Flowable.create(new FlowableOnSubscribe<User>() {
+                                        @Override
+                                        public void subscribe(final FlowableEmitter<User> flowableEmitter) throws Exception {
+
+                                            Log.i("id", id);
+                                            mUserStore.orderByKey().equalTo(id)
+                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            Log.i("retrivati", String.valueOf(dataSnapshot.hasChildren()));
+                                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                                userInfos.add(snapshot.getValue(User.class));
+                                                                Log.i("prova", String.valueOf(userInfos.size()));
+                                                            }
+
+                                                            Log.i("prova", "retrievato");
+                                                            flowableEmitter.onNext(new User());
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
+                                        }
+                                    }, BackpressureStrategy.BUFFER));
+
+
+                                }
+
+                                Log.i("prova", "sono qui");
+
+                                //final List<Subscription> subscriptions = new ArrayList<>();
+
+                                for (Flowable<User> promise : promises) {
+
+                                    Log.i("prova", "mi registro");
+
+                                    promise.subscribe(new Consumer<User>() {
+                                        @Override
+                                        public void accept(User user) throws Exception {
+                                            Log.i("prova", "poffarbacco");
+                                            Log.i("N Utenti da scaricare", String.valueOf(userIds.size()));
+                                            Log.i("N Utenti gia scar", String.valueOf(userInfos.size()));
+                                            if (userIds.size() == userInfos.size()) {
+
+                                                // TODO dai agli eventi le loro info utente corrette
+                                                Log.i("Utenti", userIds.toString());
+                                                Log.i("INFO", userInfos.toString());
+
+                                                topEmitter.onNext(applicationEvents);
+                                            }
+                                        }
+                                    });
+                                }
+
+
+
+
+
+
+
+                                /*
+                                for (EventFirebaseAdapter fEvent :
+                                        firebaseEvents) {
+
+                                    Event event1 = new Event();
+
+
+                                    event1.setDescription(fEvent.getDescription());
+                                    event1.setExpire(fEvent.getExpiration());
+                                    event1.setTitle("test tile");
+                                    //testLocation.setName("location name");
+                                    event1.setLocation(fEvent.getLocation());
+
+                                    event1.setPublished(fEvent.getPublication());
+                                    event1.setExpire(fEvent.getExpiration());
+                                    event1.setImage(fEvent.getImageUrl());
+
+                                    User creator = new User();
+                                    creator.setUserId(fEvent.getEventCreatorUserId());
+
+                                    List<User> partecipants = new ArrayList<>();
+
+                                    for (String userid :
+                                            fEvent.getPartecipantsUserIds()) {
+                                        User partecipant = new User();
+                                        partecipant.setUserId(userid);
+                                        partecipants.add(partecipant);
+                                    }
+
+                                    event1.setParticipants(partecipants);
+                                    event1.setCreator(creator);
+
+                                    applicationEvents.add(event1);
+
+
+
+
+
+                                }
+                                */
+
+
                             }
 
-                            event1.setParticipants(partecipants);
-                            event1.setUser(creator);
-
-                            applicationEvents.add(event1);
-
-                        }
-
-                        flowableEmitter.onNext(applicationEvents);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //flowableEmitter.onError(databaseError.toException());
-                    }
-                });
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                topEmitter.onError(databaseError.toException());
+                            }
+                        });
             }
         }, BackpressureStrategy.BUFFER);
 
@@ -178,4 +268,6 @@ public class EventModelImpl implements EventModel {
         // todo, sort events by location distance
         // TODO use a strategy pattern here
     }
+
+
 }
