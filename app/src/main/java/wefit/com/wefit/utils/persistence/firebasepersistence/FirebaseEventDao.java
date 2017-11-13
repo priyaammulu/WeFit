@@ -89,11 +89,18 @@ public class FirebaseEventDao implements EventDao {
         private int initialOffset;
         private int resultRange;
 
+        private FlowableEmitter<List<Event>> flowableEmitter;
+        private List<EventWrapper> firebaseEvents = new ArrayList<>();
+        private Map<String, User> retrievedUsers = new HashMap<>();
+
+
         @Override
-        public void subscribe(final FlowableEmitter<List<Event>> listeners) throws Exception {
+        public void subscribe(FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
 
-            Log.i("SOTTOSCRITTO", "alala");
+            // memorize the emitter to use it in other methods
+            this.flowableEmitter = flowableEmitter;
 
+            // event request
             mEventStorage.
                     orderByChild("expiration") // TODO rivedere l'ordinamento
                     .limitToFirst(resultRange)
@@ -101,20 +108,15 @@ public class FirebaseEventDao implements EventDao {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            final List<EventWrapper> firebaseEvents = new ArrayList<>();
                             final Set<String> userIDs = new HashSet<>();
-                            final Map<String, User> retrievedUsers = new HashMap<>();
 
                             // retrieve data of the events from the DB
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                                 EventWrapper wrapper = snapshot.getValue(EventWrapper.class);
-
-                                if (wrapper != null) { // always true tho
-                                    wrapper.setId(snapshot.getKey());
-                                }
-
+                                wrapper.setId(snapshot.getKey());
                                 firebaseEvents.add(wrapper);
+
                             }
 
                             for (EventWrapper wrapped : firebaseEvents) {
@@ -138,36 +140,10 @@ public class FirebaseEventDao implements EventDao {
 
                                         // if the last user is retrieved
                                         if (retrievedUsers.size() == userIDs.size()) {
-                                            this.structureEvents();
+                                            structureEvents();
 
                                         }
 
-                                    }
-
-                                    private void structureEvents() {
-
-                                        List<Event> unwrappedEvents = new ArrayList<>();
-
-                                        // all the information are now available
-                                        // construct the events
-                                        for (EventWrapper firebaseEvent : firebaseEvents) {
-
-                                            Event newevent = firebaseEvent.unwrap();
-
-                                            // retrieve user creator from the map
-                                            newevent.setCreator(retrievedUsers.get(firebaseEvent.getEventCreatorUserId()));
-
-                                            // fill all the partecipant to the event
-                                            for (String partecipantID : firebaseEvent.getPartecipantsUserIds()) {
-                                                newevent.addPatecipant(retrievedUsers.get(partecipantID));
-                                            }
-
-                                            unwrappedEvents.add(newevent);
-
-                                        }
-
-                                        // all is done, send the notification
-                                        listeners.onNext(unwrappedEvents);
                                     }
                                 });
 
@@ -188,6 +164,32 @@ public class FirebaseEventDao implements EventDao {
             this.centralPosition = centralPosition;
             this.initialOffset = initialOffset;
             this.resultRange = resultRange;
+        }
+
+        private void structureEvents() {
+
+            List<Event> unwrappedEvents = new ArrayList<>();
+
+            // all the information are now available
+            // construct the events
+            for (EventWrapper firebaseEvent : firebaseEvents) {
+
+                Event newevent = firebaseEvent.unwrap();
+
+                // retrieve user creator from the map
+                newevent.setCreator(retrievedUsers.get(firebaseEvent.getEventCreatorUserId()));
+
+                // fill all the partecipant to the event
+                for (String partecipantID : firebaseEvent.getPartecipantsUserIds()) {
+                    newevent.addPatecipant(retrievedUsers.get(partecipantID));
+                }
+
+                unwrappedEvents.add(newevent);
+
+            }
+
+            // all is done, send the notification
+            flowableEmitter.onNext(unwrappedEvents);
         }
     }
 

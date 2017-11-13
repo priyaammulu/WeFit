@@ -30,7 +30,24 @@ public class FirebaseUserDao implements UserDao {
 
     @Override
     public void save(User userToStore) {
-        // TODO yet to be implemented
+
+        String userID;
+
+        // make sure if the user has already an Id (this allows overwriting)
+        userID = userToStore.getUserId();
+
+        if (userID == null) {
+
+            // get the key from the store and assign to the event
+            userID = this.mUserStorage.push().getKey();
+            userToStore.setUserId(userID);
+
+        }
+
+
+        // save in the db
+        this.mUserStorage.child(userID).setValue(userToStore);
+
     }
 
     public FirebaseUserDao(FirebaseDatabase firebaseDatabase, String userStoreName) {
@@ -46,8 +63,6 @@ public class FirebaseUserDao implements UserDao {
 
         @Override
         public void subscribe(final FlowableEmitter<User> flowableEmitter) throws Exception {
-
-            Log.i("VOGLIO", userID);
 
             // reitrieve the user by ID
             mUserStorage
