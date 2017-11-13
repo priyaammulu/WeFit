@@ -5,10 +5,10 @@ import android.app.Application;
 import com.facebook.stetho.Stetho;
 import com.google.firebase.database.FirebaseDatabase;
 
-import wefit.com.wefit.datamodel.FirebaseLoginModel;
-import wefit.com.wefit.datamodel.LoginModel;
 import wefit.com.wefit.datamodel.EventModel;
 import wefit.com.wefit.datamodel.EventModelImpl;
+import wefit.com.wefit.datamodel.FirebaseLoginModel;
+import wefit.com.wefit.datamodel.LoginModel;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -23,6 +23,7 @@ public class WefitApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         // TODO remove in the end (local storage debugging)
         Stetho.initializeWithDefaults(this);
 
