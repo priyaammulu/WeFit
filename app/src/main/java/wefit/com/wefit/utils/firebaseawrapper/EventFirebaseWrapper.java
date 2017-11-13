@@ -1,4 +1,4 @@
-package wefit.com.wefit.utils.firebaseadapters;
+package wefit.com.wefit.utils.firebaseawrapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +13,7 @@ import wefit.com.wefit.pojo.User;
  * Created by gioacchino on 12/11/2017.
  */
 
-public class EventFirebaseAdapter {
+public class EventFirebaseWrapper {
 
     private String title;
     private String description;
@@ -26,13 +26,13 @@ public class EventFirebaseAdapter {
     private Category eventCategory;
     private List<String> partecipantsUserIds = new ArrayList<>();
 
-    public EventFirebaseAdapter(Event adaptedEvent) {
+    public EventFirebaseWrapper(Event adaptedEvent) {
 
         extractInfos(adaptedEvent);
 
     }
 
-    public EventFirebaseAdapter() {
+    public EventFirebaseWrapper() {
     }
 
     private void extractInfos(Event adaptedEvent) {

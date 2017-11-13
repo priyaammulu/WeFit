@@ -24,7 +24,7 @@ import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.utils.firebaseadapters.EventFirebaseAdapter;
+import wefit.com.wefit.utils.firebaseawrapper.EventFirebaseWrapper;
 
 
 /**
@@ -98,7 +98,7 @@ public class EventModelImpl implements EventModel {
 
                 testEvent.setParticipants(partecipants);
 
-                final EventFirebaseAdapter event = new EventFirebaseAdapter(testEvent);
+                final EventFirebaseWrapper event = new EventFirebaseWrapper(testEvent);
 
                 // save in the db
                 mEventStore.child(newEventKey).setValue(event);
@@ -113,7 +113,7 @@ public class EventModelImpl implements EventModel {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                List<EventFirebaseAdapter> firebaseEvents = new ArrayList<>();
+                                List<EventFirebaseWrapper> firebaseEvents = new ArrayList<>();
                                 final List<Event> applicationEvents = new ArrayList<>();
 
                                 final Set<String> userIds = new HashSet<>();
@@ -125,12 +125,12 @@ public class EventModelImpl implements EventModel {
 
                                 // retrieve data of the events from the DB
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                    firebaseEvents.add(snapshot.getValue(EventFirebaseAdapter.class));
+                                    firebaseEvents.add(snapshot.getValue(EventFirebaseWrapper.class));
                                 }
 
 
                                 // retrieve all the required user IDs
-                                for (EventFirebaseAdapter event : firebaseEvents) {
+                                for (EventFirebaseWrapper event : firebaseEvents) {
 
                                     userIds.add(event.getEventCreatorUserId());
                                     userIds.addAll(event.getPartecipantsUserIds());
@@ -206,7 +206,7 @@ public class EventModelImpl implements EventModel {
 
 
                                 /*
-                                for (EventFirebaseAdapter fEvent :
+                                for (EventFirebaseWrapper fEvent :
                                         firebaseEvents) {
 
                                     Event event1 = new Event();
