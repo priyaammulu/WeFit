@@ -1,7 +1,5 @@
 package wefit.com.wefit.utils.persistence.firebasepersistence;
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -83,22 +81,22 @@ public class FirebaseEventDao implements EventDao {
 
     }
 
+    private Flowable<Event> loadAssociatedUsers(EventWrapper event) {
+        return Flowable.create(new LoadAssociateUserProvider(event), BackpressureStrategy.BUFFER);
+    }
+
     private class EventListAsyncProvider implements FlowableOnSubscribe<List<Event>> {
 
         private Location centralPosition;
         private int initialOffset;
         private int resultRange;
 
-        private FlowableEmitter<List<Event>> flowableEmitter;
         private List<EventWrapper> firebaseEvents = new ArrayList<>();
-        private Map<String, User> retrievedUsers = new HashMap<>();
+        private List<Event> retrievedEvents = new ArrayList<>();
 
 
         @Override
-        public void subscribe(FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
-
-            // memorize the emitter to use it in other methods
-            this.flowableEmitter = flowableEmitter;
+        public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
 
             // event request
             mEventStorage.
@@ -107,8 +105,6 @@ public class FirebaseEventDao implements EventDao {
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-
-                            final Set<String> userIDs = new HashSet<>();
 
                             // retrieve data of the events from the DB
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -119,34 +115,20 @@ public class FirebaseEventDao implements EventDao {
 
                             }
 
-                            for (EventWrapper wrapped : firebaseEvents) {
+                            for (EventWrapper wrappedEvent : firebaseEvents) {
 
-                                // collect all the user IDs for each event
-                                userIDs.add(wrapped.getEventCreatorUserId());
-                                userIDs.addAll(wrapped.getPartecipantsUserIds());
-
-                            }
-
-                            // fetch user infos for each user
-                            for (String id : userIDs) {
-
-                                mUserPersistence.loadByID(id).subscribe(new Consumer<User>() {
-
+                                loadAssociatedUsers(wrappedEvent).subscribe(new Consumer<Event>() {
                                     @Override
-                                    public void accept(User user) throws Exception {
+                                    public void accept(Event event) throws Exception {
 
-                                        // collect the user in a id-data dictionary
-                                        retrievedUsers.put(user.getUserId(), user);
+                                        retrievedEvents.add(event);
 
-                                        // if the last user is retrieved
-                                        if (retrievedUsers.size() == userIDs.size()) {
-                                            structureEvents();
-
+                                        if (retrievedEvents.size() == firebaseEvents.size()) {
+                                            flowableEmitter.onNext(retrievedEvents);
                                         }
 
                                     }
                                 });
-
 
                             }
 
@@ -165,32 +147,6 @@ public class FirebaseEventDao implements EventDao {
             this.initialOffset = initialOffset;
             this.resultRange = resultRange;
         }
-
-        private void structureEvents() {
-
-            List<Event> unwrappedEvents = new ArrayList<>();
-
-            // all the information are now available
-            // construct the events
-            for (EventWrapper firebaseEvent : firebaseEvents) {
-
-                Event newevent = firebaseEvent.unwrap();
-
-                // retrieve user creator from the map
-                newevent.setCreator(retrievedUsers.get(firebaseEvent.getEventCreatorUserId()));
-
-                // fill all the partecipant to the event
-                for (String partecipantID : firebaseEvent.getPartecipantsUserIds()) {
-                    newevent.addPatecipant(retrievedUsers.get(partecipantID));
-                }
-
-                unwrappedEvents.add(newevent);
-
-            }
-
-            // all is done, send the notification
-            flowableEmitter.onNext(unwrappedEvents);
-        }
     }
 
     private class EventAsyncProvider implements FlowableOnSubscribe<Event> {
@@ -200,14 +156,31 @@ public class FirebaseEventDao implements EventDao {
         @Override
         public void subscribe(final FlowableEmitter<Event> listeners) throws Exception {
 
-            mEventStorage.orderByKey().equalTo(requestedEventId).addListenerForSingleValueEvent(new ValueEventListener() {
+            mEventStorage
+                    .orderByKey()
+                    .equalTo(requestedEventId)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    // TODO qui ricevi l'evento e fai qualcosa
-                    Event retrieved = new Event();
+                    // this snapshot contains the required data
+                    DataSnapshot snapshot = dataSnapshot
+                            .getChildren()
+                            .iterator()
+                            .next();
 
-                    listeners.onNext(retrieved);
+                    // retrieve event content
+                    EventWrapper wrapper = snapshot.getValue(EventWrapper.class);
+                    wrapper.setId(snapshot.getKey());
+
+                    // retrieve all the user informations and send the event
+                    loadAssociatedUsers(wrapper).subscribe(new Consumer<Event>() {
+                        @Override
+                        public void accept(Event event) throws Exception {
+                            listeners.onNext(event);
+                        }
+                    });
+
 
                 }
 
@@ -221,6 +194,70 @@ public class FirebaseEventDao implements EventDao {
 
         EventAsyncProvider(String requestedEventId) {
             this.requestedEventId = requestedEventId;
+        }
+    }
+
+    private class LoadAssociateUserProvider implements FlowableOnSubscribe<Event> {
+
+        private EventWrapper firebaseEvent;
+        private Map<String, User> userMap = new HashMap<>();
+
+        public LoadAssociateUserProvider(EventWrapper firebaseEvent) {
+            this.firebaseEvent = firebaseEvent;
+        }
+
+        @Override
+        public void subscribe(final FlowableEmitter<Event> flowableEmitter) throws Exception {
+
+
+            final Set<String> userIDs = new HashSet<>();
+            userIDs.add(firebaseEvent.getEventCreatorUserId());
+            userIDs.addAll(firebaseEvent.getPartecipantsUserIds());
+
+
+            // fetch user infos for each user
+            for (String id : userIDs) {
+
+                mUserPersistence.loadByID(id).subscribe(new Consumer<User>() {
+
+                    @Override
+                    public void accept(User user) throws Exception {
+
+                        // collect the user in a id-data dictionary
+                        userMap.put(user.getUserId(), user);
+
+                        // if the last user is retrieved
+                        if (userMap.size() == userIDs.size()) {
+
+                            Event event = this.structureResposne();
+                            flowableEmitter.onNext(event);
+
+
+                        }
+
+                    }
+
+                    private Event structureResposne() {
+
+                        Event newevent = firebaseEvent.unwrap();
+
+                        // retrieve user creator from the map
+                        newevent.setCreator(userMap.get(firebaseEvent.getEventCreatorUserId()));
+
+                        // fill all the partecipant to the event
+                        for (String partecipantID : firebaseEvent.getPartecipantsUserIds()) {
+                            newevent.addPatecipant(userMap.get(partecipantID));
+                        }
+
+                        return newevent;
+
+                    }
+                });
+
+
+            }
+
+
         }
     }
 
