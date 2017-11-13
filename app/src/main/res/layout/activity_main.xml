@@ -6,26 +6,31 @@
     android:orientation="vertical"
     tools:context="wefit.com.wefit.MainActivity">
 
-    <Button
-        android:id="@+id/sign_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign out" />
-
-    <fragment
-        android:name="wefit.com.wefit.MainFragment"
-        android:id="@+id/main_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <LinearLayout
-        android:layout_gravity="bottom"
+        android:id="@+id/topPanel"
+        android:layout_gravity="top"
         android:background="@color/cardview_light_background"
         android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-            <!--First icon -->
+        android:layout_height="50dp">
+        <!--First Top icon -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_edit"
+                />
+
+        </LinearLayout>
+
+
+        <!--third icon -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -36,7 +41,49 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@drawable/ic_search"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <Button
+        android:id="@+id/sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign out" />
+
+    <fragment
+        android:name="wefit.com.wefit.MainFragment"
+        android:id="@+id/main_fragment"
+        android:layout_below="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:background="@color/cardview_light_background"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!--First icon -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_user"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,7 +101,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@drawable/ic_home"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -72,7 +119,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@drawable/ic_calendar"/>
 
             <TextView
                 android:layout_width="wrap_content"

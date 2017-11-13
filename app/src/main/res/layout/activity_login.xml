@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="wefit.com.wefit.LoginActivity"
-    style="@style/Theme.AppCompat.Light.DarkActionBar">
+    android:background="@color/white">
+
+
+
+    <ImageView
+        android:id="@+id/logoSVG"
+        android:layout_height="300dp"
+        android:layout_width="300dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginBottom="170dp"/>
+
+
 
     <Button
         android:id="@+id/facebook_login_btn"
-        android:layout_width="@dimen/loginbutton_width"
-        android:layout_height="@dimen/loginbutton_height"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/login_button_fb"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/google_login_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.942" />
+        android:text="   login with facebook  "
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:drawableLeft="@drawable/ic_facebook"
+        android:background="@drawable/my_facebook_button"
+        android:layout_marginBottom="15dp"
+        android:layout_above="@+id/google_login_btn"
+        android:layout_centerHorizontal="true"
+        android:padding="15dp" />
+
+
+
 
     <Button
         android:id="@+id/google_login_btn"
-        android:layout_width="@dimen/loginbutton_width"
-        android:layout_height="@dimen/loginbutton_height"
-        android:layout_marginBottom="84dp"
-        android:background="@drawable/login_button_gmail"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginTop="64dp"
-        app:layout_constraintBottom_toTopOf="@+id/facebook_login_btn"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.56"
-        app:layout_constraintVertical_chainStyle="spread_inside"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
+        android:layout_marginBottom="85dp"
+        android:textAllCaps="false"
+        android:text="  login with google  "
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:drawableLeft="@drawable/ic_google"
+        android:background="@drawable/my_google_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="15dp"/>
 
-</android.support.constraint.ConstraintLayout>
+
+
+</RelativeLayout>

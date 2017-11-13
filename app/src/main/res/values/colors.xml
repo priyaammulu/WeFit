@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorAccent">#FF4081</color>
+    <color name="transparentLightBlue">#40009fff</color>
+    <color name="transparentBlue">#B3303F9F</color>
+    <color name="lightGrey">#c4c4c4</color>
+    <color name="transparentLightGrey">#B3c4c4c4</color>
+    <color name="grey">#999999</color>
+    <color name="titleGrey">#6a6a6a</color>
+    <color name="lighterGrey">#f0f0f0</color>
+    <color name="darkGrey">#444444</color>
+    <color name="darkerGrey">#3B3B3B</color>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="lightBlue">#2ECCFA</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
 </resources>

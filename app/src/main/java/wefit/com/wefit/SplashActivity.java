@@ -14,6 +14,7 @@ public class SplashActivity extends AppCompatActivity {
         Intent intent;
         LoginViewModel mLoginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
 
+
         if (mLoginViewModel.isAuth())
             intent = new Intent(this, MainActivity.class);
         else
