@@ -64,13 +64,13 @@ public class EventAdapter extends BaseAdapter {
         Event event = events.get(position);
         holder.title.setText(event.getTitle());
         holder.location.setText(event.getLocation().getName());
-        holder.monthDay.setText(event.getDate().toString().substring(5));
-        holder.time.setText(event.getDate().toString().substring(5));
+        holder.monthDay.setText(event.getExpire().toString().substring(5));
+        holder.time.setText(event.getExpire().toString().substring(5));
         holder.organizer.setText(event.getUser().getName());
         holder.published.setText(event.getPublished().toString().substring(5));
-        Picasso.with(context).load(R.mipmap.ic_launcher).into(holder.mEvent);
-        Picasso.with(context).load(R.mipmap.ic_launcher).into(holder.mUser);
-        Picasso.with(context).load(R.mipmap.ic_launcher).into(holder.mGame);
+        Picasso.with(context).load(event.getImage()).into(holder.mEvent);
+        Picasso.with(context).load(event.getImage()).into(holder.mUser);
+        Picasso.with(context).load(event.getImage()).into(holder.mGame);
         return convertView;
     }
 

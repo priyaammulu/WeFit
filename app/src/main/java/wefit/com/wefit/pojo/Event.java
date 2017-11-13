@@ -16,7 +16,7 @@ public class Event implements Parcelable {
     private String image;
     private Location location;
     private User user;
-    private Date date;
+    private Date expire;
     private Date published;
     private Category category;
     private List<User> participants;
@@ -50,12 +50,12 @@ public class Event implements Parcelable {
         this.title = title;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getExpire() {
+        return expire;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setExpire(Date expire) {
+        this.expire = expire;
     }
 
     public Category getCategory() {

@@ -33,6 +33,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Arrays;
 import java.util.List;
 
+import wefit.com.wefit.main.MainActivity;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {

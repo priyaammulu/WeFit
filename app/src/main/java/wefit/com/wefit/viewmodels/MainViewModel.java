@@ -1,10 +1,13 @@
 package wefit.com.wefit.viewmodels;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.util.List;
 
 import io.reactivex.Flowable;
 import wefit.com.wefit.datamodel.EventModel;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.Location;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -19,5 +22,9 @@ public class MainViewModel {
 
     public Flowable<List<Event>> getEvents() {
         return mEventModel.getEvents();
+    }
+
+    public void setLocation(Location location) {
+        mEventModel.setLocation(location);
     }
 }

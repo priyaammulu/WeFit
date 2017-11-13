@@ -23,7 +23,6 @@ public class WefitApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         // TODO remove in the end (local storage debugging)
         Stetho.initializeWithDefaults(this);
 

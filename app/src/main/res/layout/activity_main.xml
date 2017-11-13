@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="wefit.com.wefit.MainActivity">
+    tools:context="wefit.com.wefit.main.MainActivity">
 
     <LinearLayout
         android:id="@+id/topPanel"
@@ -56,8 +56,7 @@
         android:layout_height="wrap_content"
         android:text="Sign out" />
 
-    <fragment
-        android:name="wefit.com.wefit.MainFragment"
+    <FrameLayout
         android:id="@+id/main_fragment"
         android:layout_below="@+id/topPanel"
         android:layout_width="match_parent"
@@ -76,6 +75,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:id="@+id/button_settings"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -95,6 +95,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:id="@+id/button_main"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -113,6 +114,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:gravity="center"
+            android:id="@+id/button_myevents"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
