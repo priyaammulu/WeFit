@@ -3,29 +3,33 @@ package wefit.com.wefit.datamodel;
 import android.content.Context;
 import android.util.Log;
 
-import com.facebook.AccessToken;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.utils.persistence.UserDao;
 
 
 /**
  * Created by lorenzo on 10/28/17.
  */
 
-public class FirebaseLoginModel implements LoginModel {
+public class UserModelImpl implements UserModel {
 
     private User user;
     private FirebaseAuth mAuth;
     private FirebaseUser mUser;
 
-    public FirebaseLoginModel(Context currentContext) {
+    private UserDao userDao;
+
+    public UserModelImpl(Context currentContext, UserDao userPersistence) {
 
         // firebase initialization
         FirebaseApp.initializeApp(currentContext);
         mAuth = FirebaseAuth.getInstance();
+
+        this.userDao = userPersistence;
 
     }
 

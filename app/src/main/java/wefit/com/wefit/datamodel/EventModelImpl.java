@@ -28,24 +28,16 @@ import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
  */
 
 public class EventModelImpl implements EventModel {
-    //private DatabaseReference mEventStore;
+
     private Location currentLocation;
 
-    //private DatabaseReference mUserStore;
-
-    // TODO spostare fuori
-    EventDao eventDao;
-    UserDao userDao;
+    private EventDao eventDao;
+    private UserDao userDao;
 
 
-    public EventModelImpl(FirebaseDatabase firebase) {
-        //mEventStore = firebase.getReference("events");
-        //mUserStore = firebase.getReference("users");
-
-        this.userDao = new FirebaseUserDao(firebase, "users");
-        // tODO questa roba deve essere iniettata
-        //this.userDao;
-        this.eventDao = new FirebaseEventDao(firebase, "events", this.userDao);
+    public EventModelImpl(EventDao eventPersistence, UserDao userPersistence) {
+        this.userDao = userPersistence;
+        this.eventDao = eventPersistence;
     }
 
     @Override

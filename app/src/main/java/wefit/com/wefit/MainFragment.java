@@ -64,6 +64,8 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
+        // tODO tolto per test mio
+        /*
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
@@ -89,6 +91,7 @@ public class MainFragment extends Fragment {
 
             }
         });
+        */
     }
 
     private void bind(View view) {

@@ -44,11 +44,11 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
+    public String getContact() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setContact(String email) {
         this.email = email;
     }
 

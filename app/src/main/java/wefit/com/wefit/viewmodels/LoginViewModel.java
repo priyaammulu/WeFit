@@ -1,7 +1,7 @@
 package wefit.com.wefit.viewmodels;
 
 
-import wefit.com.wefit.datamodel.LoginModel;
+import wefit.com.wefit.datamodel.UserModel;
 import wefit.com.wefit.pojo.User;
 
 /**
@@ -12,9 +12,9 @@ public class LoginViewModel {
 
     public static final String ACCESS_STORED_USER = "user_key";
 
-    private LoginModel mLoginModel;
+    private UserModel mLoginModel;
 
-    public LoginViewModel(LoginModel LoginModel) {
+    public LoginViewModel(UserModel LoginModel) {
         this.mLoginModel = LoginModel;
     }
 

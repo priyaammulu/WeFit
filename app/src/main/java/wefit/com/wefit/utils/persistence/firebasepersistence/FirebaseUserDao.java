@@ -31,19 +31,11 @@ public class FirebaseUserDao implements UserDao {
     @Override
     public void save(User userToStore) {
 
-        String userID;
+        // the user has always an ID
+        String userID = userToStore.getUserId();
 
-        // make sure if the user has already an Id (this allows overwriting)
-        userID = userToStore.getUserId();
-
-        if (userID == null) {
-
-            // get the key from the store and assign to the event
-            userID = this.mUserStorage.push().getKey();
-            userToStore.setUserId(userID);
-
-        }
-
+        // save the event in the store
+        userID = this.mUserStorage.child(userID).getKey();
 
         // save in the db
         this.mUserStorage.child(userID).setValue(userToStore);
@@ -75,8 +67,14 @@ public class FirebaseUserDao implements UserDao {
                             // there is only one value
                             DataSnapshot userWrapper = dataSnapshot.getChildren().iterator().next();
 
-                            // unwrap
-                            User retrieved = userWrapper.getValue(User.class);
+                            User retrieved;
+                            if (userWrapper != null) {
+                                // if you can retrieve a use, unwrap it
+                                retrieved = userWrapper.getValue(User.class);
+                            } else {
+                                // empty user
+                                retrieved = new User();
+                            }
 
                             // send event user retrieved
                             flowableEmitter.onNext(retrieved);
