@@ -72,6 +72,12 @@ public class EventModelImpl implements EventModel {
         this.currentLocation = location;
     }
 
+    @Override
+    public Flowable<List<Event>> getUserEvents() {
+        // TODO non so che farci
+        return null;
+    }
+
     private void sortByLocation() {
         // todo, sort events by location distance
         // TODO use a strategy pattern here

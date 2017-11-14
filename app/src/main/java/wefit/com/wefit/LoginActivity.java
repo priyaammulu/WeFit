@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
+import wefit.com.wefit.main.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.LoginViewModel;

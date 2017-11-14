@@ -42,6 +42,7 @@ public class MyEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
+        /*
         Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
@@ -65,6 +66,7 @@ public class MyEventsFragment extends Fragment {
 
             }
         });
+        */
     }
 
     private void initilizeListView(List<Event> events) {

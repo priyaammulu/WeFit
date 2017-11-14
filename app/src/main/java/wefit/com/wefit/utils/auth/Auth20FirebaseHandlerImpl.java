@@ -37,6 +37,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
 
     @Override
     public void signOut() {
+
         mFirebaseAuth.signOut();
     }
 
