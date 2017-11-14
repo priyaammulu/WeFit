@@ -1,20 +1,17 @@
 package wefit.com.wefit.datamodel;
 
-import com.google.firebase.auth.FirebaseUser;
-
+import io.reactivex.Flowable;
 import wefit.com.wefit.pojo.User;
 
 /**
  * Created by lorenzo on 10/28/17.
  */
 
-public interface LoginModel {
+public interface UserModel {
 
-    void associateUser(User loggedUser);
+    Flowable<User> retrieveLoggedUser();
 
     boolean isAuth();
 
     void signOut();
-
-    FirebaseUser getUser();
 }

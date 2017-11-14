@@ -40,15 +40,15 @@ public class User {
         return name;
     }
 
-    public void setName(String birthDaay) {
-        this.name = birthDaay;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getEmail() {
+    public String getContact() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setContact(String email) {
         this.email = email;
     }
 
@@ -62,4 +62,5 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
+
 }
