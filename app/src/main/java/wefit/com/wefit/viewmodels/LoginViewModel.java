@@ -1,6 +1,7 @@
 package wefit.com.wefit.viewmodels;
 
 
+import io.reactivex.Flowable;
 import wefit.com.wefit.datamodel.UserModel;
 import wefit.com.wefit.pojo.User;
 
@@ -10,7 +11,7 @@ import wefit.com.wefit.pojo.User;
 
 public class LoginViewModel {
 
-    public static final String ACCESS_STORED_USER = "user_key";
+    //public static final String ACCESS_STORED_USER = "user_key";
 
     private UserModel mLoginModel;
 
@@ -18,8 +19,8 @@ public class LoginViewModel {
         this.mLoginModel = LoginModel;
     }
 
-    public void associateUser(User loggedUser) {
-        mLoginModel.associateUser(loggedUser);
+    public Flowable<User> retrieveUser() {
+        return mLoginModel.retrieveLoggedUser();
     }
 
     public boolean isAuth() {

@@ -8,6 +8,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.NoSuchElementException;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -64,15 +66,12 @@ public class FirebaseUserDao implements UserDao {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            // there is only one value
-                            DataSnapshot userWrapper = dataSnapshot.getChildren().iterator().next();
-
                             User retrieved;
-                            if (userWrapper != null) {
-                                // if you can retrieve a use, unwrap it
+                            try {
+                                // there is only one value
+                                DataSnapshot userWrapper = dataSnapshot.getChildren().iterator().next();
                                 retrieved = userWrapper.getValue(User.class);
-                            } else {
-                                // empty user
+                            } catch (NoSuchElementException e) {
                                 retrieved = new User();
                             }
 

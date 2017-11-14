@@ -7,6 +7,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import io.reactivex.Flowable;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.persistence.UserDao;
 
@@ -34,10 +35,8 @@ public class UserModelImpl implements UserModel {
     }
 
     @Override
-    public void associateUser(User loggedUser) {
-        Log.i("INFO", "set associated");
-        user = loggedUser;
-        Log.i("INFO", user.getAuthKey() + "\n" + user.getUserId());
+    public Flowable<User> retrieveLoggedUser() {
+        return null;
     }
 
     @Override

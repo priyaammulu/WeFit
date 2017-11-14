@@ -1,5 +1,7 @@
 package wefit.com.wefit.utils.auth;
 
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -29,7 +31,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
     @Override
     public boolean isAuth() {
 
-        return mFirebaseAuth.getCurrentUser() != null;
+        return mFirebaseAuth.getCurrentUser() != null && mFirebaseAuth.getCurrentUser().isEmailVerified();
 
     }
 
@@ -45,8 +47,11 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
             public void subscribe(final FlowableEmitter<User> flowableEmitter) throws Exception {
                 final FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
 
+                Log.i("PROVA", "sono qui");
                 // retrieve the user id
-                final String userId = getUserID();
+                final String userId = firebaseUser.getUid();
+
+                Log.i("PROVA", "user id e: " + userId);
 
                 // todo check if user exists in the system, if not create it
 
@@ -55,13 +60,17 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
                     public void accept(User loggedUser) throws Exception {
 
                         if (loggedUser.getUserId() == null) {
-                            loggedUser.setUserId(userId);
+
+                            firebaseUser.sendEmailVerification();
+
+                            loggedUser.setUserId(firebaseUser.getUid());
                             loggedUser.setName(firebaseUser.getDisplayName());
-                            loggedUser.setContact(userId);
+                            loggedUser.setContact(getContact());
 
                             mUserDao.save(loggedUser);
 
                         }
+                        Log.i("PROVA2", "sono qui");
 
                         flowableEmitter.onNext(loggedUser);
 
@@ -76,17 +85,17 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
         this.mUserDao = mUserDao;
     }
 
-    private String getUserID() {
+    private String getContact() {
 
         FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
 
         // the user is logged with an email or a phone number
-        String userID = firebaseUser.getEmail();
-        if (userID == null) {
-            userID = firebaseUser.getPhoneNumber();
+        String contact = firebaseUser.getEmail();
+        if (contact == null) {
+            contact = firebaseUser.getPhoneNumber();
         }
 
-        return userID;
+        return contact;
 
 
 

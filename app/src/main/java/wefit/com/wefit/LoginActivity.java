@@ -28,11 +28,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.functions.Consumer;
+import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -207,6 +210,8 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onSuccess(final LoginResult loginResult) {
 
+            Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
+
             handleFacebookAccessTokenForFirebase(loginResult.getAccessToken());
 
         }
@@ -274,7 +279,23 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
+                            Log.i("identificativo gmail ", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            //Log.i("telefono ", FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+
+                            Log.i("USER", "voglio il retrieve");
+                            // TODO retrieve dell'user
+                            loginViewModel.retrieveUser().subscribe(new Consumer<User>() {
+                                @Override
+                                public void accept(User user) throws Exception {
+                                    Log.i("USER", user.toString());
+                                }
+                            });
+                            // go to the main activity
+
+
                             startMainActivity();
+
                         } else {
                             // TODO gestire graficamente
                             // If sign in fails, display a message to the user.
@@ -291,6 +312,14 @@ public class LoginActivity extends AppCompatActivity {
      * Use after the login
      */
     private void startMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+
+        if (this.loginViewModel.isAuth()) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+        else {
+            // TODO mettere in inglese!
+            Toast.makeText(this, "Hey, non hai ancora confermato la tua mail!", Toast.LENGTH_LONG).show();
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package wefit.com.wefit.datamodel;
 
+import io.reactivex.Flowable;
 import wefit.com.wefit.pojo.User;
 
 /**
@@ -8,7 +9,7 @@ import wefit.com.wefit.pojo.User;
 
 public interface UserModel {
 
-    void associateUser(User loggedUser);
+    Flowable<User> retrieveLoggedUser();
 
     boolean isAuth();
 
