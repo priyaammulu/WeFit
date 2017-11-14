@@ -14,4 +14,6 @@ public interface UserModel {
     boolean isAuth();
 
     void signOut();
+
+    User getLocalUser();
 }

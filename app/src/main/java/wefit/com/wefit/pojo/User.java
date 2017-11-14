@@ -1,5 +1,7 @@
 package wefit.com.wefit.pojo;
 
+import java.util.List;
+
 /**
  * Created by gioacchino on 31/10/2017.
  */
@@ -11,6 +13,10 @@ public class User {
     private String gender;
     private String name;
     private String email;
+    private String biography;
+    private String photo;
+    private int birthDate;
+    private List<String> eventPartecipations;
 
     public String getAuthKey() {
         return authKey;
@@ -50,6 +56,46 @@ public class User {
 
     public void setContact(String email) {
         this.email = email;
+    }
+
+    public int getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(int birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public List<String> getEventPartecipations() {
+        return eventPartecipations;
+    }
+
+    public void setEventPartecipations(List<String> eventPartecipations) {
+        this.eventPartecipations = eventPartecipations;
     }
 
     @Override

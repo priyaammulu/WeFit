@@ -1,6 +1,7 @@
 package wefit.com.wefit.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
+import wefit.com.wefit.UserParameterModification;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -42,6 +44,10 @@ public class MyEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
+
+        // TODO togliere va direttamente ad activiti modifica utente
+        startActivity(new Intent(getContext(), UserParameterModification.class));
+
         /*
         Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {

@@ -1,8 +1,10 @@
 package wefit.com.wefit.datamodel;
 
 import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.auth.Auth20Handler;
+import wefit.com.wefit.utils.persistence.LocalUserDao;
 
 /**
  * Created by gioacchino on 14/11/2017.
@@ -10,12 +12,25 @@ import wefit.com.wefit.utils.auth.Auth20Handler;
 
 public class UserModelAsyncImpl implements UserModel {
 
-    private Auth20Handler loginHandler;
-
+    private final LocalUserDao localUserDao;
+    private final Auth20Handler loginHandler;
 
     @Override
     public Flowable<User> retrieveLoggedUser() {
-        return loginHandler.retrieveUser();
+
+        Flowable<User> flow =  loginHandler.retrieveUser();
+
+        // memorize locally the user to serve efficiently the future requests
+        flow.subscribe(new Consumer<User>() {
+            @Override
+            public void accept(User user) throws Exception {
+
+                localUserDao.save(user);
+
+            }
+        });
+
+        return flow;
     }
 
     @Override
@@ -28,7 +43,13 @@ public class UserModelAsyncImpl implements UserModel {
         loginHandler.signOut();
     }
 
-    public UserModelAsyncImpl(Auth20Handler loginHandler) {
+    @Override
+    public User getLocalUser() {
+        return localUserDao.load();
+    }
+
+    public UserModelAsyncImpl(Auth20Handler loginHandler, LocalUserDao localUserDao) {
         this.loginHandler = loginHandler;
+        this.localUserDao = localUserDao;
     }
 }

@@ -8,7 +8,7 @@
     <string name="connection_failure_msg">Sorry, please connect to the Internet</string>
     <string name="loging_fb_btn">Login with Facebook</string>
     <string name="event_description_top_label">Event description</string>
-    <string name="postedby_text" >posted by</string>
+    <string name="postedby_text">posted by</string>
     <string name="postedby_label" />
 
     <!-- TODO: Remove or change this placeholder text -->

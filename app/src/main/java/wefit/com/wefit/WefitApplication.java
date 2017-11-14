@@ -14,10 +14,12 @@ import wefit.com.wefit.datamodel.UserModelAsyncImpl;
 import wefit.com.wefit.utils.auth.Auth20FirebaseHandlerImpl;
 import wefit.com.wefit.utils.auth.Auth20Handler;
 import wefit.com.wefit.utils.persistence.EventDao;
+import wefit.com.wefit.utils.persistence.LocalUserDao;
 import wefit.com.wefit.utils.persistence.UserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
-import wefit.com.wefit.viewmodels.LoginViewModel;
+import wefit.com.wefit.utils.persistence.sharedpreferencepersistence.LocalUserDaoImpl;
+import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 /**
@@ -40,16 +42,17 @@ public class WefitApplication extends Application {
         UserDao userDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
         EventDao eventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "events", userDao);
         Auth20Handler loginHandler = new Auth20FirebaseHandlerImpl(FirebaseAuth.getInstance(), userDao);
+        LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 
 
         // initialise loginModel
         //mLoginModel = new UserModelImpl(this, userDao); // TODO vedi come devi modificare questa implemetnazione
-        mLoginModel = new UserModelAsyncImpl(loginHandler);
+        mLoginModel = new UserModelAsyncImpl(loginHandler, localUserDao);
         mEventModel = new EventModelImpl(eventDao, userDao);
     }
 
-    public LoginViewModel getLoginViewModel() {
-        return new LoginViewModel(getLoginModel());
+    public UserViewModel getUserViewModel() {
+        return new UserViewModel(getLoginModel());
     }
 
     private UserModel getLoginModel() {

@@ -51,7 +51,6 @@ dependencies {
     // rxjava, events managemente
     compile "io.reactivex.rxjava2:rxjava:2.1.6"
 
-
     // layout libraries
     compile 'com.mikhaellopez:circularimageview:3.0.2' // circle images
 

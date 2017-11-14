@@ -3,8 +3,6 @@ package wefit.com.wefit;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -40,7 +38,7 @@ import io.reactivex.functions.Consumer;
 import wefit.com.wefit.main.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.NetworkCheker;
-import wefit.com.wefit.viewmodels.LoginViewModel;
+import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -69,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Handle to the login VM
      */
-    LoginViewModel loginViewModel;
+    UserViewModel loginViewModel;
 
     /**
      * Firebase authentication manager
@@ -93,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // retrieve viewmodel to communicate with
-        this.loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
+        this.loginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
 
         hideActionBar();
 
@@ -304,7 +302,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
                             // this is a round trip operation to guarantee that the user is in the remote DB
-                            loginViewModel.retrieveUser().subscribe(new Consumer<User>() {
+                            loginViewModel.retrieveUserFromRemoteStore().subscribe(new Consumer<User>() {
                                 @Override
                                 public void accept(User user) throws Exception {
                                     Log.i("USER", user.toString());
