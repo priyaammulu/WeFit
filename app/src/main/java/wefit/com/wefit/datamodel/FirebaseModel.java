@@ -3,7 +3,6 @@ package wefit.com.wefit.datamodel;
 import android.content.Context;
 import android.util.Log;
 
-import com.facebook.AccessToken;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,13 +37,18 @@ public class FirebaseModel implements LoginModel {
 
     @Override
     public boolean isAuth() {
-        if (mUser == null)
-            mUser = mAuth.getCurrentUser();
-        return mUser != null;
+        return getUser() != null;
     }
 
     @Override
     public void signOut() {
         mAuth.signOut();
+    }
+
+    @Override
+    public FirebaseUser getUser() {
+        if (mUser == null)
+            mUser = mAuth.getCurrentUser();
+        return mUser;
     }
 }

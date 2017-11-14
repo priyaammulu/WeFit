@@ -269,7 +269,7 @@ public class LoginActivity extends AppCompatActivity {
      * If necessary it creates the user
      * @param credential Wrapped User credential (facebook or google)
      */
-    private void buildFirebaseUser(AuthCredential credential) {
+    private void buildFirebaseUser(final AuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override

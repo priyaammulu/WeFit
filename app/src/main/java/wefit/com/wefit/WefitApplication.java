@@ -28,7 +28,7 @@ public class WefitApplication extends Application {
 
         // initialise loginModel
         mLoginModel = new FirebaseModel(this);
-        mEventModel = new EventModelImpl(FirebaseDatabase.getInstance());
+        mEventModel = new EventModelImpl(FirebaseDatabase.getInstance(), mLoginModel.getUser());
     }
 
     public LoginViewModel getLoginViewModel() {

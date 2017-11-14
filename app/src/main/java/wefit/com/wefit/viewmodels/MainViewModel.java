@@ -27,4 +27,8 @@ public class MainViewModel {
     public void setLocation(Location location) {
         mEventModel.setLocation(location);
     }
+
+    public Flowable<List<Event>> getUserEvents() {
+        return mEventModel.getUserEvents();
+    }
 }

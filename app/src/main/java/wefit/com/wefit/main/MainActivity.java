@@ -8,8 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -33,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private LoginViewModel mLoginViewModel;
     private MainViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
-    private MyeventsFragment myeventsFragment = new MyeventsFragment();
+    private MyEventsFragment myEventsFragment = new MyEventsFragment();
     private SettingsFragment settingsFragment = new SettingsFragment();
     private LinkedList<Fragment> stack = new LinkedList<>();
 
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         myEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransaction(myeventsFragment);
+                fragmentTransaction(myEventsFragment);
             }
         });
         final LinearLayout settings = (LinearLayout) findViewById(R.id.button_settings);
@@ -84,9 +82,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_fragment, mainFragment)
-                .add(R.id.main_fragment, myeventsFragment)
+                .add(R.id.main_fragment, myEventsFragment)
                 .add(R.id.main_fragment, settingsFragment)
-                .hide(myeventsFragment)
+                .hide(myEventsFragment)
                 .hide(settingsFragment)
                 .commit();
         stack.push(mainFragment);
@@ -97,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mainFragment)
-                .hide(myeventsFragment)
+                .hide(myEventsFragment)
                 .hide(settingsFragment)
                 .show(fragment)
                // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
