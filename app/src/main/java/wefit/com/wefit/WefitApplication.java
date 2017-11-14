@@ -11,7 +11,6 @@ import wefit.com.wefit.datamodel.EventModel;
 import wefit.com.wefit.datamodel.EventModelImpl;
 import wefit.com.wefit.datamodel.UserModel;
 import wefit.com.wefit.datamodel.UserModelAsyncImpl;
-import wefit.com.wefit.datamodel.UserModelImpl;
 import wefit.com.wefit.utils.auth.Auth20FirebaseHandlerImpl;
 import wefit.com.wefit.utils.auth.Auth20Handler;
 import wefit.com.wefit.utils.persistence.EventDao;

@@ -1,7 +1,10 @@
 package wefit.com.wefit;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,7 +31,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
@@ -36,6 +38,7 @@ import java.util.List;
 
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.LoginViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -72,10 +75,21 @@ public class LoginActivity extends AppCompatActivity {
      */
     private FirebaseAuth mAuth;
 
+    private ProgressDialog popupDialogProgress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        // check if the device is online
+        if (!NetworkCheker.getInstance().isNetworkAvailable(this)) {
+            Toast.makeText(LoginActivity.this,
+                    LoginActivity.this.getString(R.string.connection_failure_msg),
+                    Toast.LENGTH_LONG)
+                    .show();
+        }
 
         // retrieve viewmodel to communicate with
         this.loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
@@ -93,8 +107,6 @@ public class LoginActivity extends AppCompatActivity {
         // bind the services to the buttons
         this.bindFacebookButton();
         this.bindGoogleButton();
-
-
     }
 
     private void hideActionBar() {
@@ -158,6 +170,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
+                showWaitSpinner();
+
             }
         });
 
@@ -183,6 +197,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
+                showWaitSpinner();
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, requestedPermissions);
             }
         });
@@ -191,8 +206,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // if the request has the specified code GOOGLE_REQ_LOGIN_CODE, it is related to google
+
         if (requestCode == GOOGLE_REQ_LOGIN_CODE) { // google handling
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             googleLoginResultHandling(result);
@@ -218,14 +233,16 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onCancel() {
-            // TODO gestire meglio graficamente
-            Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
+            // TODO mettere in inglese!
+            stopSpinner();
+            Toast.makeText(getApplicationContext(), "Hey, non ti vergognare", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onError(FacebookException error) {
             // TODO gestire meglio graficamente
-            Log.i("LOGIN FB ERROR", "sorry the user is shy");
+            stopSpinner();
+            Toast.makeText(getApplicationContext(), "Ops, facebook è impazzito", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -245,13 +262,15 @@ public class LoginActivity extends AppCompatActivity {
 
 
         } else { // error handling
-            // TODO handle graphically this retieve error
-            Log.d("error", "cannot retrieveerror");
+            stopSpinner();
+            // TODO mettere in inglese!
+            Toast.makeText(this, "Ops, qualcosa è andato storto", Toast.LENGTH_LONG).show();
         }
     }
 
     /**
      * Access firebase with FB credential
+     *
      * @param token Facebook access token
      */
     private void handleFacebookAccessTokenForFirebase(AccessToken token) {
@@ -261,6 +280,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Access firebase with G credential
+     *
      * @param account Google access token container
      */
     private void handleGoogleAccessTokenForFirebase(GoogleSignInAccount account) {
@@ -271,6 +291,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Connect to the server
      * If necessary it creates the user
+     *
      * @param credential Wrapped User credential (facebook or google)
      */
     private void buildFirebaseUser(AuthCredential credential) {
@@ -280,26 +301,24 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            Log.i("identificativo gmail ", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                            //Log.i("telefono ", FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
 
-                            Log.i("USER", "voglio il retrieve");
-                            // TODO retrieve dell'user
+                            // this is a round trip operation to guarantee that the user is in the remote DB
                             loginViewModel.retrieveUser().subscribe(new Consumer<User>() {
                                 @Override
                                 public void accept(User user) throws Exception {
                                     Log.i("USER", user.toString());
+
+                                    // now the user is retrieved and you can go to the main activity
+                                    startMainActivity();
+
                                 }
                             });
                             // go to the main activity
 
-
-                            startMainActivity();
-
                         } else {
-                            // TODO gestire graficamente
-                            // If sign in fails, display a message to the user.
-                            Log.w("FAIL", "signInWithCredential:failure", task.getException());
+                            stopSpinner();
+                            // TODO gestire meglio graficamente
+                            Toast.makeText(getApplicationContext(), "Ops, abbiamo problemi al server", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -313,13 +332,27 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void startMainActivity() {
 
+        stopSpinner();
+
+        // check if the auth has been successful
         if (this.loginViewModel.isAuth()) {
             startActivity(new Intent(this, MainActivity.class));
-        }
-        else {
+        } else {
             // TODO mettere in inglese!
             Toast.makeText(this, "Hey, non hai ancora confermato la tua mail!", Toast.LENGTH_LONG).show();
         }
 
     }
+
+    private void showWaitSpinner() {
+        // tODO english
+        popupDialogProgress = ProgressDialog.show(this, "",
+                "Loading. Please wait...", true);
+    }
+
+    private void stopSpinner() {
+        popupDialogProgress.dismiss();
+    }
+
+
 }
