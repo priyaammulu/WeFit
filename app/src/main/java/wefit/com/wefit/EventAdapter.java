@@ -65,7 +65,7 @@ public class EventAdapter extends BaseAdapter {
         holder.title.setText(event.getTitle());
         holder.location.setText(event.getLocation().getName());
         holder.monthDay.setText(event.getExpire().toString().substring(5));
-        holder.time.setText(event.getExpire().toString().substring(5));gi
+        holder.time.setText(event.getExpire().toString().substring(5));
         holder.organizer.setText(event.getCreator().getName());
         holder.published.setText(event.getPublished().toString().substring(5));
         Picasso.with(context).load(event.getImage()).into(holder.mEvent);

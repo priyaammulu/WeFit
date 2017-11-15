@@ -62,6 +62,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
 
                         if (loggedUser.getUserId() == null) {
 
+
                             firebaseUser.sendEmailVerification();
 
                             loggedUser.setUserId(firebaseUser.getUid());
@@ -97,7 +98,6 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
         }
 
         return contact;
-
 
 
     }

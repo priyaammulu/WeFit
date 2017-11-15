@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import wefit.com.wefit.main.MainActivity;
+import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class SplashActivity extends AppCompatActivity {

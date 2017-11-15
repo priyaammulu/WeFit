@@ -1,4 +1,4 @@
-package wefit.com.wefit.main;
+package wefit.com.wefit.mainscreen;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,8 +14,6 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
-import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.UserParameterModification;
@@ -46,7 +44,7 @@ public class MyEventsFragment extends Fragment {
         mMainViewModel = mActivity.getMainViewModel();
 
         // TODO togliere va direttamente ad activity modifica utente
-        startActivity(new Intent(getContext(), UserParameterModification.class));
+        //startActivity(new Intent(getContext(), UserParameterModification.class));
 
         /*
         Flowable<List<Event>> stream = mMainViewModel.getUserEvents();

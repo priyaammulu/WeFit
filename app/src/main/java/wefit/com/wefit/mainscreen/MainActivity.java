@@ -1,4 +1,4 @@
-package wefit.com.wefit.main;
+package wefit.com.wefit.mainscreen;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

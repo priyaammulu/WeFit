@@ -35,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
-import wefit.com.wefit.main.MainActivity;
+import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.UserViewModel;
@@ -241,11 +241,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(final LoginResult loginResult) {
-
-            Log.i("LOGIN FB CANCELLED", "sorry the user is shy");
-
             handleFacebookAccessTokenForFirebase(loginResult.getAccessToken());
-
         }
 
         @Override

@@ -52,8 +52,12 @@ public class LocalUserDaoImpl implements LocalUserDao {
         editor.putInt(BIRTH_FIELD, userToSave.getBirthDate());
 
         Set<String> events = new HashSet<>();
-        events.addAll(userToSave.getEventPartecipations());
-        editor.putStringSet(EVENTS_FIELD, events);
+        List<String> partecipations = userToSave.getEventPartecipations();
+        if (partecipations != null) {
+            events.addAll(userToSave.getEventPartecipations());
+            editor.putStringSet(EVENTS_FIELD, events);
+        }
+
 
         // commit in background
         editor.apply();
