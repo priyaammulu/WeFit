@@ -1,4 +1,4 @@
-package wefit.com.wefit.main;
+package wefit.com.wefit.mainscreen;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -23,12 +23,12 @@ import java.util.LinkedList;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
-import wefit.com.wefit.viewmodels.LoginViewModel;
+import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
     private static final int LOCATION_PERMISSION = 1;
-    private LoginViewModel mLoginViewModel;
+    private UserViewModel mLoginViewModel;
     private MainViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
     private MyEventsFragment myEventsFragment = new MyEventsFragment();
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLoginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
+        mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         mMainViewModel = getMainViewModel();
         if (!mLoginViewModel.isAuth())
             signOut();

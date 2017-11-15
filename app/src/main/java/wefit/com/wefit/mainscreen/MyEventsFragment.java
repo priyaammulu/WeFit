@@ -1,4 +1,4 @@
-package wefit.com.wefit.main;
+package wefit.com.wefit.mainscreen;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,38 +8,27 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.reactivestreams.Subscription;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
-import io.reactivex.FlowableSubscriber;
-import wefit.com.wefit.EventAdapter;
-import wefit.com.wefit.EventDescriptionActivity;
+import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
+import wefit.com.wefit.UserParameterModification;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentsInteractionListener} interface
- * to handle interaction events.
- */
-public class MainFragment extends Fragment {
-    public static final String EVENT = "selected";
-    private EventAdapter mAdapter;
-    private ListView mEventList;
+public class MyEventsFragment extends Fragment {
+    private FragmentsInteractionListener mActivity;
     private MainViewModel mMainViewModel;
-    private FragmentsInteractionListener mListener;
-    // this should be handled by another class
     private Subscription mSubscription;
+    private ListView mListView;
+    private MyEventsAdapter myEventsAdapter;
 
-    public MainFragment() {
+    public MyEventsFragment() {
         // Required empty public constructor
     }
 
@@ -52,9 +41,13 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainViewModel = mListener.getMainViewModel();
-        mListener.provideLocation();
-        Flowable<List<Event>> stream = mMainViewModel.getEvents();
+        mMainViewModel = mActivity.getMainViewModel();
+
+        // TODO togliere va direttamente ad activity modifica utente
+        //startActivity(new Intent(getContext(), UserParameterModification.class));
+
+        /*
+        Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
             public void onSubscribe(Subscription subscription) {
@@ -64,12 +57,12 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onNext(List<Event> events) {
-                handleAdapter(events);
+                initilizeListView(events);
             }
 
             @Override
             public void onError(Throwable throwable) {
-                handleError(throwable);
+
             }
 
             @Override
@@ -77,51 +70,30 @@ public class MainFragment extends Fragment {
 
             }
         });
+        */
+    }
+
+    private void initilizeListView(List<Event> events) {
+        myEventsAdapter = new MyEventsAdapter(events, getActivity());
+        mListView.setAdapter(myEventsAdapter);
     }
 
     private void bind(View view) {
-        mEventList = (ListView) view.findViewById(R.id.event_list);
-        mEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
-                Event selected = mAdapter.getItem(i);
-                intent.putExtra(EVENT, selected);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void handleError(Throwable error) {
-        //todo implement
-    }
-
-    private void handleAdapter(List<Event> events) {
-        if (mAdapter == null) {
-            mAdapter = new EventAdapter(events, getActivity());
-            mEventList.setAdapter(mAdapter);
-        } else
-            mAdapter.setEvents(events);
-        mAdapter.notifyDataSetChanged();
+        mListView = (ListView) view.findViewById(R.id.myevents_listview);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        return inflater.inflate(R.layout.fragment_events, container, false);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof FragmentsInteractionListener) {
-            mListener = (FragmentsInteractionListener) context;
+            mActivity = (FragmentsInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement FragmentsInteractionListener");
@@ -131,7 +103,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mActivity = null;
     }
 
     @Override
@@ -140,5 +112,4 @@ public class MainFragment extends Fragment {
         if (mSubscription != null)
             mSubscription.cancel();
     }
-
 }
