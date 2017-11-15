@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         // retrieve viewmodel to communicate with
         this.loginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
 
-        hideActionBar();
+        //hideActionBar();
 
         // setup the services
         setupFirebaseAuth();
@@ -87,6 +87,23 @@ public class LoginActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_login);
+
+        // TODO encoment rest and delete onClickListener ->just test for layout
+
+        /*Button button = (Button) findViewById(R.id.facebook_login_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getBaseContext(), ProfileActivity.class));
+
+
+            }
+        });*/
+
+
+   // }
+
+
 
         // bind the services to the buttons
         this.bindFacebookButton();
@@ -182,6 +199,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, requestedPermissions);
+
             }
         });
     }
@@ -222,6 +240,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onError(FacebookException error) {
             // TODO gestire meglio graficamente
             Log.i("LOGIN FB ERROR", "sorry the user is shy");
+
         }
 
     }
