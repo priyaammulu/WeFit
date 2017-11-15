@@ -31,7 +31,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
     @Override
     public boolean isAuth() {
 
-        return mFirebaseAuth.getCurrentUser() != null && mFirebaseAuth.getCurrentUser().isEmailVerified();
+        return mFirebaseAuth.getCurrentUser() != null;// && mFirebaseAuth.getCurrentUser().isEmailVerified();
 
     }
 
