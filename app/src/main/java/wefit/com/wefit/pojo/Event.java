@@ -20,7 +20,7 @@ public class Event implements Parcelable {
     private String title;
     private String image;
     private Location location;
-    private User user;
+    private User organizer;
     private Date expire;
     private Date published;
     private Category category;
@@ -48,11 +48,11 @@ public class Event implements Parcelable {
     }
 
     public User getCreator() {
-        return user;
+        return organizer;
     }
 
     public void setCreator(User user) {
-        this.user = user;
+        this.organizer = user;
     }
 
     public String getTitle() {
@@ -146,7 +146,7 @@ public class Event implements Parcelable {
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", location=" + location +
-                ", user=" + user +
+                ", organizer=" + organizer +
                 ", expire=" + expire +
                 ", published=" + published +
                 ", category=" + category +
