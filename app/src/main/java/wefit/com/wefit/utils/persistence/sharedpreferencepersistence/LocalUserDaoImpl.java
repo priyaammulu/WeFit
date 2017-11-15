@@ -3,6 +3,11 @@ package wefit.com.wefit.utils.persistence.sharedpreferencepersistence;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.persistence.LocalUserDao;
 
@@ -27,6 +32,7 @@ public class LocalUserDaoImpl implements LocalUserDao {
     private static final String IMAGE_FIELD = "image";
     private static final String BIO_FIELD = "bio";
     private static final String BIRTH_FIELD = "birthdate";
+    private static final String EVENTS_FIELD = "my_events";
 
     private SharedPreferences sharedPreferences;
 
@@ -39,11 +45,15 @@ public class LocalUserDaoImpl implements LocalUserDao {
         // save the user fields
         editor.putString(ID_FIELD, userToSave.getUserId());
         editor.putString(NAME_FIELD, userToSave.getName());
-        editor.putString(CONTACT_FIELD, userToSave.getContact());
+        editor.putString(CONTACT_FIELD, userToSave.getEmail());
         editor.putString(GENDER_FIELD, userToSave.getGender());
         editor.putString(IMAGE_FIELD, userToSave.getPhoto());
         editor.putString(BIO_FIELD, userToSave.getBiography());
         editor.putInt(BIRTH_FIELD, userToSave.getBirthDate());
+
+        Set<String> events = new HashSet<>();
+        events.addAll(userToSave.getEventPartecipations());
+        editor.putStringSet(EVENTS_FIELD, events);
 
         // commit in background
         editor.apply();
@@ -58,11 +68,15 @@ public class LocalUserDaoImpl implements LocalUserDao {
         // retrieve the user from the local store
         localStoredUser.setUserId(sharedPreferences.getString(ID_FIELD, null));
         localStoredUser.setName(sharedPreferences.getString(NAME_FIELD, null));
-        localStoredUser.setContact(sharedPreferences.getString(CONTACT_FIELD, null));
+        localStoredUser.setEmail(sharedPreferences.getString(CONTACT_FIELD, null));
         localStoredUser.setGender(sharedPreferences.getString(GENDER_FIELD, null));
         localStoredUser.setPhoto(sharedPreferences.getString(IMAGE_FIELD, null));
         localStoredUser.setBiography(sharedPreferences.getString(BIO_FIELD, null));
         localStoredUser.setBirthDate(sharedPreferences.getInt(BIRTH_FIELD, 0));
+
+        List<String> events = new ArrayList<>();
+        events.addAll(sharedPreferences.getStringSet(EVENTS_FIELD, new HashSet<String>()));
+        localStoredUser.setEventPartecipations(events);
 
         return localStoredUser;
     }

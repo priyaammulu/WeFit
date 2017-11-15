@@ -16,4 +16,6 @@ public interface UserModel {
     void signOut();
 
     User getLocalUser();
+
+    void updateUser(User userToStore);
 }

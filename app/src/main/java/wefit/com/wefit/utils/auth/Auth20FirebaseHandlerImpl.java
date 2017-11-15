@@ -66,7 +66,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
 
                             loggedUser.setUserId(firebaseUser.getUid());
                             loggedUser.setName(firebaseUser.getDisplayName());
-                            loggedUser.setContact(getContact());
+                            loggedUser.setEmail(getContact());
 
                             mUserDao.save(loggedUser);
 

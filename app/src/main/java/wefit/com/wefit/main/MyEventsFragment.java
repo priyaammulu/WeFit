@@ -45,7 +45,7 @@ public class MyEventsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
 
-        // TODO togliere va direttamente ad activiti modifica utente
+        // TODO togliere va direttamente ad activity modifica utente
         startActivity(new Intent(getContext(), UserParameterModification.class));
 
         /*

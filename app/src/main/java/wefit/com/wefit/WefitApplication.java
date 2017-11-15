@@ -47,7 +47,7 @@ public class WefitApplication extends Application {
 
         // initialise loginModel
         //mLoginModel = new UserModelImpl(this, userDao); // TODO vedi come devi modificare questa implemetnazione
-        mLoginModel = new UserModelAsyncImpl(loginHandler, localUserDao);
+        mLoginModel = new UserModelAsyncImpl(loginHandler, localUserDao, userDao);
         mEventModel = new EventModelImpl(eventDao, userDao);
     }
 

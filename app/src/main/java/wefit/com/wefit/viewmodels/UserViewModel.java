@@ -13,26 +13,30 @@ public class UserViewModel {
 
     //public static final String ACCESS_STORED_USER = "user_key";
 
-    private UserModel mLoginModel;
+    private UserModel mUserModel;
 
     public UserViewModel(UserModel LoginModel) {
-        this.mLoginModel = LoginModel;
+        this.mUserModel = LoginModel;
     }
 
     public Flowable<User> retrieveUserFromRemoteStore() {
-        return mLoginModel.retrieveLoggedUser();
+        return mUserModel.retrieveLoggedUser();
     }
 
     public User retrieveCachedUser() {
-        return mLoginModel.getLocalUser();
+        return mUserModel.getLocalUser();
     }
 
     public boolean isAuth() {
-        return mLoginModel.isAuth();
+        return mUserModel.isAuth();
     }
 
     public void signOut() {
-        mLoginModel.signOut();
+        mUserModel.signOut();
+    }
+
+    public void updateUser(User userToSave) {
+        mUserModel.updateUser(userToSave);
     }
 
 }

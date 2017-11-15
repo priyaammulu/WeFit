@@ -50,14 +50,6 @@ public class User {
         this.name = name;
     }
 
-    public String getContact() {
-        return email;
-    }
-
-    public void setContact(String email) {
-        this.email = email;
-    }
-
     public int getBirthDate() {
         return birthDate;
     }
@@ -106,7 +98,10 @@ public class User {
                 ", gender='" + gender + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", biography='" + biography + '\'' +
+                ", photo='" + photo + '\'' +
+                ", birthDate=" + birthDate +
+                ", eventPartecipations=" + eventPartecipations +
                 '}';
     }
-
 }
