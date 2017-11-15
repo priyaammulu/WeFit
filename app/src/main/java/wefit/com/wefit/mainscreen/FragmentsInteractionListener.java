@@ -1,4 +1,4 @@
-package wefit.com.wefit.main;
+package wefit.com.wefit.mainscreen;
 
 import wefit.com.wefit.viewmodels.MainViewModel;
 

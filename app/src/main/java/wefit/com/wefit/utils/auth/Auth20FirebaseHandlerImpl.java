@@ -31,7 +31,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
     @Override
     public boolean isAuth() {
 
-        return mFirebaseAuth.getCurrentUser() != null && mFirebaseAuth.getCurrentUser().isEmailVerified();
+        return mFirebaseAuth.getCurrentUser() != null;// && mFirebaseAuth.getCurrentUser().isEmailVerified();
 
     }
 
@@ -61,6 +61,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
                     public void accept(User loggedUser) throws Exception {
 
                         if (loggedUser.getUserId() == null) {
+
 
                             firebaseUser.sendEmailVerification();
 
@@ -97,7 +98,6 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
         }
 
         return contact;
-
 
 
     }
