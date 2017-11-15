@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private MainViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
     private MyEventsFragment myEventsFragment = new MyEventsFragment();
-    private SettingsFragment settingsFragment = new SettingsFragment();
+    private ProfileFragment profileFragment = new ProfileFragment();
     private LinkedList<Fragment> stack = new LinkedList<>();
 
     @Override
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransaction(settingsFragment);
+                fragmentTransaction(profileFragment);
             }
         });
         LinearLayout main = (LinearLayout) findViewById(R.id.button_main);
@@ -83,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 .beginTransaction()
                 .add(R.id.main_fragment, mainFragment)
                 .add(R.id.main_fragment, myEventsFragment)
-                .add(R.id.main_fragment, settingsFragment)
+                .add(R.id.main_fragment, profileFragment)
                 .hide(myEventsFragment)
-                .hide(settingsFragment)
+                .hide(profileFragment)
                 .commit();
         stack.push(mainFragment);
     }
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 .beginTransaction()
                 .hide(mainFragment)
                 .hide(myEventsFragment)
-                .hide(settingsFragment)
+                .hide(profileFragment)
                 .show(fragment)
                // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();

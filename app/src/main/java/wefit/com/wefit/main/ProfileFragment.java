@@ -1,6 +1,7 @@
 package wefit.com.wefit.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,12 +11,13 @@ import android.view.ViewGroup;
 
 import wefit.com.wefit.EventAdapter;
 import wefit.com.wefit.R;
+import wefit.com.wefit.newevent.NewEventActivity;
 
 
-public class SettingsFragment extends Fragment {
+public class ProfileFragment extends Fragment {
     private FragmentsInteractionListener mListener;
 
-    public SettingsFragment() {
+    public ProfileFragment() {
         // Required empty public constructor
     }
 
@@ -31,6 +33,12 @@ public class SettingsFragment extends Fragment {
     }
 
     private void bind(View view) {
+        view.findViewById(R.id.new_event_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().startActivity(new Intent(getActivity(), NewEventActivity.class));
+            }
+        });
     }
 
     @Override

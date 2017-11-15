@@ -3,7 +3,7 @@
     package="wefit.com.wefit">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".WefitApplication"
@@ -30,10 +30,10 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".EventDescriptionActivity"
-            android:label="@string/event_description_top_label">
-
-        </activity>
+        <activity
+            android:name=".EventDescriptionActivity"
+            android:label="@string/event_description_top_label"></activity>
+        <activity android:name=".newevent.NewEventActivity"></activity>
     </application>
 
 </manifest>

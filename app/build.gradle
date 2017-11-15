@@ -22,6 +22,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //compile 'com.android.support:support-v4:25.4.0'
+    compile 'com.android.support:support-v4:25.4.0'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -51,7 +52,6 @@ dependencies {
     // rxjava, events managemente
     compile "io.reactivex.rxjava2:rxjava:2.1.6"
 
-
     // layout libraries
     compile 'com.mikhaellopez:circularimageview:3.0.2' // circle images
 
@@ -60,6 +60,10 @@ dependencies {
 
     //location
     compile 'com.google.android.gms:play-services-location:11.4.2'
+
+    // recycler view
+    compile 'com.android.support:cardview-v7:21.0.+'
+    compile 'com.android.support:recyclerview-v7:21.0.+'
 
 }
 
