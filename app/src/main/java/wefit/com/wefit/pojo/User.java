@@ -20,7 +20,6 @@ public class User {
 
 
     private String city;
-
     private String description;
     private String profilePicture;
 

@@ -7,12 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import wefit.com.wefit.R;
 
 
 public class ProfileFragment extends Fragment {
     private FragmentsInteractionListener mListener;
+
+    TextView userName;
+    TextView city;
+    TextView birthDate;
+    TextView description;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -37,6 +43,19 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+
+       /* User user = new User();
+        userName = (TextView) findViewById(R.id.user_name);
+        userName.setText(user.getName());
+
+        city = (TextView) findViewById(R.id.city);
+        city.setText("Lives in "+ user.getCity());
+
+        birthDate = (TextView) findViewById(R.id.birth_date);
+        birthDate.setText("Birth date: " +user.getBirthDate());
+
+        description = (TextView) findViewById(R.id.discription);
+        description.setText(user.getDescription());*/
     }
 
     @Override
