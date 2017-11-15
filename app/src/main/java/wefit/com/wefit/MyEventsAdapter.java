@@ -18,12 +18,12 @@ import wefit.com.wefit.pojo.Event;
  * Created by lorenzo on 11/3/17.
  */
 
-public class EventAdapter extends BaseAdapter {
+public class MyEventsAdapter extends BaseAdapter {
 
     private List<Event> events;
     private Context context;
 
-    public EventAdapter(List<Event> events, Context context) {
+    public MyEventsAdapter(List<Event> events, Context context) {
         this.events = events;
         this.context = context;
     }
@@ -53,7 +53,7 @@ public class EventAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.myevents_item, parent, false);
         }
         EventViewHolder holder = (EventViewHolder) convertView.getTag();
         if (holder == null) {
@@ -65,36 +65,30 @@ public class EventAdapter extends BaseAdapter {
         holder.title.setText(event.getTitle());
         holder.location.setText(event.getLocation().getName());
         holder.monthDay.setText(event.getExpire().toString().substring(5));
-        holder.time.setText(event.getExpire().toString().substring(5));gi
-        holder.organizer.setText(event.getCreator().getName());
-        holder.published.setText(event.getPublished().toString().substring(5));
+        holder.time.setText(event.getExpire().toString().substring(5));
         Picasso.with(context).load(event.getImage()).into(holder.mEvent);
-        Picasso.with(context).load(event.getImage()).into(holder.mUser);
         Picasso.with(context).load(event.getImage()).into(holder.mGame);
+        Picasso.with(context).load(event.getImage()).into(holder.mImageOrganizer);
         return convertView;
     }
 
     private static class EventViewHolder {
         private ImageView mEvent;
-        private ImageView mUser;
         private ImageView mGame;
+        private ImageView mImageOrganizer;
         private TextView title;
         private TextView location;
         private TextView monthDay;
         private TextView time;
-        private TextView organizer;
-        private TextView published;
 
         EventViewHolder(View row) {
-            this.title = (TextView) row.findViewById(R.id.event_title);
-            this.location = (TextView) row.findViewById(R.id.event_location);
-            this.monthDay = (TextView) row.findViewById(R.id.evet_month_day);
-            this.time = (TextView) row.findViewById(R.id.event_time);
-            this.organizer = (TextView) row.findViewById(R.id.event_organizer);
-            this.published = (TextView) row.findViewById(R.id.event_published);
-            this.mEvent = (ImageView) row.findViewById(R.id.event_image);
-            this.mUser = (ImageView) row.findViewById(R.id.event_user_image);
-            this.mGame = (ImageView) row.findViewById(R.id.event_game_image);
+            this.title = (TextView) row.findViewById(R.id.myevents_title);
+            this.location = (TextView) row.findViewById(R.id.myevents_location);
+            this.monthDay = (TextView) row.findViewById(R.id.myevents_expire_date);
+            this.time = (TextView) row.findViewById(R.id.myevents_expire_time);
+            this.mEvent = (ImageView) row.findViewById(R.id.myevents_image);
+            this.mGame = (ImageView) row.findViewById(R.id.myevents_game_image);
+            this.mImageOrganizer = (ImageView) row.findViewById(R.id.myevents_organizer_image);
         }
 
     }

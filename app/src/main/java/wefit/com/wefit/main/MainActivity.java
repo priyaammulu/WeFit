@@ -23,22 +23,27 @@ import java.util.LinkedList;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
-import wefit.com.wefit.viewmodels.LoginViewModel;
+import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
     private static final int LOCATION_PERMISSION = 1;
-    private LoginViewModel mLoginViewModel;
+    private UserViewModel mLoginViewModel;
     private MainViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
-    private MyeventsFragment myeventsFragment = new MyeventsFragment();
+
+    private MyEventsFragment myeventsFragment = new MyEventsFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
+
+    private MyEventsFragment myEventsFragment = new MyEventsFragment();
+    private ProfileFragment settingsFragment = new ProfileFragment();
+
     private LinkedList<Fragment> stack = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLoginViewModel = ((WefitApplication) getApplication()).getLoginViewModel();
+        mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         mMainViewModel = getMainViewModel();
         if (!mLoginViewModel.isAuth())
             signOut();
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         myEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransaction(myeventsFragment);
+                fragmentTransaction(myEventsFragment);
             }
         });
         final LinearLayout settings = (LinearLayout) findViewById(R.id.button_settings);
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 .add(R.id.main_fragment, profileFragment)
                 .hide(myeventsFragment)
                 .hide(profileFragment)
+
                 .commit();
         stack.push(mainFragment);
     }
@@ -95,8 +101,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mainFragment)
+
                 .hide(myeventsFragment)
                 .hide(profileFragment)
+
+                .hide(myEventsFragment)
+                .hide(settingsFragment)
+
                 .show(fragment)
                // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();

@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="wefit.com.wefit">
 
+    <!-- permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- use of the camera -->
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name=".WefitApplication"
@@ -36,10 +42,10 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".EventDescriptionActivity"
-            android:label="@string/event_description_top_label">
-
-        </activity>
+        <activity
+            android:name=".EventDescriptionActivity"
+            android:label="@string/event_description_top_label"></activity>
+        <activity android:name=".UserParameterModification"></activity>
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package wefit.com.wefit.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,10 @@ import java.util.List;
  */
 
 public class Event implements Parcelable {
+
+    private String id;
+
+
     private String description;
     private String title;
     private String image;
@@ -19,11 +24,19 @@ public class Event implements Parcelable {
     private Date expire;
     private Date published;
     private Category category;
-    private List<User> participants;
+    private List<User> participants = new ArrayList<>();
     // parcelable stuff
     private int mData;
 
     public Event() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getDescription() {
@@ -34,11 +47,11 @@ public class Event implements Parcelable {
         this.description = description;
     }
 
-    public User getUser() {
+    public User getCreator() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setCreator(User user) {
         this.user = user;
     }
 
@@ -72,6 +85,10 @@ public class Event implements Parcelable {
 
     public void setParticipants(List<User> participants) {
         this.participants = participants;
+    }
+
+    public void addPatecipant(User partecipant) {
+        this.participants.add(partecipant);
     }
 
     public Location getLocation() {
@@ -120,5 +137,21 @@ public class Event implements Parcelable {
 
     public void setPublished(Date published) {
         this.published = published;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "description='" + description + '\'' +
+                ", title='" + title + '\'' +
+                ", image='" + image + '\'' +
+                ", location=" + location +
+                ", user=" + user +
+                ", expire=" + expire +
+                ", published=" + published +
+                ", category=" + category +
+                ", participants=" + participants +
+                ", mData=" + mData +
+                '}';
     }
 }

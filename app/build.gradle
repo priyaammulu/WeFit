@@ -51,7 +51,6 @@ dependencies {
     // rxjava, events managemente
     compile "io.reactivex.rxjava2:rxjava:2.1.6"
 
-
     // layout libraries
     compile 'com.mikhaellopez:circularimageview:3.0.2' // circle images
 
@@ -60,6 +59,9 @@ dependencies {
 
     //location
     compile 'com.google.android.gms:play-services-location:11.4.2'
+
+    // async future
+    //compile 'net.sourceforge.streamsupport:android-retrofuture:1.5.6'
 
 }
 

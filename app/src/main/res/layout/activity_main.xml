@@ -66,6 +66,7 @@
         android:layout_below="@+id/sign_out"
         android:layout_above="@+id/linearLayout"/>
 
+
     <LinearLayout
         android:layout_gravity="bottom"
         android:background="@color/cardview_light_background"
