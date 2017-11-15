@@ -1,4 +1,4 @@
-package wefit.com.wefit.pojo;
+package wefit.com.wefit.pojo.users;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,6 +6,10 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import wefit.com.wefit.pojo.Category;
+import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.User;
 
 /**
  * Created by lorenzo on 11/3/17.

@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.users.Event;
 
 /**
  * Created by lorenzo on 11/3/17.

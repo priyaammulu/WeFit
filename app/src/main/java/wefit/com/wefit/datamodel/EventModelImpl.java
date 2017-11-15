@@ -2,25 +2,17 @@ package wefit.com.wefit.datamodel;
 
 import android.util.Log;
 
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.FlowableSubscriber;
 import io.reactivex.functions.Consumer;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.users.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.utils.persistence.EventDao;
 import wefit.com.wefit.utils.persistence.UserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
 
 
 /**

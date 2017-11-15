@@ -18,7 +18,7 @@ import java.util.List;
 import wefit.com.wefit.EventAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.users.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 

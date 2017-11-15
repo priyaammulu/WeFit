@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import wefit.com.wefit.pojo.Category;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.users.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 

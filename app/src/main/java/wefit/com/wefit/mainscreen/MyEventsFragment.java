@@ -1,7 +1,6 @@
 package wefit.com.wefit.mainscreen;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,8 +15,7 @@ import java.util.List;
 
 import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
-import wefit.com.wefit.UserParameterModification;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.users.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 

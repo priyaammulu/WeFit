@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import io.reactivex.Flowable;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.users.Event;
 import wefit.com.wefit.pojo.Location;
 
 /**
