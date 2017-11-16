@@ -1,4 +1,4 @@
-package wefit.com.wefit.pojo.users;
+package wefit.com.wefit.pojo.events;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 
@@ -24,10 +23,10 @@ public class Event implements Parcelable {
     private String title;
     private String image;
     private Location location;
-    private User user;
+    private User creator;
     private Date expire;
     private Date published;
-    private Category category;
+    private String categoryName;
     private List<User> participants = new ArrayList<>();
     // parcelable stuff
     private int mData;
@@ -52,11 +51,11 @@ public class Event implements Parcelable {
     }
 
     public User getCreator() {
-        return user;
+        return creator;
     }
 
     public void setCreator(User user) {
-        this.user = user;
+        this.creator = user;
     }
 
     public String getTitle() {
@@ -75,12 +74,12 @@ public class Event implements Parcelable {
         this.expire = expire;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public List<User> getParticipants() {
@@ -146,14 +145,15 @@ public class Event implements Parcelable {
     @Override
     public String toString() {
         return "Event{" +
-                "description='" + description + '\'' +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", location=" + location +
-                ", user=" + user +
+                ", creator=" + creator +
                 ", expire=" + expire +
                 ", published=" + published +
-                ", category=" + category +
+                ", categoryName='" + categoryName + '\'' +
                 ", participants=" + participants +
                 ", mData=" + mData +
                 '}';

@@ -4,7 +4,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import wefit.com.wefit.datamodel.EventModel;
-import wefit.com.wefit.pojo.users.Event;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.pojo.Location;
 
 /**

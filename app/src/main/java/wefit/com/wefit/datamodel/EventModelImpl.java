@@ -9,7 +9,7 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
-import wefit.com.wefit.pojo.users.Event;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.utils.persistence.EventDao;
 import wefit.com.wefit.utils.persistence.UserDao;

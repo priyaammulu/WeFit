@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +18,14 @@ import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.utils.persistence.LocalEventDao;
+import wefit.com.wefit.utils.persistence.sqlitelocalpersistence.LocalSQLiteEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class UserParameterModification extends AppCompatActivity {
@@ -41,6 +47,37 @@ public class UserParameterModification extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_parameter_modification);
+
+
+
+
+        // TODO creazione evento fittizio
+
+
+        Event event = new Event();
+        event.setTitle("Evento3");
+        event.setDescription("locamente innamorado");
+        event.setImage("245236tddwhtsr");
+        event.setPublished(new Date(652432));
+        event.setExpire(new Date(124534765));
+
+        Location location = new Location();
+        location.setLatitude(34565.4);
+        location.setLongitude(324535.6);
+        location.setName("guantanamera city");
+        event.setLocation(location);
+        event.setCategoryName("category1");
+
+
+
+        LocalEventDao eventDao = new LocalSQLiteEventDao(this);
+        //eventDao.wipe();
+        event = eventDao.save(event);
+        List<Event> eventos = eventDao.getEvents(20, 0);
+
+        Log.i("Evento", String.valueOf(eventos.size()));
+
+        // TODO creazione evento fittizio
 
         final UserViewModel userViewModel = ((WefitApplication) getApplication()).getUserViewModel();
 

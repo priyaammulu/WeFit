@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import wefit.com.wefit.pojo.Category;
-import wefit.com.wefit.pojo.users.Event;
+import wefit.com.wefit.pojo.events.Category;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 
@@ -25,7 +25,7 @@ public class EventWrapper {
     private String eventCreatorUserId;
     private Date expiration;
     private Date publication;
-    private Category eventCategory;
+    private String eventCategory;
     private List<String> partecipantsUserIds = new ArrayList<>();
 
     public EventWrapper(Event adaptedEvent) {
@@ -48,7 +48,7 @@ public class EventWrapper {
         this.eventCreatorUserId = adaptedEvent.getCreator().getUserId();
         this.expiration = adaptedEvent.getExpire();
         this.publication = adaptedEvent.getPublished();
-        this.eventCategory = adaptedEvent.getCategory();
+        this.eventCategory = adaptedEvent.getCategoryName();
 
         for (User partecipant :adaptedEvent.getParticipants()) {
 
@@ -121,11 +121,11 @@ public class EventWrapper {
         this.publication = publication;
     }
 
-    public Category getEventCategory() {
+    public String getEventCategory() {
         return eventCategory;
     }
 
-    public void setEventCategory(Category eventCategory) {
+    public void setEventCategory(String eventCategory) {
         this.eventCategory = eventCategory;
     }
 
@@ -166,7 +166,7 @@ public class EventWrapper {
         unwrapped.setCreator(creator);
         unwrapped.setExpire(this.expiration);
         unwrapped.setPublished(this.publication);
-        unwrapped.setCategory(this.eventCategory);
+        unwrapped.setCategoryName(this.eventCategory);
         unwrapped.setParticipants(partecipants);
 
         return unwrapped;

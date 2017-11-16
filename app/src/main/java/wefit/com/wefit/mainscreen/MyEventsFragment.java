@@ -1,6 +1,7 @@
 package wefit.com.wefit.mainscreen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,7 +16,8 @@ import java.util.List;
 
 import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
-import wefit.com.wefit.pojo.users.Event;
+import wefit.com.wefit.UserParameterModification;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 
@@ -42,7 +44,9 @@ public class MyEventsFragment extends Fragment {
         mMainViewModel = mActivity.getMainViewModel();
 
         // TODO togliere va direttamente ad activity modifica utente
-        //startActivity(new Intent(getContext(), UserParameterModification.class));
+        startActivity(new Intent(getContext(), UserParameterModification.class));
+
+
 
         /*
         Flowable<List<Event>> stream = mMainViewModel.getUserEvents();

@@ -1,8 +1,8 @@
 package wefit.com.wefit.utils.persistence;
 
 import java.util.List;
-import io.reactivex.Flowable;
-import wefit.com.wefit.pojo.users.Event;
+
+import wefit.com.wefit.pojo.events.Event;
 
 /**
  * Created by gioacchino on 13/11/2017.
@@ -10,11 +10,9 @@ import wefit.com.wefit.pojo.users.Event;
 
 public interface LocalEventDao {
 
-    void create();
-    void disconnect();
     void wipe();
 
-    Event getEvents(int numResults, int startOffset);
+    List<Event> getEvents(int numResults, int startOffset);
 
     Event save(Event eventToStore);
 
