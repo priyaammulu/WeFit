@@ -17,10 +17,7 @@ public class User {
     private String photo;
     private int birthDate;
     private List<String> eventPartecipations;
-
-
     private String city;
-
     private String description;
     private String profilePicture;
 

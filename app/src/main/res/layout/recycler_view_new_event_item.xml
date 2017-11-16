@@ -3,6 +3,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:gravity="center"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="10dp"
+    android:layout_marginRight="20dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/border"
     android:id="@+id/new_event_main_layout"
     android:orientation="vertical">
 

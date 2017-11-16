@@ -5,28 +5,35 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import java.util.Arrays;
 import java.util.List;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
+import wefit.com.wefit.pojo.Event;
 
 
-public class NewEventFragmentFirst extends Fragment {
+public class NewEventFragmentFirst extends Fragment implements AdapterHandler {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     List<Category> staticCategories = Arrays.asList(
             new Category("Volleyball",R.drawable.ic_volleyball),
             new Category("Cardio",R.drawable.ic_gym_cardio),
+            new Category("Cardio",R.drawable.ic_gym_cardio),
             new Category("Weightlifting",R.drawable.ic_gym_weightlifting));
     private NewFragmentListener mListener;
+    private Category category;
+    private EditText mName;
+    private EditText mParticipants;
 
     public NewEventFragmentFirst() {
         // Required empty public constructor
@@ -40,10 +47,19 @@ public class NewEventFragmentFirst extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
+        if (category != null)
+            initCategory();
         super.onViewCreated(view, savedInstanceState);
     }
 
+    private void initCategory() {
+        mName.setText(category.getName());
+    }
+
     private void bind(View view) {
+        mName = (EditText) view.findViewById(R.id.new_event_name);
+        mParticipants = (EditText) view.findViewById(R.id.new_event_participants);
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.category_event_recycler_view);
 
         // use this setting to improve performance if you know that changes
@@ -51,12 +67,17 @@ public class NewEventFragmentFirst extends Fragment {
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                DividerItemDecoration.HORIZONTAL);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+
         // specify an adapter (see also next example)
-        mAdapter = new CategoryAdapter(staticCategories);
+        mAdapter = new CategoryAdapter(staticCategories, this);
         mRecyclerView.setAdapter(mAdapter);
+
     }
 
     @Override
@@ -81,5 +102,14 @@ public class NewEventFragmentFirst extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(Category category) {
+        mListener.secondFragment(category);
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

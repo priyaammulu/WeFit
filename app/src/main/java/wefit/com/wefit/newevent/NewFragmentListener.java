@@ -1,6 +1,6 @@
 package wefit.com.wefit.newevent;
 
-import android.net.Uri;
+import wefit.com.wefit.pojo.Category;
 
 /**
  * This interface must be implemented by activities that contain this
@@ -13,6 +13,5 @@ import android.net.Uri;
  * >Communicating with Other Fragments</a> for more information.
  */
 public interface NewFragmentListener {
-    // TODO: Update argument type and name
-    void onFragmentInteraction(Uri uri);
+    void secondFragment(Category category);
 }

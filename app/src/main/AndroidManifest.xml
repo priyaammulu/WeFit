@@ -20,7 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mainscreen.MainActivity" />
+        <activity
+            android:name=".mainscreen.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -45,7 +47,9 @@
         <activity
             android:name=".EventDescriptionActivity"
             android:label="@string/event_description_top_label"></activity>
-        <activity android:name=".newevent.NewEventActivity"></activity>
+        <activity
+            android:name=".newevent.NewEventActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".UserParameterModification"></activity>
     </application>
 
