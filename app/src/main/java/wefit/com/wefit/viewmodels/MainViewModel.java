@@ -31,4 +31,7 @@ public class MainViewModel {
     public Flowable<List<Event>> getUserEvents() {
         return mEventModel.getUserEvents();
     }
+
+    public void createNewEvent(Event newEvent) {
+    }
 }

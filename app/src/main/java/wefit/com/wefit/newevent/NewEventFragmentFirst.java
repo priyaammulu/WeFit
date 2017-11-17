@@ -11,9 +11,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.ScrollView;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import wefit.com.wefit.R;
@@ -21,19 +27,12 @@ import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 
 
-public class NewEventFragmentFirst extends Fragment implements AdapterHandler {
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    List<Category> staticCategories = Arrays.asList(
-            new Category("Volleyball",R.drawable.ic_volleyball),
-            new Category("Cardio",R.drawable.ic_gym_cardio),
-            new Category("Cardio",R.drawable.ic_gym_cardio),
-            new Category("Weightlifting",R.drawable.ic_gym_weightlifting));
+public class NewEventFragmentFirst extends Fragment {
     private NewFragmentListener mListener;
-    private Category category;
     private EditText mName;
-    private EditText mParticipants;
+    private NumberPicker mParticipants;
+    private Button mButtonAhead;
+    private DatePicker mDatePicker;
 
     public NewEventFragmentFirst() {
         // Required empty public constructor
@@ -47,37 +46,37 @@ public class NewEventFragmentFirst extends Fragment implements AdapterHandler {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
-        if (category != null)
-            initCategory();
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    private void initCategory() {
-        mName.setText(category.getName());
     }
 
     private void bind(View view) {
         mName = (EditText) view.findViewById(R.id.new_event_name);
-        mParticipants = (EditText) view.findViewById(R.id.new_event_participants);
+        mParticipants = (NumberPicker) view.findViewById(R.id.new_event_participants);
+        mParticipants.setMinValue(1);
+        mParticipants.setMaxValue(15);
+        mDatePicker = (DatePicker) view.findViewById(R.id.new_event_datepicker);
+        mButtonAhead = (Button) view.findViewById(R.id.new_event_button_ahead);
+        mButtonAhead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Event event = new Event();
+                event.setTitle(mName.getText().toString());
+                event.setNumberParticipants(mParticipants.getValue());
+                event.setExpire(getDateFromDatePicker(mDatePicker));
+                mListener.secondFragment(event);
+            }
+        });
+    }
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.category_event_recycler_view);
+    private Date getDateFromDatePicker(DatePicker datePicker) {
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year = datePicker.getYear();
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
-                DividerItemDecoration.HORIZONTAL);
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        // specify an adapter (see also next example)
-        mAdapter = new CategoryAdapter(staticCategories, this);
-        mRecyclerView.setAdapter(mAdapter);
-
+        return calendar.getTime();
     }
 
     @Override
@@ -104,12 +103,4 @@ public class NewEventFragmentFirst extends Fragment implements AdapterHandler {
         mListener = null;
     }
 
-    @Override
-    public void onItemClick(Category category) {
-        mListener.secondFragment(category);
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 }

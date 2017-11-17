@@ -1,26 +1,33 @@
 package wefit.com.wefit.newevent;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+
 import wefit.com.wefit.R;
-import wefit.com.wefit.pojo.Category;
+import wefit.com.wefit.WefitApplication;
+import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.viewmodels.MainViewModel;
 
 public class NewEventActivity extends AppCompatActivity implements NewFragmentListener {
     private NewEventFragmentFirst fragmentFirst = new NewEventFragmentFirst();
     private NewEventFragmentSecond fragmentSecond = new NewEventFragmentSecond();
-    private Category category;
+    private Event newEvent;
+    private MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
+        mainViewModel = ((WefitApplication) getApplication()).getMainViewModel();
         bind();
-        attachFragment(fragmentFirst);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.new_event_fragment, fragmentFirst)
+                .commit();
     }
 
     private void attachFragment(Fragment fragment) {
-        fragmentFirst.setCategory(category);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.new_event_fragment, fragment)
@@ -33,7 +40,20 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     }
 
     @Override
-    public void secondFragment(Category category) {
+    public void secondFragment(Event event) {
+        newEvent = event;
         attachFragment(fragmentSecond);
+    }
+
+    @Override
+    public Event getNewEvent() {
+        return newEvent;
+    }
+
+    @Override
+    public void finish(Event newEvent) {
+        this.newEvent = newEvent;
+        mainViewModel.createNewEvent(newEvent);
+        finish();
     }
 }

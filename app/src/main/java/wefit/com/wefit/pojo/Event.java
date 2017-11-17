@@ -14,8 +14,6 @@ import java.util.List;
 public class Event implements Parcelable {
 
     private String id;
-
-
     private String description;
     private String title;
     private String image;
@@ -25,6 +23,8 @@ public class Event implements Parcelable {
     private Date published;
     private Category category;
     private List<User> participants = new ArrayList<>();
+    private int numberParticipants;
+
     // parcelable stuff
     private int mData;
 
@@ -153,5 +153,13 @@ public class Event implements Parcelable {
                 ", participants=" + participants +
                 ", mData=" + mData +
                 '}';
+    }
+
+    public int getNumberParticipants() {
+        return numberParticipants;
+    }
+
+    public void setNumberParticipants(int numberParticipants) {
+        this.numberParticipants = numberParticipants;
     }
 }

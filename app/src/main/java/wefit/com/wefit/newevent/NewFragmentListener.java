@@ -1,6 +1,6 @@
 package wefit.com.wefit.newevent;
 
-import wefit.com.wefit.pojo.Category;
+import wefit.com.wefit.pojo.Event;
 
 /**
  * This interface must be implemented by activities that contain this
@@ -13,5 +13,8 @@ import wefit.com.wefit.pojo.Category;
  * >Communicating with Other Fragments</a> for more information.
  */
 public interface NewFragmentListener {
-    void secondFragment(Category category);
+    void secondFragment(Event event);
+    Event getNewEvent();
+
+    void finish(Event newEvent);
 }

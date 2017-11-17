@@ -1,5 +1,7 @@
 package wefit.com.wefit.newevent;
 
+import android.graphics.drawable.Drawable;
+
 import wefit.com.wefit.pojo.Category;
 
 /**
@@ -8,4 +10,6 @@ import wefit.com.wefit.pojo.Category;
 
 public interface AdapterHandler {
     void onItemClick(Category category);
+
+    Drawable getDrawable(int drawable);
 }

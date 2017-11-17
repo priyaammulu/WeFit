@@ -1,5 +1,6 @@
 package wefit.com.wefit.newevent;
 
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(CategoryAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final CategoryAdapter.ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mTextView.setText(categories.get(position).getName());
@@ -45,6 +46,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             @Override
             public void onClick(View view) {
                 handler.onItemClick(categories.get(position));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    holder.mLinearLayout.setBackground(handler.getDrawable(R.drawable.border_grey));
+                }
             }
         });
     }
