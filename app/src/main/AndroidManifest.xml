@@ -51,6 +51,12 @@
             android:name=".newevent.NewEventActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".UserParameterModification"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAniSobsz_scZ5nYwcxFpDgBmS89NvpwAA"/>
+
     </application>
+
 
 </manifest>

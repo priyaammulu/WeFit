@@ -1,6 +1,7 @@
 package wefit.com.wefit.newevent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,8 +15,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -26,13 +34,17 @@ import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class NewEventFragmentFirst extends Fragment {
+    private static final int PLACE_PICKER_REQUEST = 1;
     private NewFragmentListener mListener;
     private EditText mName;
     private NumberPicker mParticipants;
     private Button mButtonAhead;
     private DatePicker mDatePicker;
+    private ImageButton mImageButton;
 
     public NewEventFragmentFirst() {
         // Required empty public constructor
@@ -55,6 +67,21 @@ public class NewEventFragmentFirst extends Fragment {
         mParticipants.setMinValue(1);
         mParticipants.setMaxValue(15);
         mDatePicker = (DatePicker) view.findViewById(R.id.new_event_datepicker);
+        mImageButton = (ImageButton) view.findViewById(R.id.new_event_map);
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+                try {
+                    startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         mButtonAhead = (Button) view.findViewById(R.id.new_event_button_ahead);
         mButtonAhead.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +93,16 @@ public class NewEventFragmentFirst extends Fragment {
                 mListener.secondFragment(event);
             }
         });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, getActivity());
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(getActivity(), toastMsg, Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private Date getDateFromDatePicker(DatePicker datePicker) {
