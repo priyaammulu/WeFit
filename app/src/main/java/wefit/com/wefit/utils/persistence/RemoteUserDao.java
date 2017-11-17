@@ -7,7 +7,7 @@ import wefit.com.wefit.pojo.User;
  * Created by gioacchino on 13/11/2017.
  */
 
-public interface UserDao {
+public interface RemoteUserDao {
 
     /**
      * Save a user in the store. This operation is async.

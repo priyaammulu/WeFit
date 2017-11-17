@@ -13,10 +13,10 @@ import wefit.com.wefit.datamodel.UserModel;
 import wefit.com.wefit.datamodel.UserModelAsyncImpl;
 import wefit.com.wefit.utils.auth.Auth20FirebaseHandlerImpl;
 import wefit.com.wefit.utils.auth.Auth20Handler;
-import wefit.com.wefit.utils.persistence.EventDao;
+import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.LocalEventDao;
 import wefit.com.wefit.utils.persistence.LocalUserDao;
-import wefit.com.wefit.utils.persistence.UserDao;
+import wefit.com.wefit.utils.persistence.RemoteUserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
 import wefit.com.wefit.utils.persistence.sharedpreferencepersistence.LocalUserDaoImpl;
@@ -41,8 +41,8 @@ public class WefitApplication extends Application {
 
         // initialize remote persistence
         FirebaseApp.initializeApp(this);
-        UserDao userDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
-        EventDao eventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "events", userDao);
+        RemoteUserDao userDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
+        RemoteEventDao eventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "events", userDao);
         Auth20Handler loginHandler = new Auth20FirebaseHandlerImpl(FirebaseAuth.getInstance(), userDao);
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 

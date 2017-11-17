@@ -153,6 +153,11 @@ public class LocalSQLiteEventDao implements LocalEventDao {
     }
 
     @Override
+    public void update(Event eventToStore) {
+
+    }
+
+    @Override
     public Event loadEventByID(String eventID) {
 
         Event retrievedEvent = null;

@@ -11,8 +11,8 @@ import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.pojo.Location;
-import wefit.com.wefit.utils.persistence.EventDao;
-import wefit.com.wefit.utils.persistence.UserDao;
+import wefit.com.wefit.utils.persistence.RemoteEventDao;
+import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 
 /**
@@ -23,11 +23,11 @@ public class EventModelImpl implements EventModel {
 
     private Location currentLocation;
 
-    private EventDao eventDao;
-    private UserDao userDao;
+    private RemoteEventDao eventDao;
+    private RemoteUserDao userDao;
 
 
-    public EventModelImpl(EventDao eventPersistence, UserDao userPersistence) {
+    public EventModelImpl(RemoteEventDao eventPersistence, RemoteUserDao userPersistence) {
         this.userDao = userPersistence;
         this.eventDao = eventPersistence;
     }

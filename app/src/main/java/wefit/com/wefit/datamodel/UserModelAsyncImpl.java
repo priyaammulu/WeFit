@@ -5,7 +5,7 @@ import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.auth.Auth20Handler;
 import wefit.com.wefit.utils.persistence.LocalUserDao;
-import wefit.com.wefit.utils.persistence.UserDao;
+import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by gioacchino on 14/11/2017.
@@ -15,7 +15,7 @@ public class UserModelAsyncImpl implements UserModel {
 
     private final LocalUserDao localUserDao;
     private final Auth20Handler loginHandler;
-    private final UserDao remoteUserStore;
+    private final RemoteUserDao remoteUserStore;
 
     @Override
     public Flowable<User> retrieveLoggedUser() {
@@ -61,7 +61,7 @@ public class UserModelAsyncImpl implements UserModel {
 
     }
 
-    public UserModelAsyncImpl(Auth20Handler loginHandler, LocalUserDao localUserDao, UserDao remoteUserDao) {
+    public UserModelAsyncImpl(Auth20Handler loginHandler, LocalUserDao localUserDao, RemoteUserDao remoteUserDao) {
         this.loginHandler = loginHandler;
         this.localUserDao = localUserDao;
         this.remoteUserStore = remoteUserDao;

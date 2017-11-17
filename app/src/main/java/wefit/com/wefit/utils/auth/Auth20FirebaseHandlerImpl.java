@@ -11,7 +11,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.utils.persistence.UserDao;
+import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by gioacchino on 14/11/2017.
@@ -20,7 +20,7 @@ import wefit.com.wefit.utils.persistence.UserDao;
 public class Auth20FirebaseHandlerImpl implements Auth20Handler {
 
     private FirebaseAuth mFirebaseAuth;
-    private UserDao mUserDao;
+    private RemoteUserDao mUserDao;
 
     @Override
     public void signIn() {
@@ -82,7 +82,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
         }, BackpressureStrategy.BUFFER);
     }
 
-    public Auth20FirebaseHandlerImpl(FirebaseAuth mFirebaseAuth, UserDao mUserDao) {
+    public Auth20FirebaseHandlerImpl(FirebaseAuth mFirebaseAuth, RemoteUserDao mUserDao) {
         this.mFirebaseAuth = mFirebaseAuth;
         this.mUserDao = mUserDao;
     }

@@ -16,5 +16,7 @@ public interface LocalEventDao {
 
     Event save(Event eventToStore);
 
+    void update(Event eventToStore);
+
     Event loadEventByID(String eventID);
 }
