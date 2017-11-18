@@ -82,6 +82,7 @@ public class NewEventFragmentFirst extends Fragment {
                 event.setTitle(mName.getText().toString());
                 event.setNumberParticipants(mParticipants.getValue());
                 event.setExpire(getDateFromDatePicker(mDatePicker));
+                event.setCreator(mListener.getEventCreator());
                 mListener.secondFragment(event);
             }
         });

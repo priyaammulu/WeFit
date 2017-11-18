@@ -11,10 +11,11 @@ import wefit.com.wefit.pojo.Location;
  */
 
 public interface EventModel {
-
-   Flowable<List<Event>> getEvents();
+    Flowable<List<Event>> getEvents();
 
     void setLocation(Location location);
 
     Flowable<List<Event>> getUserEvents();
+
+    void createEvent(Event event);
 }

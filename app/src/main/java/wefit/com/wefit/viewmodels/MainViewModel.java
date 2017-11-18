@@ -31,5 +31,6 @@ public class MainViewModel {
     }
 
     public void createNewEvent(Event newEvent) {
+        mEventModel.createEvent(newEvent);
     }
 }

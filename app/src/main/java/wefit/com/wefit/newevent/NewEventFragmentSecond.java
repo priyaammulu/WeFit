@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import wefit.com.wefit.R;
@@ -77,6 +78,7 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
                 byte[] imageInByte = baos.toByteArray();
                 newEvent.setImage(imageInByte.toString()); // todo delete toString
                 newEvent.setCategory(mCategory);
+                newEvent.setPublished(new Date());
                 mListener.finish(newEvent);
             }
         });

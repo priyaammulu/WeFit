@@ -102,6 +102,11 @@ public class EventModelImpl implements EventModel {
         return Flowable.just(events);
     }
 
+    @Override
+    public void createEvent(Event event) {
+        eventDao.save(event);
+    }
+
     private void sortByLocation() {
         // todo, sort events by location distance
         // TODO use a strategy pattern here
