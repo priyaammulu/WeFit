@@ -1,4 +1,4 @@
-package wefit.com.wefit.pojo.events;
+package wefit.com.wefit.pojo;
 
 /**
  * Created by lorenzo on 11/4/17.

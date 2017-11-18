@@ -1,5 +1,6 @@
 package wefit.com.wefit.newevent;
 
+
 import wefit.com.wefit.pojo.Event;
 
 /**

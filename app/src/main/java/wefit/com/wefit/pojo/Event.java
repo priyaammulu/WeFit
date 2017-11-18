@@ -1,4 +1,4 @@
-package wefit.com.wefit.pojo.events;
+package wefit.com.wefit.pojo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,9 +6,6 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import wefit.com.wefit.pojo.Location;
-import wefit.com.wefit.pojo.User;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -19,6 +16,7 @@ public class Event implements Parcelable {
     private String id;
 
 
+    private int numberParticipants;
     private String description;
     private String title;
     private String image;
@@ -27,6 +25,7 @@ public class Event implements Parcelable {
     private Date expire;
     private Date published;
     private String categoryName;
+    private Category category;
     private List<User> participants = new ArrayList<>();
     // parcelable stuff
     private int mData;
@@ -157,5 +156,21 @@ public class Event implements Parcelable {
                 ", participants=" + participants +
                 ", mData=" + mData +
                 '}';
+    }
+
+    public int getNumberParticipants() {
+        return numberParticipants;
+    }
+
+    public void setNumberParticipants(int numberParticipants) {
+        this.numberParticipants = numberParticipants;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

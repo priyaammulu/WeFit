@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import wefit.com.wefit.pojo.Location;
-import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.utils.persistence.LocalEventDao;
 
 /**
