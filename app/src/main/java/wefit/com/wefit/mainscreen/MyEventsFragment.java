@@ -47,7 +47,7 @@ public class MyEventsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
 
-        // TODO to be modifie it later (not user events, but for test is the same
+        // TODO to be modified it later (not user events, but for test is the same
         //Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new Consumer<List<Event>>() {
