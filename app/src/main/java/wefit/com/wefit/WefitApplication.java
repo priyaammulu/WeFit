@@ -42,7 +42,7 @@ public class WefitApplication extends Application {
         // initialize remote persistence
         FirebaseApp.initializeApp(this);
         RemoteUserDao userDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
-        RemoteEventDao eventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "events", userDao);
+        RemoteEventDao eventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "event_store", userDao);
         Auth20Handler loginHandler = new Auth20FirebaseHandlerImpl(FirebaseAuth.getInstance(), userDao);
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 

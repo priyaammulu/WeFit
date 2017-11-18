@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
+import io.reactivex.functions.Consumer;
 import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.UserParameterModification;
@@ -45,43 +47,20 @@ public class MyEventsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
 
-        // TODO togliere va direttamente ad activity modifica utente
-        //startActivity(new Intent(getContext(), UserParameterModification.class));
-
-
-
-
-
-
         // TODO to be modifie it later (not user events, but for test is the same
         //Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
-        stream.subscribe(new FlowableSubscriber<List<Event>>() {
+        stream.subscribe(new Consumer<List<Event>>() {
             @Override
-            public void onSubscribe(Subscription subscription) {
-                subscription.request(Long.MAX_VALUE);
-                mSubscription = subscription;
-            }
-
-            @Override
-            public void onNext(List<Event> events) {
+            public void accept(List<Event> events) throws Exception {
                 initilizeListView(events);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
             }
         });
 
     }
 
     private void initilizeListView(List<Event> events) {
+        Log.i("LIsta eventi", events.toString());
         myEventsAdapter = new MyEventsAdapter(events, getActivity());
         mListView.setAdapter(myEventsAdapter);
     }

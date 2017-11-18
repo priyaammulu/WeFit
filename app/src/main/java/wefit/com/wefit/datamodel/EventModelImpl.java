@@ -37,18 +37,17 @@ public class EventModelImpl implements EventModel {
 
         return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
             @Override
-            public void subscribe(FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
+            public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
 
 
-                Flowable<List<Event>> promise = eventDao.getEvents(5, 0, null);
+                Flowable<List<Event>> promise = eventDao.getEvents(6, 0, null);
 
                 promise.subscribe(new Consumer<List<Event>>() {
                     @Override
                     public void accept(List<Event> events) throws Exception {
-                        // todo messaggio ricevuto
-                        Log.i("PROMISE GETEVENT", events.toString());
-                        Log.i("PROMISE RESPEcet", "rispettato");
-                        // TODO qui posso continuare con la computazione perché ho tutti gli eventi
+
+                        flowableEmitter.onNext(events);
+
                     }
                 });
 
