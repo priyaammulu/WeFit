@@ -1,10 +1,15 @@
-package wefit.com.wefit.pojo;
+package wefit.com.wefit.pojo.events;
 
 /**
  * Created by lorenzo on 11/4/17.
  */
 
 public class Category {
+
+
+    /**
+     * This is the category id
+     */
     private String name;
     private int image;
 

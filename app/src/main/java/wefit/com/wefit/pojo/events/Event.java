@@ -1,4 +1,4 @@
-package wefit.com.wefit.pojo;
+package wefit.com.wefit.pojo.events;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.User;
+
 /**
  * Created by lorenzo on 11/3/17.
  */
@@ -14,17 +17,17 @@ import java.util.List;
 public class Event implements Parcelable {
 
     private String id;
+
+
     private String description;
     private String title;
     private String image;
     private Location location;
-    private User organizer;
+    private User creator;
     private Date expire;
     private Date published;
-    private Category category;
+    private String categoryName;
     private List<User> participants = new ArrayList<>();
-    private int numberParticipants;
-
     // parcelable stuff
     private int mData;
 
@@ -48,11 +51,11 @@ public class Event implements Parcelable {
     }
 
     public User getCreator() {
-        return organizer;
+        return creator;
     }
 
     public void setCreator(User user) {
-        this.organizer = user;
+        this.creator = user;
     }
 
     public String getTitle() {
@@ -71,12 +74,12 @@ public class Event implements Parcelable {
         this.expire = expire;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public List<User> getParticipants() {
@@ -142,24 +145,17 @@ public class Event implements Parcelable {
     @Override
     public String toString() {
         return "Event{" +
-                "description='" + description + '\'' +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", location=" + location +
-                ", organizer=" + organizer +
+                ", creator=" + creator +
                 ", expire=" + expire +
                 ", published=" + published +
-                ", category=" + category +
+                ", categoryName='" + categoryName + '\'' +
                 ", participants=" + participants +
                 ", mData=" + mData +
                 '}';
-    }
-
-    public int getNumberParticipants() {
-        return numberParticipants;
-    }
-
-    public void setNumberParticipants(int numberParticipants) {
-        this.numberParticipants = numberParticipants;
     }
 }

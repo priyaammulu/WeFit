@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import wefit.com.wefit.pojo.Category;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.events.Category;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 
@@ -23,9 +23,9 @@ public class EventWrapper {
     private Location location;
 
     private String eventCreatorUserId;
-    private Date expiration;
-    private Date publication;
-    private Category eventCategory;
+    private long expiration;
+    private long publication;
+    private String eventCategory;
     private List<String> partecipantsUserIds = new ArrayList<>();
 
     public EventWrapper(Event adaptedEvent) {
@@ -46,9 +46,9 @@ public class EventWrapper {
         this.imageUrl = adaptedEvent.getImage();
         this.location = adaptedEvent.getLocation();
         this.eventCreatorUserId = adaptedEvent.getCreator().getUserId();
-        this.expiration = adaptedEvent.getExpire();
-        this.publication = adaptedEvent.getPublished();
-        this.eventCategory = adaptedEvent.getCategory();
+        this.expiration = adaptedEvent.getExpire().getTime();
+        this.publication = adaptedEvent.getPublished().getTime();
+        this.eventCategory = adaptedEvent.getCategoryName();
 
         for (User partecipant :adaptedEvent.getParticipants()) {
 
@@ -105,27 +105,27 @@ public class EventWrapper {
         this.eventCreatorUserId = eventCreatorUserId;
     }
 
-    public Date getExpiration() {
+    public long getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(Date expiration) {
+    public void setExpiration(long expiration) {
         this.expiration = expiration;
     }
 
-    public Date getPublication() {
+    public long getPublication() {
         return publication;
     }
 
-    public void setPublication(Date publication) {
+    public void setPublication(long publication) {
         this.publication = publication;
     }
 
-    public Category getEventCategory() {
+    public String getEventCategory() {
         return eventCategory;
     }
 
-    public void setEventCategory(Category eventCategory) {
+    public void setEventCategory(String eventCategory) {
         this.eventCategory = eventCategory;
     }
 
@@ -141,7 +141,7 @@ public class EventWrapper {
      * Unwrap the event in the requested App format
      * @return App event
      */
-    public Event unwrap() {
+    Event unwrapEvent() {
 
         Event unwrapped = new Event();
         User creator = new User();
@@ -164,9 +164,9 @@ public class EventWrapper {
         unwrapped.setImage(this.imageUrl);
         unwrapped.setLocation(this.location);
         unwrapped.setCreator(creator);
-        unwrapped.setExpire(this.expiration);
-        unwrapped.setPublished(this.publication);
-        unwrapped.setCategory(this.eventCategory);
+        unwrapped.setExpire(new Date(this.expiration));
+        unwrapped.setPublished(new Date(this.publication));
+        unwrapped.setCategoryName(this.eventCategory);
         unwrapped.setParticipants(partecipants);
 
         return unwrapped;

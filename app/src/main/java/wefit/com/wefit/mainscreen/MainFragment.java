@@ -22,7 +22,7 @@ import wefit.com.wefit.EventAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.newevent.NewEventActivity;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 
@@ -56,6 +56,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
+
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
@@ -66,9 +67,10 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onNext(List<Event> events) {
+                //handleAdapter(events);
+                Log.i("PROMISE GETEVENT main", events.toString());
+                Log.i("PROMISE RESPEcet main", "respected");
                 handleAdapter(events);
-                Log.i("PROMISE GETEVENT", events.toString());
-                Log.i("PROMISE RESPEcet", "rispettato");
             }
 
             @Override
@@ -81,6 +83,7 @@ public class MainFragment extends Fragment {
 
             }
         });
+
     }
 
     private void bind(View view) {

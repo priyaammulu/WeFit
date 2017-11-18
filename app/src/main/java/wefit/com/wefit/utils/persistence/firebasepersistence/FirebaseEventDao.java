@@ -20,21 +20,21 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.utils.persistence.EventDao;
-import wefit.com.wefit.utils.persistence.UserDao;
+import wefit.com.wefit.utils.persistence.RemoteEventDao;
+import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by gioacchino on 13/11/2017.
  */
 
-public class FirebaseEventDao implements EventDao {
+public class FirebaseEventDao implements RemoteEventDao {
 
     private DatabaseReference mEventStorage;
 
-    private UserDao mUserPersistence;
+    private RemoteUserDao mUserPersistence;
 
     @Override
     public Flowable<List<Event>> getEvents(int numResults, int startOffset, @Nullable Location centralPosition) {
@@ -71,7 +71,7 @@ public class FirebaseEventDao implements EventDao {
         return Flowable.create(new EventAsyncProvider(eventID), BackpressureStrategy.BUFFER);
     }
 
-    public FirebaseEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName, UserDao userPersistence) {
+    public FirebaseEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName, RemoteUserDao userPersistence) {
 
         // access to the remote event store
         this.mEventStorage = firebaseDatabase.getReference(eventStoreName);
@@ -239,7 +239,7 @@ public class FirebaseEventDao implements EventDao {
 
                     private Event structureResposne() {
 
-                        Event newevent = firebaseEvent.unwrap();
+                        Event newevent = firebaseEvent.unwrapEvent();
 
                         // retrieve user creator from the map
                         newevent.setCreator(userMap.get(firebaseEvent.getEventCreatorUserId()));
