@@ -8,7 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- use of the camera -->
-    <uses-feature android:name="android.hardware.camera"
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -19,7 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mainscreen.MainActivity" />
+        <activity
+            android:name=".mainscreen.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
@@ -31,11 +34,10 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- facebook login -->
         <meta-data
@@ -45,7 +47,16 @@
         <activity
             android:name=".EventDescriptionActivity"
             android:label="@string/event_description_top_label"></activity>
+        <activity
+            android:name=".newevent.NewEventActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
         <activity android:name=".UserParameterModification"></activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAniSobsz_scZ5nYwcxFpDgBmS89NvpwAA"/>
+
     </application>
+
 
 </manifest>

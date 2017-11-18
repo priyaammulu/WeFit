@@ -58,7 +58,7 @@ public class FirebaseUserDao implements RemoteUserDao {
 
             // reitrieve the user by ID
             mUserStorage
-                    .orderByKey()
+//                    .orderByKey()
                     .equalTo(userID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

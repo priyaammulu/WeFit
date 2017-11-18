@@ -21,6 +21,7 @@ import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.EventAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
+import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -69,6 +70,7 @@ public class MainFragment extends Fragment {
                 //handleAdapter(events);
                 Log.i("PROMISE GETEVENT main", events.toString());
                 Log.i("PROMISE RESPEcet main", "respected");
+                handleAdapter(events);
             }
 
             @Override
@@ -93,6 +95,12 @@ public class MainFragment extends Fragment {
                 Event selected = mAdapter.getItem(i);
                 intent.putExtra(EVENT, selected);
                 startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.new_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().startActivity(new Intent(getActivity(), NewEventActivity.class));
             }
         });
     }
