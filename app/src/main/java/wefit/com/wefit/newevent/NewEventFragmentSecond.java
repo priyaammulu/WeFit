@@ -22,8 +22,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import wefit.com.wefit.R;
-import wefit.com.wefit.pojo.Category;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.events.Category;
+import wefit.com.wefit.pojo.events.Event;
 
 
 public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
@@ -76,7 +76,8 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] imageInByte = baos.toByteArray();
                 newEvent.setImage(imageInByte.toString()); // todo delete toString
-                newEvent.setCategory(mCategory);
+                //newEvent.setCategory(mCategory.getName());
+                newEvent.setCategoryName(mCategory.getName()); // TODO NON si deve salvare la categorai, ma solo l'id
                 mListener.finish(newEvent);
             }
         });

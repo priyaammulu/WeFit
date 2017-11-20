@@ -31,8 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 import wefit.com.wefit.R;
-import wefit.com.wefit.pojo.Category;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.events.Event;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -88,7 +87,7 @@ public class NewEventFragmentFirst extends Fragment {
             public void onClick(View view) {
                 Event event = new Event();
                 event.setTitle(mName.getText().toString());
-                event.setNumberParticipants(mParticipants.getValue());
+                event.setNumberPartecipants(mParticipants.getValue());
                 event.setExpire(getDateFromDatePicker(mDatePicker));
                 mListener.secondFragment(event);
             }

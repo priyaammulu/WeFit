@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
-import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.events.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 public class NewEventActivity extends AppCompatActivity implements NewFragmentListener {

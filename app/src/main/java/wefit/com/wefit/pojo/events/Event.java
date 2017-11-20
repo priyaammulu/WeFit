@@ -28,6 +28,7 @@ public class Event implements Parcelable {
     private Date published;
     private String categoryName;
     private List<User> participants = new ArrayList<>();
+    private int numberPartecipants;
     // parcelable stuff
     private int mData;
 
@@ -40,6 +41,14 @@ public class Event implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getNumberPartecipants() {
+        return numberPartecipants;
+    }
+
+    public void setNumberPartecipants(int numberPartecipants) {
+        this.numberPartecipants = numberPartecipants;
     }
 
     public String getDescription() {
