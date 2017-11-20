@@ -59,7 +59,7 @@ public class LocalUserDaoImpl implements LocalUserDao {
             events.addAll(userToSave.getEventPartecipations());
             editor.putStringSet(EVENTS_FIELD, events);
         }
-        c
+
 
         // commit in background
         editor.apply();

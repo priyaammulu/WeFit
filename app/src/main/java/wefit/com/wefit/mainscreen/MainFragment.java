@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.EventAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
@@ -53,7 +56,7 @@ public class MainFragment extends Fragment {
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
         // tODO tolto per test mio
-        /*
+
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
@@ -64,7 +67,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onNext(List<Event> events) {
-                //handleAdapter(events);
+                handleAdapter(events);
                 Log.i("PROMISE GETEVENT", events.toString());
                 Log.i("PROMISE RESPEcet", "rispettato");
             }
@@ -79,7 +82,7 @@ public class MainFragment extends Fragment {
 
             }
         });
-        */
+
     }
 
     private void bind(View view) {

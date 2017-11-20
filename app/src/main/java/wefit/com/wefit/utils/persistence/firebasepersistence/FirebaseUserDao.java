@@ -60,7 +60,7 @@ public class FirebaseUserDao implements UserDao {
 
             // reitrieve the user by ID
             mUserStorage
-                    .orderByKey()
+                   // .orderByKey()
                     .equalTo(userID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

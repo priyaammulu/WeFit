@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
@@ -17,6 +18,7 @@ import io.reactivex.FlowableSubscriber;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.persistence.EventDao;
 import wefit.com.wefit.utils.persistence.UserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
@@ -42,14 +44,10 @@ public class EventModelImpl implements EventModel {
 
     @Override
     public Flowable<List<Event>> getEvents() {
-
         return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
             @Override
-            public void subscribe(FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
-
-
+            public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
                 Flowable<List<Event>> promise = eventDao.getEvents(5, 0, null);
-
                 promise.subscribe(new Consumer<List<Event>>() {
                     @Override
                     public void accept(List<Event> events) throws Exception {
@@ -57,6 +55,7 @@ public class EventModelImpl implements EventModel {
                         Log.i("PROMISE GETEVENT", events.toString());
                         Log.i("PROMISE RESPEcet", "rispettato");
                         // TODO qui posso continuare con la computazione perché ho tutti gli eventi
+                        flowableEmitter.onNext(events);
                     }
                 });
 
