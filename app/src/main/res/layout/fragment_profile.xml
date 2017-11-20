@@ -85,7 +85,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/ic_profile_picture"
-                />
+                tools:layout_editor_absoluteX="84dp"
+                tools:layout_editor_absoluteY="66dp" />
 
             <TextView
                 android:id="@+id/user_name"
@@ -159,18 +160,6 @@
                 android:textColor="@color/grey"
                 />
 
-            <Button
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/vertical_line"
-                android:layout_marginLeft="21dp"
-                android:layout_marginStart="21dp"
-                android:layout_marginTop="11dp"
-                android:layout_toEndOf="@+id/profilePicture"
-                android:layout_toRightOf="@+id/profilePicture"
-                android:background="@drawable/my_edit_button"
-                android:drawableBottom="@drawable/ic_edit"
-                android:padding="10dp" />
 
 
         </RelativeLayout>
@@ -179,6 +168,17 @@
     </ScrollView>
 
     <!-- edit Profile -->
+    <Button
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginRight="18dp"
+        android:background="@drawable/my_edit_button"
+        android:drawableBottom="@drawable/ic_edit"
+        android:padding="10dp" />
 
 
 </RelativeLayout>

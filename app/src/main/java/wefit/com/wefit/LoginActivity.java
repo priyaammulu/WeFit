@@ -47,17 +47,17 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Facebook login button
      */
-    Button mFacebookLogin;
+    private Button mFacebookLogin;
 
     /**
      * G login button
      */
-    Button mGoogleLogin;
+    private Button mGoogleLogin;
 
     /**
      * Handle login callback functions
      */
-    CallbackManager fbCallbackManager;
+    private CallbackManager fbCallbackManager;
 
     /**
      * Google API manager client
@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Handle to the login VM
      */
-    UserViewModel loginViewModel;
+    private UserViewModel loginViewModel;
 
     /**
      * Firebase authentication manager
@@ -258,6 +258,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.i("LOGIN FB ERROR", "sorry the user is shy");
             stopSpinner();
             Toast.makeText(getApplicationContext(), "Ops, facebook è impazzito", Toast.LENGTH_LONG).show();
+            Log.i("ERRORE FB", error.toString());
 
         }
 

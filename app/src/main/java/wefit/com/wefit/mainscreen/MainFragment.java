@@ -21,6 +21,7 @@ import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.EventAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
+import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -47,6 +48,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
+        fetchEvents();
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -55,8 +57,9 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
-        // tODO tolto per test mio
+    }
 
+    private void fetchEvents() {
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
@@ -67,9 +70,10 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onNext(List<Event> events) {
+                //handleAdapter(events);
+                Log.i("PROMISE GETEVENT main", events.toString());
+                Log.i("PROMISE RESPEcet main", "respected");
                 handleAdapter(events);
-                Log.i("PROMISE GETEVENT", events.toString());
-                Log.i("PROMISE RESPEcet", "rispettato");
             }
 
             @Override
@@ -82,7 +86,6 @@ public class MainFragment extends Fragment {
 
             }
         });
-
     }
 
     private void bind(View view) {
@@ -94,6 +97,12 @@ public class MainFragment extends Fragment {
                 Event selected = mAdapter.getItem(i);
                 intent.putExtra(EVENT, selected);
                 startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.new_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().startActivity(new Intent(getActivity(), NewEventActivity.class));
             }
         });
     }

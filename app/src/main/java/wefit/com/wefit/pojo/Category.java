@@ -5,8 +5,18 @@ package wefit.com.wefit.pojo;
  */
 
 public class Category {
+
+
+    /**
+     * This is the category id
+     */
     private String name;
-    private String image; // todo modify
+    private int image;
+
+    public Category(String name, int image) {
+        this.name = name;
+        this.image = image;
+    }
 
     public String getName() {
         return name;
@@ -16,11 +26,11 @@ public class Category {
         this.name = name;
     }
 
-    public String getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(int image) {
         this.image = image;
     }
 }

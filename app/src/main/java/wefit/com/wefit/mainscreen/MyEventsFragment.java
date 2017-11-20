@@ -1,10 +1,10 @@
 package wefit.com.wefit.mainscreen;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +14,10 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.functions.Consumer;
 import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
-import wefit.com.wefit.UserParameterModification;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -35,6 +36,16 @@ public class MyEventsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
+
+        // TODO to be modified it later (not user events, but for test is the same
+        //Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
+        Flowable<List<Event>> stream = mMainViewModel.getEvents();
+        stream.subscribe(new Consumer<List<Event>>() {
+            @Override
+            public void accept(List<Event> events) throws Exception {
+                initilizeListView(events);
+            }
+        });
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -42,38 +53,10 @@ public class MyEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
-
-        // TODO togliere va direttamente ad activity modifica utente
-        //startActivity(new Intent(getContext(), UserParameterModification.class));
-
-        /*
-        Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
-        stream.subscribe(new FlowableSubscriber<List<Event>>() {
-            @Override
-            public void onSubscribe(Subscription subscription) {
-                subscription.request(Long.MAX_VALUE);
-                mSubscription = subscription;
-            }
-
-            @Override
-            public void onNext(List<Event> events) {
-                initilizeListView(events);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-        */
     }
 
     private void initilizeListView(List<Event> events) {
+        Log.i("LIsta eventi", events.toString());
         myEventsAdapter = new MyEventsAdapter(events, getActivity());
         mListView.setAdapter(myEventsAdapter);
     }

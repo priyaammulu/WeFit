@@ -31,13 +31,8 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private UserViewModel mLoginViewModel;
     private MainViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
-
-    private MyEventsFragment myeventsFragment = new MyEventsFragment();
-    private ProfileFragment profileFragment = new ProfileFragment();
-
     private MyEventsFragment myEventsFragment = new MyEventsFragment();
-    private ProfileFragment settingsFragment = new ProfileFragment();
-
+    private ProfileFragment profileFragment = new ProfileFragment();
     private LinkedList<Fragment> stack = new LinkedList<>();
 
     @Override
@@ -87,11 +82,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_fragment, mainFragment)
-                .add(R.id.main_fragment, myeventsFragment)
+                .add(R.id.main_fragment, myEventsFragment)
                 .add(R.id.main_fragment, profileFragment)
-                .hide(myeventsFragment)
+                .hide(myEventsFragment)
                 .hide(profileFragment)
-
                 .commit();
         stack.push(mainFragment);
     }
@@ -101,13 +95,8 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mainFragment)
-
-                .hide(myeventsFragment)
-                .hide(profileFragment)
-
                 .hide(myEventsFragment)
-                .hide(settingsFragment)
-
+                .hide(profileFragment)
                 .show(fragment)
                // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();

@@ -1,7 +1,5 @@
 package wefit.com.wefit.utils.persistence.firebasepersistence;
 
-import android.util.Log;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -15,13 +13,13 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.utils.persistence.UserDao;
+import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by gioacchino on 13/11/2017.
  */
 
-public class FirebaseUserDao implements UserDao {
+public class FirebaseUserDao implements RemoteUserDao {
 
     private DatabaseReference mUserStorage;
 
@@ -60,7 +58,7 @@ public class FirebaseUserDao implements UserDao {
 
             // reitrieve the user by ID
             mUserStorage
-                   // .orderByKey()
+//                    .orderByKey()
                     .equalTo(userID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

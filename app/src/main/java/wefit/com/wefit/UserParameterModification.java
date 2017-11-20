@@ -8,18 +8,30 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import io.reactivex.functions.Consumer;
+import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.persistence.RemoteEventDao;
+import wefit.com.wefit.utils.persistence.RemoteUserDao;
+import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
+import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class UserParameterModification extends AppCompatActivity {
@@ -41,6 +53,94 @@ public class UserParameterModification extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_parameter_modification);
+
+
+
+
+        // TODO creazione evento fittizio
+
+
+
+        User creator = new User();
+        creator.setUserId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
+
+        final Event event = new Event();
+        //event.setId("-Kz47m2Qmn623ifrqLJO");
+        event.setCreator(creator);
+        event.setTitle("Bellolevento");
+        event.setDescription("locamente innamorado");
+        event.setImage("245236tddwhtsr");
+        event.setPublished(new Date(652432));
+        event.setExpire(new Date(124534765));
+
+        Location location = new Location();
+        location.setLatitude(34565.4);
+        location.setLongitude(324535.6);
+        location.setName("guantanamera city");
+        event.setLocation(location);
+        event.setCategoryName("category1");
+
+        User part1 = new User();
+        part1.setUserId("oMHgmaouzSPyxOVK0gcW3mPp7d42");
+        User part2 = new User();
+        part2.setUserId("IeCvyPwpL6aXbHMAQUdD4BFhcB43");
+
+        List<User> parts = new ArrayList<>();
+        parts.add(part1);
+        parts.add(part2);
+
+        event.setParticipants(parts);
+
+
+        //RemoteEventDao remoteDao = new RestructuredFirebaseEventDao(FirebaseDatabase.getInstance(), "event_store");
+        final RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
+
+        RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "event_store", remoteUserDao);
+        remoteDao.save(event);
+
+
+        remoteDao.getEvents(6, 0, null).subscribe(new Consumer<List<Event>>() {
+            @Override
+            public void accept(List<Event> events) throws Exception {
+                Log.i("Eventos", String.valueOf(events.size()));
+            }
+        });
+
+        /*
+        remoteDao.loadEventByID(event.getId()).subscribe(new Consumer<Event>() {
+            @Override
+            public void accept(final Event event) throws Exception {
+                //Log.i("Evento", event.toString());
+
+                // TODO fill del creatore
+                remoteUserDao.loadByID(event.getCreator().getUserId()).subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(User user) throws Exception {
+                        //Log.i("Evento", user.toString());
+                        event.setCreator(user);
+                        Log.i("Evento", event.toString());
+                    }
+                });
+
+
+
+
+
+            }
+        });
+        */
+
+
+
+        /*
+        LocalEventDao eventDao = new LocalSQLiteEventDao(this);
+        //eventDao.wipe();
+        event = eventDao.save(event);
+        List<Event> eventos = eventDao.getEvents(20, 0);
+
+        Log.i("Evento", String.valueOf(eventos.size()));
+        */
+        // TODO creazione evento fittizio
 
         final UserViewModel userViewModel = ((WefitApplication) getApplication()).getUserViewModel();
 

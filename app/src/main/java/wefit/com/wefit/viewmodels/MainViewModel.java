@@ -1,7 +1,5 @@
 package wefit.com.wefit.viewmodels;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -30,5 +28,9 @@ public class MainViewModel {
 
     public Flowable<List<Event>> getUserEvents() {
         return mEventModel.getUserEvents();
+    }
+
+    public void createNewEvent(Event newEvent) {
+        mEventModel.createEvent(newEvent);
     }
 }

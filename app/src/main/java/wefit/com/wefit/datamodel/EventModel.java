@@ -1,7 +1,5 @@
 package wefit.com.wefit.datamodel;
 
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -13,10 +11,11 @@ import wefit.com.wefit.pojo.Location;
  */
 
 public interface EventModel {
-
-   Flowable<List<Event>> getEvents();
+    Flowable<List<Event>> getEvents();
 
     void setLocation(Location location);
 
     Flowable<List<Event>> getUserEvents();
+
+    void createEvent(Event event);
 }

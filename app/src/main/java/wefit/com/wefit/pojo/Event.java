@@ -16,13 +16,15 @@ public class Event implements Parcelable {
     private String id;
 
 
+    private int numberParticipants;
     private String description;
     private String title;
     private String image;
     private Location location;
-    private User user;
+    private User creator;
     private Date expire;
     private Date published;
+    private String categoryName;
     private Category category;
     private List<User> participants = new ArrayList<>();
     // parcelable stuff
@@ -48,11 +50,11 @@ public class Event implements Parcelable {
     }
 
     public User getCreator() {
-        return user;
+        return creator;
     }
 
     public void setCreator(User user) {
-        this.user = user;
+        this.creator = user;
     }
 
     public String getTitle() {
@@ -71,12 +73,12 @@ public class Event implements Parcelable {
         this.expire = expire;
     }
 
-    public Category getCategory() {
-        return category;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public List<User> getParticipants() {
@@ -142,16 +144,33 @@ public class Event implements Parcelable {
     @Override
     public String toString() {
         return "Event{" +
-                "description='" + description + '\'' +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
                 ", title='" + title + '\'' +
                 ", image='" + image + '\'' +
                 ", location=" + location +
-                ", user=" + user +
+                ", creator=" + creator +
                 ", expire=" + expire +
                 ", published=" + published +
-                ", category=" + category +
+                ", categoryName='" + categoryName + '\'' +
                 ", participants=" + participants +
                 ", mData=" + mData +
                 '}';
+    }
+
+    public int getNumberParticipants() {
+        return numberParticipants;
+    }
+
+    public void setNumberParticipants(int numberParticipants) {
+        this.numberParticipants = numberParticipants;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
