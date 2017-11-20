@@ -81,6 +81,7 @@ public class EventModelImpl implements EventModel {
 //                promise.subscribe(new Consumer<List<Event>>() {
 //                    @Override
 //                    public void accept(List<Event> events) throws Exception {
+//                        sortByLocation(events);
 //                        flowableEmitter.onNext(events);
 //                    }
 //                });

@@ -362,13 +362,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showWaitSpinner() {
-        // tODO english
-        popupDialogProgress = ProgressDialog.show(this, "",
-                "Loading. Please wait...", true);
+//        // tODO english
+//        popupDialogProgress = ProgressDialog.show(this, "",
+//                "Loading. Please wait...", true);
     }
 
     private void stopSpinner() {
-        popupDialogProgress.dismiss();
+//        popupDialogProgress.dismiss();
     }
 
 
