@@ -46,7 +46,7 @@ public class ProfileFragment extends Fragment {
 
        /* User user = new User();
         userName = (TextView) findViewById(R.id.user_name);
-        userName.setText(user.getName());
+        userName.setText(user.getDisplayName());
 
         city = (TextView) findViewById(R.id.city);
         city.setText("Lives in "+ user.getCity());

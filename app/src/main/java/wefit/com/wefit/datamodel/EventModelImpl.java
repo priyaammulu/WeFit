@@ -35,7 +35,7 @@ public class EventModelImpl implements EventModel {
         this.userDao = userPersistence;
         this.eventDao = eventPersistence;
         event = new Event();
-        //event.setId("-Kz47m2Qmn623ifrqLJO");
+        //event.setDisplayName("-Kz47m2Qmn623ifrqLJO");
         User creator = new User();
         creator.setId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
         event.setAdmin(creator);
@@ -110,7 +110,7 @@ public class EventModelImpl implements EventModel {
     }
 
     private void sortByLocation() {
-        // todo, sort events by location distance
+        // todo, sort events by location computeDistance
         // TODO use a strategy pattern here
     }
 }

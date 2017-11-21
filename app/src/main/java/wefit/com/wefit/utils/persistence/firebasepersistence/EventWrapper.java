@@ -52,7 +52,7 @@ public class EventWrapper {
         /*
         for (User partecipant : adaptedEvent.getAttendingUsers()) {
 
-            this.partecipantsUserIds.add(partecipant.getId());
+            this.partecipantsUserIds.add(partecipant.getDisplayName());
 
         }
         */

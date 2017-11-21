@@ -46,7 +46,6 @@ public class FirebaseEventDao implements RemoteEventDao {
     @Override
     public Event save(Event eventToStore) {
 
-        EventWrapper storeWrapper;
         String eventID;
 
         eventID = eventToStore.getId();
@@ -59,11 +58,7 @@ public class FirebaseEventDao implements RemoteEventDao {
 
         }
 
-        // TODO possibile rimozione
-        // wrap the event in the Firebase representation
-        //storeWrapper = new EventWrapper(eventToStore);
-
-        // save in the db
+        // save in firebase
         this.mEventStorage.child(eventID).setValue(eventToStore);
 
 
@@ -88,6 +83,11 @@ public class FirebaseEventDao implements RemoteEventDao {
     @Override
     public void removeAttendee(String eventID, String userID) {
         this.mEventStorage.child(eventID).child("attendingUsers").child(userID).removeValue();
+    }
+
+    @Override
+    public void deleteEvent(String eventID) {
+        this.mEventStorage.child(eventID).removeValue();
     }
 
 

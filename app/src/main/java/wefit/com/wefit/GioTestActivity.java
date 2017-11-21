@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,8 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ import java.util.Map;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.eventutils.location.DistanceSorter;
+import wefit.com.wefit.utils.eventutils.location.DistanceSorterImpl;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
@@ -62,24 +65,26 @@ public class GioTestActivity extends AppCompatActivity {
         creator.setId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
 
         final Event event = new Event();
-        //event.setId("-Kz47m2Qmn623ifrqLJO");
+        //event.setDisplayName("-Kz47m2Qmn623ifrqLJO");
         event.setAdmin(creator);
-        event.setName("evento 2");
+        event.setName("evento 0");
         event.setDescription("locamente innamorado");
         event.setImage("245236tddwhtsr");
         event.setPublicationDate(652432);
         event.setEventDate(124534765);
 
         Location location = new Location();
-        location.setLatitude(34565.4);
-        location.setLongitude(324535.6);
+        location.setLatitude(200);
+        location.setLongitude(300);
         location.setName("guantanamera city");
         event.setEventLocation(location);
-        event.setCategoryID("category1");
+        event.setCategoryID("volleyball");
 
         Map<String, Boolean> attendances = new HashMap<>();
         attendances.put("oMHgmaouzSPyxOVK0gcW3mPp7d42", true);
         attendances.put("IeCvyPwpL6aXbHMAQUdD4BFhcB43", false);
+
+        Log.i("base", event.toString());
 
         event.setAttendingUsers(attendances);
 
@@ -90,20 +95,51 @@ public class GioTestActivity extends AppCompatActivity {
         RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
         //remoteDao.save(event);
 
-        //remoteDao.addAttendee("-KzVWcG0024ODPdPbIIG", "user_inexisting");
-        //remoteDao.setAttendanceState("-KzVWcG0024ODPdPbIIG", "user_inexisting", true);
-        remoteDao.removeAttendee("-KzVWcG0024ODPdPbIIG", "user_inexisting");
+
+        Location center = new Location();
+        location.setLatitude(0);
+        location.setLongitude(0);
+
+        Location event1Loc = new Location(300, 0);
+
+        Location event2Loc = new Location(200, 0);
+
+        Event event1 = new Event();
+        event1.setName("evento 1");
+        event1.setEventLocation(event1Loc);
+
+        Log.i("base1", event1.toString());
+
+        Event event2 = new Event();
+        event2.setName("evento 2");
+        event2.setEventLocation(event2Loc);
+
+        Log.i("base2", event2.toString());
+
+
+        List<Event> ev = new ArrayList<>();
+        ev.add(event1);
+        ev.add(event2);
+
+        Log.i("not_sort", ev.toString());
+
+        DistanceSorter sort = new DistanceSorterImpl();
+        List<Event> sorted = sort.sortByDistanceFromLocation(center, ev);
+        Log.i("sort", sorted.toString());
+
+
+        //Log.i("gen_cat", CategoryFactory.getInstance().getCategoryByID(event.getCategoryID()).toString());
 
 
 
         /*
-        remoteDao.loadEventByID(event.getId()).subscribe(new Consumer<Event>() {
+        remoteDao.loadEventByID(event.getDisplayName()).subscribe(new Consumer<Event>() {
             @Override
             public void accept(final Event event) throws Exception {
                 //Log.i("Evento", event.toString());
 
                 // TODO fill del creatore
-                remoteUserDao.loadByID(event.getAdmin().getId()).subscribe(new Consumer<User>() {
+                remoteUserDao.loadByID(event.getAdmin().getDisplayName()).subscribe(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
                         //Log.i("Evento", user.toString());
