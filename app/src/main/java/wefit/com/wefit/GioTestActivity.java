@@ -30,10 +30,12 @@ import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.utils.eventutils.location.DistanceSorter;
 import wefit.com.wefit.utils.eventutils.location.DistanceSorterImpl;
+import wefit.com.wefit.utils.persistence.LocalEventDao;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
+import wefit.com.wefit.utils.persistence.sqlitelocalpersistence.LocalSQLiteEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class GioTestActivity extends AppCompatActivity {
@@ -88,14 +90,29 @@ public class GioTestActivity extends AppCompatActivity {
 
         event.setAttendingUsers(attendances);
 
+        LocalEventDao localEventDao = new LocalSQLiteEventDao(getApplicationContext());
+        //localEventDao.wipe();
+        //localEventDao.save(event);
+
+
+        Event ev = localEventDao.loadEventByID("1");
+        ev.setDescription("banzai");
+        localEventDao.save(ev);
+        ev = localEventDao.loadEventByID("1");
+        Log.i("locev", ev.toString());
+
+
+
+
 
         //RemoteEventDao remoteDao = new RestructuredFirebaseEventDao(FirebaseDatabase.getInstance(), "event_store");
-        final RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
+        //final RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
 
-        RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
+        //RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
         //remoteDao.save(event);
 
 
+        /*
         Location center = new Location();
         location.setLatitude(0);
         location.setLongitude(0);
@@ -126,6 +143,7 @@ public class GioTestActivity extends AppCompatActivity {
         DistanceSorter sort = new DistanceSorterImpl();
         List<Event> sorted = sort.sortByDistanceFromLocation(center, ev);
         Log.i("sort", sorted.toString());
+        */
 
 
         //Log.i("gen_cat", CategoryFactory.getInstance().getCategoryByID(event.getCategoryID()).toString());
