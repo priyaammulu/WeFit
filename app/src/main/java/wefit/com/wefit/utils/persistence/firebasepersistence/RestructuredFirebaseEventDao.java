@@ -15,7 +15,7 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import wefit.com.wefit.pojo.Location;
-import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 
 /**

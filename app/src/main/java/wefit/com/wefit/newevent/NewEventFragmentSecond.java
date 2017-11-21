@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import wefit.com.wefit.R;
@@ -76,8 +77,7 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] imageInByte = baos.toByteArray();
                 newEvent.setImage(imageInByte.toString()); // todo delete toString
-                //newEvent.setCategory(mCategory.getName());
-                newEvent.setCategoryName(mCategory.getName()); // TODO NON si deve salvare la categorai, ma solo l'id
+                newEvent.setCategory(mCategory);
                 mListener.finish(newEvent);
             }
         });

@@ -3,7 +3,7 @@ package wefit.com.wefit.datamodel;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
 
 /**
@@ -11,10 +11,11 @@ import wefit.com.wefit.pojo.Location;
  */
 
 public interface EventModel {
-
-   Flowable<List<Event>> getEvents();
+    Flowable<List<Event>> getEvents();
 
     void setLocation(Location location);
 
     Flowable<List<Event>> getUserEvents();
+
+    void createEvent(Event event);
 }

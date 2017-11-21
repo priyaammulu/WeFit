@@ -18,4 +18,6 @@ public interface NewFragmentListener {
     Event getNewEvent();
 
     void finish(Event newEvent);
+
+    User getEventCreator();
 }

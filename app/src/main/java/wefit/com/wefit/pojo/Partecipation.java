@@ -1,4 +1,4 @@
-package wefit.com.wefit.pojo.events;
+package wefit.com.wefit.pojo;
 
 import wefit.com.wefit.pojo.User;
 

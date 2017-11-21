@@ -1,7 +1,6 @@
 package wefit.com.wefit.mainscreen;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,12 +15,10 @@ import org.reactivestreams.Subscription;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import io.reactivex.FlowableSubscriber;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
-import wefit.com.wefit.UserParameterModification;
-import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 
@@ -39,13 +36,6 @@ public class MyEventsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mMainViewModel = mActivity.getMainViewModel();
 
         // TODO to be modified it later (not user events, but for test is the same
         //Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
@@ -56,7 +46,13 @@ public class MyEventsFragment extends Fragment {
                 initilizeListView(events);
             }
         });
+        super.onViewCreated(view, savedInstanceState);
+    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMainViewModel = mActivity.getMainViewModel();
     }
 
     private void initilizeListView(List<Event> events) {

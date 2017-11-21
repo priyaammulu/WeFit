@@ -2,7 +2,7 @@ package wefit.com.wefit.utils.persistence;
 
 import java.util.List;
 
-import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.pojo.Event;
 
 /**
  * Created by gioacchino on 13/11/2017.

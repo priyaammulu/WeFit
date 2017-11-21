@@ -27,12 +27,11 @@ import java.util.List;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.RestructuredFirebaseEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class UserParameterModification extends AppCompatActivity {
