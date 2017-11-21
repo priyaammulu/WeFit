@@ -62,10 +62,10 @@ public class MyEventsAdapter extends BaseAdapter {
         }
 
         Event event = events.get(position);
-        holder.title.setText(event.getTitle());
-        holder.location.setText(event.getLocation().getName());
-        holder.monthDay.setText(event.getExpire().toString().substring(5));
-        holder.time.setText(event.getExpire().toString().substring(5));
+        holder.title.setText(event.getName());
+        holder.location.setText(event.getEventLocation().getName());
+        //holder.monthDay.setText(event.getEventDate().toString().substring(5));
+        //holder.time.setText(event.getEventDate().toString().substring(5));
         Picasso.with(context).load(event.getImage()).into(holder.mEvent);
         Picasso.with(context).load(event.getImage()).into(holder.mGame);
         Picasso.with(context).load(event.getImage()).into(holder.mImageOrganizer);

@@ -1,7 +1,8 @@
 package wefit.com.wefit.newevent;
 
 
-import wefit.com.wefit.pojo.events.Event;
+import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.User;
 
 /**
  * This interface must be implemented by activities that contain this

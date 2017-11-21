@@ -8,30 +8,37 @@ import java.util.List;
 
 public class User {
 
-    private String authKey;
-    private String userId;
+    /**
+     * Unique ID of the user in the system
+     */
+    private String id;
+
     private String gender;
-    private String name;
+    private String fullName;
     private String email;
     private String biography;
+
+    /**
+     * Encoded user pic
+     */
     private String photo;
+
+    /**
+     * Birth date in un UNIX second format
+     */
     private int birthDate;
-    private List<String> eventPartecipations;
 
-    public String getAuthKey() {
-        return authKey;
+    /**
+     * List of the IDs of the events
+     */
+    private List<String> attendances;
+
+    public String getId() {
+        return id;
     }
 
-    public void setAuthKey(String authKey) {
-        this.authKey = authKey;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getGender() {
@@ -42,12 +49,12 @@ public class User {
         this.gender = gender;
     }
 
-    public String getName() {
-        return name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public int getBirthDate() {
@@ -82,27 +89,26 @@ public class User {
         this.photo = photo;
     }
 
-    public List<String> getEventPartecipations() {
-        return eventPartecipations;
+    public List<String> getAttendances() {
+        return attendances;
     }
 
-    public void setEventPartecipations(List<String> eventPartecipations) {
-        this.eventPartecipations = eventPartecipations;
+    public void setAttendances(List<String> attendances) {
+        this.attendances = attendances;
 
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "authKey='" + authKey + '\'' +
-                ", userId='" + userId + '\'' +
+                ", id='" + id + '\'' +
                 ", gender='" + gender + '\'' +
-                ", name='" + name + '\'' +
+                ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", biography='" + biography + '\'' +
                 ", photo='" + photo + '\'' +
                 ", birthDate=" + birthDate +
-                ", eventPartecipations=" + eventPartecipations +
+                ", attendances=" + attendances +
                 '}';
     }
 }

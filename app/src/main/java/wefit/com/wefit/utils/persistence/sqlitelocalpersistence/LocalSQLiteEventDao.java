@@ -131,15 +131,15 @@ public class LocalSQLiteEventDao implements LocalEventDao {
         long newid;
 
         ContentValues valuesToStore = new ContentValues();
-        valuesToStore.put(EventEntry.COLUMN_EVENT_NAME, eventToStore.getTitle());
+        valuesToStore.put(EventEntry.COLUMN_EVENT_NAME, eventToStore.getName());
         valuesToStore.put(EventEntry.COLUMN_DESCRIPTION, eventToStore.getDescription());
         valuesToStore.put(EventEntry.COLUMN_IMAGE, eventToStore.getImage());
-        valuesToStore.put(EventEntry.COLUMN_LONGITUDE, eventToStore.getLocation().getLongitude());
-        valuesToStore.put(EventEntry.COLUMN_LATITUDE, eventToStore.getLocation().getLatitude());
-        valuesToStore.put(EventEntry.COLUMN_PLACE_NAME, eventToStore.getLocation().getName());
-        valuesToStore.put(EventEntry.COLUMN_EVENT_DATE, eventToStore.getExpire().getTime());
-        valuesToStore.put(EventEntry.COLUMN_CREATION_DATE, eventToStore.getPublished().getTime());
-        valuesToStore.put(EventEntry.COLUMN_CATEGORY, eventToStore.getCategoryName());
+        valuesToStore.put(EventEntry.COLUMN_LONGITUDE, eventToStore.getEventLocation().getLongitude());
+        valuesToStore.put(EventEntry.COLUMN_LATITUDE, eventToStore.getEventLocation().getLatitude());
+        valuesToStore.put(EventEntry.COLUMN_PLACE_NAME, eventToStore.getEventLocation().getName());
+        valuesToStore.put(EventEntry.COLUMN_EVENT_DATE, eventToStore.getEventDate());
+        valuesToStore.put(EventEntry.COLUMN_CREATION_DATE, eventToStore.getPublicationDate());
+        valuesToStore.put(EventEntry.COLUMN_CATEGORY, eventToStore.getCategoryID());
 
         // store and retrieve ID
         newid = helper.getWritableDatabase().insert(EventEntry.TABLE_NAME, null, valuesToStore);
@@ -208,25 +208,25 @@ public class LocalSQLiteEventDao implements LocalEventDao {
 
 
         retrievedEvent.setId(cursor.getString(idC));
-        retrievedEvent.setTitle(cursor.getString(nameC));
+        retrievedEvent.setName(cursor.getString(nameC));
         retrievedEvent.setDescription(cursor.getString(descrC));
         retrievedEvent.setImage(cursor.getString(imgC));
-        retrievedEvent.setTitle(cursor.getString(nameC));
-        retrievedEvent.setTitle(cursor.getString(nameC));
-        retrievedEvent.setCategoryName(cursor.getString(categoryC));
+        retrievedEvent.setName(cursor.getString(nameC));
+        retrievedEvent.setName(cursor.getString(nameC));
+        retrievedEvent.setCategoryID(cursor.getString(categoryC));
 
         // set location
         Location location = new Location();
         location.setLatitude(cursor.getDouble(latC));
         location.setLatitude(cursor.getDouble(lonC));
         location.setName(cursor.getString(placeNameC));
-        retrievedEvent.setLocation(location);
+        retrievedEvent.setEventLocation(location);
 
         // date creation and event date
-        Date creationdate = new Date(cursor.getLong(creationDateC));
-        retrievedEvent.setPublished(creationdate);
-        Date eventdate = new Date(cursor.getLong(eventDateC));
-        retrievedEvent.setExpire(eventdate);
+        //Date creationdate = new Date(cursor.getLong(creationDateC));
+        retrievedEvent.setPublicationDate(cursor.getLong(creationDateC));
+        //Date eventdate = new Date(cursor.getLong(eventDateC));
+        retrievedEvent.setEventDate(cursor.getLong(eventDateC));
 
         return retrievedEvent;
 

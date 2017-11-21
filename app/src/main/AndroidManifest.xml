@@ -35,9 +35,7 @@
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
 
         <!-- facebook login -->
         <meta-data
@@ -50,7 +48,7 @@
         <activity
             android:name=".newevent.NewEventActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".UserParameterModification"></activity>
+        <activity android:name=".GioTestActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

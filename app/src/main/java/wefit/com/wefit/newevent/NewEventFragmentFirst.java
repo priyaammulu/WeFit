@@ -79,9 +79,9 @@ public class NewEventFragmentFirst extends Fragment {
             @Override
             public void onClick(View view) {
                 Event event = new Event();
-                event.setTitle(mName.getText().toString());
-                event.setNumberParticipants(mParticipants.getValue());
-                event.setExpire(getDateFromDatePicker(mDatePicker));
+                event.setName(mName.getText().toString());
+                //event.setMaxAttendee(mParticipants.getValue());
+                //event.setEventDate(getDateFromDatePicker(mDatePicker));
                 mListener.secondFragment(event);
             }
         });

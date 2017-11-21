@@ -31,16 +31,16 @@ public class EventAdapter extends BaseAdapter {
         this.context = context;
         Event prova = new Event();
         prova.setDescription("jncdjnvj");
-        prova.setExpire(new Date());
-        prova.setTitle("kdlerkfm");
+        //prova.setEventDate(new Date());
+        prova.setName("kdlerkfm");
         Location loc = new Location();
         loc.setName("chair");
-        prova.setLocation(loc);
+        prova.setEventLocation(loc);
         prova.setImage("https://www.google.ie/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwja-JiD3MDXAhXMDsAKHe3jCFkQjRwIBw&url=https%3A%2F%2Fkids.nationalgeographic.com%2Fanimals%2Flion%2F&psig=AOvVaw2FusIASKcfExnS69TvNHfU&ust=1510840077707924");
-        prova.setPublished(new Date());
+        //prova.setPublicationDate(new Date());
         User user = new User();
-        user.setName("c");
-        prova.setCreator(user);
+        user.setFullName("c");
+        prova.setAdmin(user);
         this.events.add(prova);
     }
 
@@ -49,16 +49,16 @@ public class EventAdapter extends BaseAdapter {
             this.events = events;
         Event prova = new Event();
         prova.setDescription("jncdjnvj");
-        prova.setExpire(new Date());
-        prova.setTitle("kdlerkfm");
+        //prova.setEventDate(new Date());
+        prova.setName("kdlerkfm");
         Location loc = new Location();
         loc.setName("chair");
-        prova.setLocation(loc);
+        prova.setEventLocation(loc);
         prova.setImage("https://kids.nationalgeographic.com/content/dam/kids/photos/animals/Mammals/H-P/lion-male-roar.ngsversion.1466679939988.adapt.1900.1.jpg");
-        prova.setPublished(new Date());
+        //prova.setPublicationDate(new Date());
         User user = new User();
-        user.setName("Lorenzo");
-        prova.setCreator(user);
+        user.setFullName("Lorenzo");
+        prova.setAdmin(user);
         events.add(prova);
     }
 
@@ -91,12 +91,12 @@ public class EventAdapter extends BaseAdapter {
         }
 
         Event event = events.get(position);
-        holder.title.setText(event.getTitle());
-        holder.location.setText(event.getLocation().getName());
-//        holder.monthDay.setText(event.getExpire().toString().substring(5));
-//        holder.time.setText(event.getExpire().toString().substring(5));
-//        holder.organizer.setText(event.getCreator().getName());
-//        holder.published.setText(event.getPublished().toString().substring(5));
+        holder.title.setText(event.getName());
+        holder.location.setText(event.getEventLocation().getName());
+//        holder.monthDay.setText(event.getEventDate().toString().substring(5));
+//        holder.time.setText(event.getEventDate().toString().substring(5));
+//        holder.organizer.setText(event.getAdmin().getFullName());
+//        holder.published.setText(event.getPublicationDate().toString().substring(5));
         Picasso.with(context).load(event.getImage()).into(holder.mEvent);
         Picasso.with(context).load(event.getImage()).into(holder.mUser);
         Picasso.with(context).load(event.getImage()).into(holder.mGame);

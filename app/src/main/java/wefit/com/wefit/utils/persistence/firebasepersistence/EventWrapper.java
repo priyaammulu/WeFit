@@ -40,20 +40,22 @@ public class EventWrapper {
 
 
         this.id = adaptedEvent.getId();
-        this.title = adaptedEvent.getTitle();
+        this.title = adaptedEvent.getName();
         this.description = adaptedEvent.getDescription();
         this.imageUrl = adaptedEvent.getImage();
-        this.location = adaptedEvent.getLocation();
-        this.eventCreatorUserId = adaptedEvent.getCreator().getUserId();
-        this.expiration = adaptedEvent.getExpire().getTime();
-        this.publication = adaptedEvent.getPublished().getTime();
-        this.eventCategory = adaptedEvent.getCategoryName();
+        this.location = adaptedEvent.getEventLocation();
+        this.eventCreatorUserId = adaptedEvent.getAdmin().getId();
+        //this.expiration = adaptedEvent.getEventDate().getTime();
+        //this.publication = adaptedEvent.getPublicationDate().getTime();
+        this.eventCategory = adaptedEvent.getCategoryID();
 
-        for (User partecipant :adaptedEvent.getParticipants()) {
+        /*
+        for (User partecipant : adaptedEvent.getAttendingUsers()) {
 
-            this.partecipantsUserIds.add(partecipant.getUserId());
+            this.partecipantsUserIds.add(partecipant.getId());
 
         }
+        */
     }
 
     public String getId() {
@@ -138,6 +140,7 @@ public class EventWrapper {
 
     /**
      * Unwrap the event in the requested App format
+     *
      * @return App event
      */
     Event unwrapEvent() {
@@ -147,26 +150,26 @@ public class EventWrapper {
         List<User> partecipants = new ArrayList<>();
 
         // creator of the event
-        creator.setUserId(this.eventCreatorUserId);
+        creator.setId(this.eventCreatorUserId);
 
         // partecipants of the event
         for (String partecipantID : this.partecipantsUserIds) {
             User part = new User();
-            part.setUserId(partecipantID);
+            part.setId(partecipantID);
             partecipants.add(part);
         }
 
         // add informations to the unwrapped event
         unwrapped.setId(this.id);
-        unwrapped.setTitle(this.title);
+        unwrapped.setName(this.title);
         unwrapped.setDescription(this.description);
         unwrapped.setImage(this.imageUrl);
-        unwrapped.setLocation(this.location);
-        unwrapped.setCreator(creator);
-        unwrapped.setExpire(new Date(this.expiration));
-        unwrapped.setPublished(new Date(this.publication));
-        unwrapped.setCategoryName(this.eventCategory);
-        unwrapped.setParticipants(partecipants);
+        unwrapped.setEventLocation(this.location);
+        unwrapped.setAdmin(creator);
+        //unwrapped.setEventDate(new Date(this.expiration));
+        //unwrapped.setPublicationDate(new Date(this.publication));
+        unwrapped.setCategoryID(this.eventCategory);
+        //unwrapped.setAttendingUsers(partecipants);
 
         return unwrapped;
 

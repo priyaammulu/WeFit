@@ -60,6 +60,7 @@ public class MainFragment extends Fragment {
     }
 
     private void fetchEvents() {
+        Log.i("PROMISE creation main", "creazione promessa");
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override

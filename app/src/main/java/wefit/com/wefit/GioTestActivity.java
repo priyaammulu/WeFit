@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,12 +18,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.pojo.Event;
@@ -34,7 +33,7 @@ import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
-public class UserParameterModification extends AppCompatActivity {
+public class GioTestActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -59,52 +58,43 @@ public class UserParameterModification extends AppCompatActivity {
 
         // TODO creazione evento fittizio
 
-
-
         User creator = new User();
-        creator.setUserId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
+        creator.setId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
 
         final Event event = new Event();
         //event.setId("-Kz47m2Qmn623ifrqLJO");
-        event.setCreator(creator);
-        event.setTitle("Bellolevento");
+        event.setAdmin(creator);
+        event.setName("evento 2");
         event.setDescription("locamente innamorado");
         event.setImage("245236tddwhtsr");
-        event.setPublished(new Date(652432));
-        event.setExpire(new Date(124534765));
+        event.setPublicationDate(652432);
+        event.setEventDate(124534765);
 
         Location location = new Location();
         location.setLatitude(34565.4);
         location.setLongitude(324535.6);
         location.setName("guantanamera city");
-        event.setLocation(location);
-        event.setCategoryName("category1");
+        event.setEventLocation(location);
+        event.setCategoryID("category1");
 
-        User part1 = new User();
-        part1.setUserId("oMHgmaouzSPyxOVK0gcW3mPp7d42");
-        User part2 = new User();
-        part2.setUserId("IeCvyPwpL6aXbHMAQUdD4BFhcB43");
+        Map<String, Boolean> attendances = new HashMap<>();
+        attendances.put("oMHgmaouzSPyxOVK0gcW3mPp7d42", true);
+        attendances.put("IeCvyPwpL6aXbHMAQUdD4BFhcB43", false);
 
-        List<User> parts = new ArrayList<>();
-        parts.add(part1);
-        parts.add(part2);
-
-        event.setParticipants(parts);
+        event.setAttendingUsers(attendances);
 
 
         //RemoteEventDao remoteDao = new RestructuredFirebaseEventDao(FirebaseDatabase.getInstance(), "event_store");
         final RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
 
-        RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "event_store", remoteUserDao);
-        remoteDao.save(event);
+        RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
+        //remoteDao.save(event);
+
+        //remoteDao.addAttendee("-KzVWcG0024ODPdPbIIG", "user_inexisting");
+        //remoteDao.setAttendanceState("-KzVWcG0024ODPdPbIIG", "user_inexisting", true);
+        remoteDao.removeAttendee("-KzVWcG0024ODPdPbIIG", "user_inexisting");
 
 
-        remoteDao.getEvents(6, 0, null).subscribe(new Consumer<List<Event>>() {
-            @Override
-            public void accept(List<Event> events) throws Exception {
-                Log.i("Eventos", String.valueOf(events.size()));
-            }
-        });
 
         /*
         remoteDao.loadEventByID(event.getId()).subscribe(new Consumer<Event>() {
@@ -113,11 +103,11 @@ public class UserParameterModification extends AppCompatActivity {
                 //Log.i("Evento", event.toString());
 
                 // TODO fill del creatore
-                remoteUserDao.loadByID(event.getCreator().getUserId()).subscribe(new Consumer<User>() {
+                remoteUserDao.loadByID(event.getAdmin().getId()).subscribe(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
                         //Log.i("Evento", user.toString());
-                        event.setCreator(user);
+                        event.setAdmin(user);
                         Log.i("Evento", event.toString());
                     }
                 });
@@ -159,11 +149,11 @@ public class UserParameterModification extends AppCompatActivity {
 
         // show old data
         mEmailShower.setText(logged.getEmail());
-        mNameTextbox.setText(logged.getName());
+        mNameTextbox.setText(logged.getFullName());
         mBiography.setText(logged.getBiography());
 
         // lista eventi
-        List<String> events = logged.getEventPartecipations();
+        List<String> events = logged.getAttendances();
         StringBuilder strEvents = new StringBuilder();
         for (String s : events) {
             strEvents.append(s).append(" ");
@@ -197,12 +187,12 @@ public class UserParameterModification extends AppCompatActivity {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logged.setName(mNameTextbox.getText().toString());
+                logged.setFullName(mNameTextbox.getText().toString());
                 logged.setBiography(mBiography.getText().toString());
                 //logged.setGender(mGenderPick.getText().toString());
 
                 // add events in the store
-                logged.setEventPartecipations(Arrays.asList(mEventsPartecipation.getText().toString().split(" ")));
+                logged.setAttendances(Arrays.asList(mEventsPartecipation.getText().toString().split(" ")));
 
                 // take image
                 Bitmap pic = ((BitmapDrawable) mUserPic.getDrawable()).getBitmap();

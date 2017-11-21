@@ -3,9 +3,8 @@ package wefit.com.wefit.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -15,24 +14,40 @@ public class Event implements Parcelable {
 
     private String id;
 
-
-    private int numberParticipants;
+    /**
+     * Event characterizing infos
+     */
+    private String name;
     private String description;
-    private String title;
+    private Location eventLocation;
+    private String categoryID;
+    private long eventDate;
+    private long publicationDate;
+    private int maxAttendee;
+
+    /**
+     * String encoded event image
+     */
     private String image;
-    private Location location;
-    private User creator;
-    private Date expire;
-    private Date published;
-    private String categoryName;
-    private Category category;
-    private List<User> participants = new ArrayList<>();
-    private int numberPartecipants;
-    // parcelable stuff
+
+    /**
+     * User that is admin of this event
+     */
+    private User admin;
+
+    /**
+     * Users that have joined the event
+     */
+    private Map<String, Boolean> attendingUsers = new HashMap<>();
+
+    /**
+     * Required for Parcelable interface
+     */
     private int mData;
 
     public Event() {
     }
+
 
     public String getId() {
         return id;
@@ -42,12 +57,12 @@ public class Event implements Parcelable {
         this.id = id;
     }
 
-    public int getNumberPartecipants() {
-        return numberPartecipants;
+    public String getName() {
+        return name;
     }
 
-    public void setNumberPartecipants(int numberPartecipants) {
-        this.numberPartecipants = numberPartecipants;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -58,56 +73,44 @@ public class Event implements Parcelable {
         this.description = description;
     }
 
-    public User getCreator() {
-        return creator;
+    public Location getEventLocation() {
+        return eventLocation;
     }
 
-    public void setCreator(User user) {
-        this.creator = user;
+    public void setEventLocation(Location eventLocation) {
+        this.eventLocation = eventLocation;
     }
 
-    public String getTitle() {
-        return title;
+    public String getCategoryID() {
+        return categoryID;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
     }
 
-    public Date getExpire() {
-        return expire;
+    public long getEventDate() {
+        return eventDate;
     }
 
-    public void setExpire(Date expire) {
-        this.expire = expire;
+    public void setEventDate(long eventDate) {
+        this.eventDate = eventDate;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+    public long getPublicationDate() {
+        return publicationDate;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setPublicationDate(long publicationDate) {
+        this.publicationDate = publicationDate;
     }
 
-    public List<User> getParticipants() {
-        return participants;
+    public int getMaxAttendee() {
+        return maxAttendee;
     }
 
-    public void setParticipants(List<User> participants) {
-        this.participants = participants;
-    }
-
-    public void addPatecipant(User partecipant) {
-        this.participants.add(partecipant);
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setMaxAttendee(int maxAttendee) {
+        this.maxAttendee = maxAttendee;
     }
 
     public String getImage() {
@@ -116,6 +119,22 @@ public class Event implements Parcelable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public User getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(User admin) {
+        this.admin = admin;
+    }
+
+    public Map<String, Boolean> getAttendingUsers() {
+        return attendingUsers;
+    }
+
+    public void setAttendingUsers(Map<String, Boolean> attendingUsers) {
+        this.attendingUsers = attendingUsers;
     }
 
     public int describeContents() {
@@ -142,44 +161,20 @@ public class Event implements Parcelable {
         mData = in.readInt();
     }
 
-    public Date getPublished() {
-        return published;
-    }
-
-    public void setPublished(Date published) {
-        this.published = published;
-    }
-
     @Override
     public String toString() {
         return "Event{" +
                 "id='" + id + '\'' +
                 ", description='" + description + '\'' +
-                ", title='" + title + '\'' +
+                ", name='" + name + '\'' +
                 ", image='" + image + '\'' +
-                ", location=" + location +
-                ", creator=" + creator +
-                ", expire=" + expire +
-                ", published=" + published +
-                ", categoryName='" + categoryName + '\'' +
-                ", participants=" + participants +
+                ", eventLocation=" + eventLocation +
+                ", admin=" + admin +
+                ", eventDate=" + eventDate +
+                ", publicationDate=" + publicationDate +
+                ", categoryID='" + categoryID + '\'' +
+                ", attendingUsers=" + attendingUsers +
                 ", mData=" + mData +
                 '}';
-    }
-
-    public int getNumberParticipants() {
-        return numberParticipants;
-    }
-
-    public void setNumberParticipants(int numberParticipants) {
-        this.numberParticipants = numberParticipants;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 }

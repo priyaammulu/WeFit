@@ -32,7 +32,7 @@ public class FirebaseUserDao implements RemoteUserDao {
     public void save(User userToStore) {
 
         // the user has always an ID
-        String userID = userToStore.getUserId();
+        String userID = userToStore.getId();
 
         // save the event in the store
         userID = this.mUserStorage.child(userID).getKey();
@@ -58,7 +58,6 @@ public class FirebaseUserDao implements RemoteUserDao {
 
             // reitrieve the user by ID
             mUserStorage
-//                    .orderByKey()
                     .equalTo(userID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

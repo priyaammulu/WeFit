@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.LinkedList;
 
+import wefit.com.wefit.GioTestActivity;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
@@ -37,6 +38,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // TODO rimuovere gioacchino
+        startActivity(new Intent(this, GioTestActivity.class));
+
         super.onCreate(savedInstanceState);
         mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         mMainViewModel = getMainViewModel();

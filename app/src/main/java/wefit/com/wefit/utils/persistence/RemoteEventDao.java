@@ -20,4 +20,9 @@ public interface RemoteEventDao {
 
     Flowable<Event> loadEventByID(String eventID);
 
+    void setAttendanceState(String eventID, String userID, boolean state);
+
+    void addAttendee(String eventID, String userID);
+    void removeAttendee(String eventID, String userID);
+
 }

@@ -37,56 +37,57 @@ public class EventModelImpl implements EventModel {
         event = new Event();
         //event.setId("-Kz47m2Qmn623ifrqLJO");
         User creator = new User();
-        creator.setUserId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
-        event.setCreator(creator);
-        event.setTitle("Bellolevento");
+        creator.setId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
+        event.setAdmin(creator);
+        event.setName("Bellolevento");
         event.setDescription("locamente innamorado");
         event.setImage("https://media.mnn.com/assets/images/2016/08/Lion-Stalking-Kalahari-Desert.jpg.638x0_q80_crop-smart.jpg");
-        event.setPublished(new Date(652432));
-        event.setExpire(new Date(124534765));
+        //event.setPublicationDate(new Date(652432));
+        //event.setEventDate(new Date(124534765));
 
         Location location = new Location();
         location.setLatitude(34565.4);
         location.setLongitude(324535.6);
         location.setName("guantanamera city");
-        event.setLocation(location);
-        Category category = new Category("category", R.drawable.ic_gym_weightlifting);
-        event.setCategory(category);
-        event.setCategoryName("category1");
+        event.setEventLocation(location);
+        event.setCategoryID("categoryID");
+        event.setCategoryID("category1");
 
         User part1 = new User();
-        part1.setUserId("oMHgmaouzSPyxOVK0gcW3mPp7d42");
+        part1.setId("oMHgmaouzSPyxOVK0gcW3mPp7d42");
         User part2 = new User();
-        part2.setUserId("IeCvyPwpL6aXbHMAQUdD4BFhcB43");
+        part2.setId("IeCvyPwpL6aXbHMAQUdD4BFhcB43");
 
+        /*
         List<User> parts = new ArrayList<>();
         parts.add(part1);
         parts.add(part2);
+        */
 
-        event.setParticipants(parts);
+        //event.setAttendingUsers(parts);
     }
 
     @Override
     public Flowable<List<Event>> getEvents() {
-        List<Event> events = new ArrayList<>();
+        /*List<Event> events = new ArrayList<>();
         events.add(event);
         events.add(event);
         events.add(event);
-        return Flowable.just(events);
+        return Flowable.just(events);*/
 
-//        return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
-//            @Override
-//            public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
-//                Flowable<List<Event>> promise = eventDao.getEvents(6, 0, null);
-//                promise.subscribe(new Consumer<List<Event>>() {
-//                    @Override
-//                    public void accept(List<Event> events) throws Exception {
-//                        sortByLocation(events);
-//                        flowableEmitter.onNext(events);
-//                    }
-//                });
-//            }
-//        }, BackpressureStrategy.BUFFER);
+        return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
+            @Override
+            public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
+                Flowable<List<Event>> promise = eventDao.getEvents(6, 0, null);
+                promise.subscribe(new Consumer<List<Event>>() {
+                    @Override
+                    public void accept(List<Event> events) throws Exception {
+                        //sortByLocation(events);
+                        flowableEmitter.onNext(events);
+                    }
+                });
+            }
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override

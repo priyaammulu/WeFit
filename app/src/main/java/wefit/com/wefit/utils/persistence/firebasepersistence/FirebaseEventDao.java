@@ -1,5 +1,7 @@
 package wefit.com.wefit.utils.persistence.firebasepersistence;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,11 +59,13 @@ public class FirebaseEventDao implements RemoteEventDao {
 
         }
 
+        // TODO possibile rimozione
         // wrap the event in the Firebase representation
-        storeWrapper = new EventWrapper(eventToStore);
+        //storeWrapper = new EventWrapper(eventToStore);
 
         // save in the db
-        this.mEventStorage.child(eventID).setValue(storeWrapper);
+        this.mEventStorage.child(eventID).setValue(eventToStore);
+
 
         return eventToStore;
     }
@@ -70,6 +74,22 @@ public class FirebaseEventDao implements RemoteEventDao {
     public Flowable<Event> loadEventByID(String eventID) {
         return Flowable.create(new EventAsyncProvider(eventID), BackpressureStrategy.BUFFER);
     }
+
+    @Override
+    public void setAttendanceState(String eventID, String userID, boolean state) {
+        this.mEventStorage.child(eventID).child("attendingUsers").child(userID).setValue(state);
+    }
+
+    @Override
+    public void addAttendee(String eventID, String userID) {
+        this.setAttendanceState(eventID, userID, false);
+    }
+
+    @Override
+    public void removeAttendee(String eventID, String userID) {
+        this.mEventStorage.child(eventID).child("attendingUsers").child(userID).removeValue();
+    }
+
 
     public FirebaseEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName, RemoteUserDao userPersistence) {
 
@@ -100,7 +120,8 @@ public class FirebaseEventDao implements RemoteEventDao {
 
             // event request
             mEventStorage.
-                    orderByChild("expiration") // TODO rivedere l'ordinamento
+                    orderByKey()
+                    //orderByChild("expiration") // TODO rivedere l'ordinamento
                     .limitToFirst(resultRange)
                     .addValueEventListener(new ValueEventListener() {
                         @Override
@@ -115,13 +136,21 @@ public class FirebaseEventDao implements RemoteEventDao {
 
                             }
 
+                            Log.i("CaZZO perche", firebaseEvents.toString());
+
+                            Log.i("numero richieste", String.valueOf(firebaseEvents.size()));
+
                             for (EventWrapper wrappedEvent : firebaseEvents) {
+
+                                Log.i("processing", wrappedEvent.toString());
 
                                 loadAssociatedUsers(wrappedEvent).subscribe(new Consumer<Event>() {
                                     @Override
                                     public void accept(Event event) throws Exception {
 
+
                                         retrievedEvents.add(event);
+                                        Log.i("richiesta", "gatto");
 
                                         if (retrievedEvents.size() == firebaseEvents.size()) {
                                             flowableEmitter.onNext(retrievedEvents);
@@ -215,6 +244,8 @@ public class FirebaseEventDao implements RemoteEventDao {
             userIDs.addAll(firebaseEvent.getPartecipantsUserIds());
 
 
+            Log.i("User events", firebaseEvent.toString());
+
             // fetch user infos for each user
             for (String id : userIDs) {
 
@@ -224,7 +255,7 @@ public class FirebaseEventDao implements RemoteEventDao {
                     public void accept(User user) throws Exception {
 
                         // collect the user in a id-data dictionary
-                        userMap.put(user.getUserId(), user);
+                        userMap.put(user.getId(), user);
 
                         // if the last user is retrieved
                         if (userMap.size() == userIDs.size()) {
@@ -242,11 +273,11 @@ public class FirebaseEventDao implements RemoteEventDao {
                         Event newevent = firebaseEvent.unwrapEvent();
 
                         // retrieve user creator from the map
-                        newevent.setCreator(userMap.get(firebaseEvent.getEventCreatorUserId()));
+                        newevent.setAdmin(userMap.get(firebaseEvent.getEventCreatorUserId()));
 
                         // fill all the partecipant to the event
                         for (String partecipantID : firebaseEvent.getPartecipantsUserIds()) {
-                            newevent.addPatecipant(userMap.get(partecipantID));
+                            //newevent.addPatecipant(userMap.get(partecipantID)); // TODO vedi se deve cambiare
                         }
 
                         return newevent;

@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.List;
 import wefit.com.wefit.R;
-import wefit.com.wefit.pojo.events.Category;
+import wefit.com.wefit.pojo.Category;
 
 /**
  * Created by lorenzo on 11/15/17.
