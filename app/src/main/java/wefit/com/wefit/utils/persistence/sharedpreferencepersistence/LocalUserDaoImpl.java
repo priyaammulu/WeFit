@@ -52,6 +52,8 @@ public class LocalUserDaoImpl implements LocalUserDao {
         editor.putInt(BIRTH_FIELD, userToSave.getBirthDate());
 
         Set<String> events = new HashSet<>();
+
+
         List<String> partecipations = userToSave.getEventPartecipations();
         if (partecipations != null) {
             events.addAll(userToSave.getEventPartecipations());

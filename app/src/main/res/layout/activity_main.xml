@@ -7,47 +7,6 @@
     tools:context="wefit.com.wefit.mainscreen.MainActivity"
     android:theme="@style/AppTheme.NoActionBar">
 
-    <LinearLayout
-        android:id="@+id/topPanel"
-        android:layout_gravity="top"
-        android:background="@color/cardview_light_background"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-        <!--First Top icon -->
-        <LinearLayout
-            android:layout_width="198dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_edit" />
-
-        </LinearLayout>
-
-
-        <!--Second Top icon -->
-        <LinearLayout
-            android:layout_width="199dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_search" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
 
 
 
