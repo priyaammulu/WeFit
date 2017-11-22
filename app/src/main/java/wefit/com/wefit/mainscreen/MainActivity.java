@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         setContentView(R.layout.activity_main);
 
 
-
         bind();
         setFragments();
     }
@@ -90,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private void setFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.main_fragment, mainFragment)
                 .add(R.id.main_fragment, myEventsFragment)
                 .add(R.id.main_fragment, profileFragment)
+                .add(R.id.main_fragment, mainFragment)
                 .hide(myEventsFragment)
                 .hide(profileFragment)
                 .commit();
@@ -185,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         }
     }
 
+    @Override
     public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
         //Icons for main Activity
         leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);

@@ -35,11 +35,21 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
         super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            mListener.fillInIcons(R.drawable.ic_arrow, "Profile", R.drawable.ic_warning);
+        }
     }
 
     private void bind(View view) {
@@ -48,8 +58,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         //insert icons
-        mainActivity.fillInIcons(R.drawable.ic_arrow, "Profile", R.drawable.ic_warning);
+//        mainActivity.fillInIcons(R.drawable.ic_arrow, "Profile", R.drawable.ic_warning);
 
 
         // Inflate the layout for this fragment

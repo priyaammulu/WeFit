@@ -15,4 +15,5 @@ import wefit.com.wefit.viewmodels.MainViewModel;
 public interface FragmentsInteractionListener {
     MainViewModel getMainViewModel();
     void provideLocation();
+    void fillInIcons(int IconLeft, String iconMiddle, int iconRight);
 }

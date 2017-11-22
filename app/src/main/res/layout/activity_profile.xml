@@ -78,6 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginBottom="20dp"
                 android:layout_below="@+id/birth_date"
                 android:text="Bio"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"

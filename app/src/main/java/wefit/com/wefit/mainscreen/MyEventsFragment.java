@@ -29,6 +29,7 @@ public class MyEventsFragment extends Fragment {
     private ListView mListView;
     private MyEventsAdapter myEventsAdapter;
 
+
     public MyEventsFragment() {
         // Required empty public constructor
     }
@@ -53,6 +54,7 @@ public class MyEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
+
     }
 
     private void initilizeListView(List<Event> events) {
@@ -70,6 +72,15 @@ public class MyEventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_events, container, false);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            mActivity.fillInIcons(R.drawable.ic_edit, "MyEvents", R.drawable.ic_search);
+
+        }
     }
 
     @Override
