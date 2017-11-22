@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import wefit.com.wefit.R;
@@ -19,6 +20,12 @@ public class ProfileFragment extends Fragment {
     TextView city;
     TextView birthDate;
     TextView description;
+
+    ImageView leftTopButton;
+    TextView middleTopButton;
+    ImageView rightTopButton;
+
+    MainActivity mainActivity;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -41,6 +48,10 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //insert icons
+        mainActivity.fillInIcons(R.drawable.ic_arrow, "Profile", R.drawable.ic_warning);
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
 

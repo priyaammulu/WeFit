@@ -12,7 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -35,6 +37,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private ProfileFragment profileFragment = new ProfileFragment();
     private LinkedList<Fragment> stack = new LinkedList<>();
 
+    private ImageView leftTopBottom;
+    private TextView middleTopBottom;
+    private ImageView rightTopButtom;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         if (!mLoginViewModel.isAuth())
             signOut();
         setContentView(R.layout.activity_main);
+
+
+
         bind();
         setFragments();
     }
@@ -174,5 +183,17 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             // other 'case' lines to check for other
             // permissions this app might request
         }
+    }
+
+    public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
+        //Icons for main Activity
+        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+        leftTopBottom.setImageResource(IconLeft);
+
+        middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
+        middleTopBottom.setText(iconMiddle);
+
+        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+        rightTopButtom.setImageResource(iconRight);
     }
 }

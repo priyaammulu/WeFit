@@ -41,6 +41,8 @@ public class MainFragment extends Fragment {
     // this should be handled by another class
     private Subscription mSubscription;
 
+    MainActivity mainActivity;
+
     public MainFragment() {
         // Required empty public constructor
     }
@@ -57,6 +59,8 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
+
+        mainActivity.fillInIcons(R.drawable.ic_edit, "Events", R.drawable.ic_search);
     }
 
     private void fetchEvents() {
