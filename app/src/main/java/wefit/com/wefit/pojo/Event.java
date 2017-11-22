@@ -3,7 +3,11 @@ package wefit.com.wefit.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +38,11 @@ public class Event implements Parcelable {
      * User that is admin of this event
      */
     private User admin;
+
+    /**
+     * User ID of the admin
+     */
+    private String adminID;
 
     /**
      * Users that have joined the event
@@ -121,12 +130,20 @@ public class Event implements Parcelable {
         this.image = image;
     }
 
-    public User getAdmin() {
+    @Exclude public User getAdmin() {
         return admin;
     }
 
-    public void setAdmin(User admin) {
+    @Exclude public void setAdmin(User admin) {
         this.admin = admin;
+    }
+
+    public String getAdminID() {
+        return adminID;
+    }
+
+    public void setAdminID(String adminID) {
+        this.adminID = adminID;
     }
 
     public Map<String, Boolean> getAttendingUsers() {

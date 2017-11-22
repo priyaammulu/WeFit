@@ -57,14 +57,6 @@ public class User {
         this.fullName = fullName;
     }
 
-    public int getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(int birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -89,13 +81,20 @@ public class User {
         this.photo = photo;
     }
 
+    public int getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(int birthDate) {
+        this.birthDate = birthDate;
+    }
+
     public List<String> getAttendances() {
         return attendances;
     }
 
     public void setAttendances(List<String> attendances) {
         this.attendances = attendances;
-
     }
 
     @Override

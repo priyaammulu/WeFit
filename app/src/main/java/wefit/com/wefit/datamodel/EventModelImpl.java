@@ -1,7 +1,6 @@
 package wefit.com.wefit.datamodel;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import io.reactivex.BackpressureStrategy;
@@ -9,8 +8,6 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
-import wefit.com.wefit.R;
-import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
@@ -78,7 +75,7 @@ public class EventModelImpl implements EventModel {
         return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
             @Override
             public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
-                Flowable<List<Event>> promise = eventDao.getEvents(6, 0, null);
+                Flowable<List<Event>> promise = eventDao.loadNewEvents(6, 0, null);
                 promise.subscribe(new Consumer<List<Event>>() {
                     @Override
                     public void accept(List<Event> events) throws Exception {

@@ -39,8 +39,13 @@ public class FirebaseEventDao implements RemoteEventDao {
     private RemoteUserDao mUserPersistence;
 
     @Override
-    public Flowable<List<Event>> getEvents(int numResults, int startOffset, @Nullable Location centralPosition) {
+    public Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable Location centralPosition) {
         return Flowable.create(new EventListAsyncProvider(startOffset, numResults, centralPosition), BackpressureStrategy.BUFFER);
+    }
+
+    @Override
+    public Flowable<List<Event>> loadNewEvents(int numResults, @Nullable String anchorID) {
+        return null;
     }
 
     @Override
@@ -68,6 +73,16 @@ public class FirebaseEventDao implements RemoteEventDao {
     @Override
     public Flowable<Event> loadEventByID(String eventID) {
         return Flowable.create(new EventAsyncProvider(eventID), BackpressureStrategy.BUFFER);
+    }
+
+    @Override
+    public Flowable<List<Event>> loadEventsByIDs(List<String> eventIDs) {
+        return null;
+    }
+
+    @Override
+    public Flowable<List<Event>> loadEventsByAdmin(String adminID) {
+        return null;
     }
 
     @Override
