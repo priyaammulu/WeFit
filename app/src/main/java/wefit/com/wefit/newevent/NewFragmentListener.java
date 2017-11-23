@@ -2,6 +2,7 @@ package wefit.com.wefit.newevent;
 
 
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 
 /**
@@ -21,4 +22,6 @@ public interface NewFragmentListener {
     void finish(Event newEvent);
 
     User getEventCreator();
+
+    Location getUserLocation();
 }

@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import java.util.List;
+
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 
@@ -19,6 +21,7 @@ import wefit.com.wefit.pojo.Category;
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private List<Category> categories;
     private AdapterHandler handler;
+    private LinearLayout currentlySelected;
 
     public CategoryAdapter(List<Category> categories, AdapterHandler handler) {
         this.categories = categories;
@@ -45,9 +48,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         holder.mLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                handler.onItemClick(categories.get(position));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    if (currentlySelected != null)
+                        currentlySelected.setBackground(handler.getDrawable(R.drawable.border_black));
+                    handler.onItemClick(categories.get(position));
                     holder.mLinearLayout.setBackground(handler.getDrawable(R.drawable.border_grey));
+                    currentlySelected = holder.mLinearLayout;
                 }
             }
         });
@@ -62,6 +68,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public LinearLayout mLinearLayout;
         public TextView mTextView;
         public ImageView mImage;
+
         public ViewHolder(LinearLayout v) {
             super(v);
             mLinearLayout = v;
