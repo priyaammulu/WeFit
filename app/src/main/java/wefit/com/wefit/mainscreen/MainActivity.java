@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
+import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private ImageView leftTopBottom;
     private TextView middleTopBottom;
     private ImageView rightTopButtom;
+    private Button newEventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(mainFragment);
+            }
+        });
+        newEventButton = (Button) findViewById(R.id.new_event);
+        newEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, NewEventActivity.class));
             }
         });
     }
@@ -195,5 +204,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
         rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
         rightTopButtom.setImageResource(iconRight);
+    }
+
+    @Override
+    public UserViewModel getLoginViewModel() {
+        return mLoginViewModel;
     }
 }

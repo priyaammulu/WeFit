@@ -6,8 +6,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="20dp"
         android:layout_above="@+id/new_event_button_ahead"
+        android:paddingBottom="20dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -16,13 +16,26 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="You can use this screen to create your own event"
+                android:textColor="@color/colorSecondary"
+                android:textSize="20sp" />
+
             <EditText
                 android:id="@+id/new_event_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:backgroundTint="@color/colorSecondary"
                 android:gravity="center"
-                android:hint="Name" />
+                android:hint="Name"
+                android:textColor="@color/colorSecondary"
+                android:textColorHint="@color/colorSecondary" />
 
             <ImageButton
                 android:id="@+id/new_event_map"
@@ -36,6 +49,7 @@
                 android:id="@+id/new_event_datepicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:calendarTextColor="@color/colorSecondary"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"></DatePicker>
 
@@ -44,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Participants"
+                android:textColor="@color/colorSecondary"
                 android:textSize="18sp" />
 
             <NumberPicker
@@ -52,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
+                android:solidColor="@color/colorSecondary"
                 android:text="Number of participants"></NumberPicker>
 
         </LinearLayout>

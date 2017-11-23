@@ -103,12 +103,6 @@ public class MainFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        view.findViewById(R.id.new_event).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().startActivity(new Intent(getActivity(), NewEventActivity.class));
-            }
-        });
     }
 
     @Override
