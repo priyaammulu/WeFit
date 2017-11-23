@@ -5,70 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--TopBar-->
-    <LinearLayout
-        android:id="@+id/topPanel"
-        android:layout_gravity="top"
-        android:background="@color/panelColor"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="60dp">
-        <!--First Top icon -->
-        <LinearLayout
-            android:layout_width="198dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_arrow" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="198dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Profile"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        </LinearLayout>
-
-
-        <!--Second Top icon -->
-        <LinearLayout
-            android:layout_width="199dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_warning" />
-
-
-        </LinearLayout>
-
-    </LinearLayout>
 
 
 
     <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="550dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/topPanel">
 
         <!--Profile data -->
@@ -90,41 +33,31 @@
 
             <TextView
                 android:id="@+id/user_name"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/profilePicture"
                 android:layout_marginTop="18dp"
                 android:text="Kerry O'Connel"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
             <TextView
-                android:id="@+id/gender"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/user_name"
-                android:text="M"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/grey" />
-
-            <TextView
                 android:id="@+id/city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/user_name"
                 android:text="Lives in Dublin"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/grey"
                 />
 
+
             <TextView
                 android:id="@+id/birth_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/city"
                 android:text="Birth date: 15 OCT 1996"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -136,8 +69,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_below="@+id/birth_date"
-                android:text="Bio"
+                android:text="Biography"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 />
 
@@ -155,6 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/vertical_line"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:maxLines="9"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="Your introduction and credits are two of the most important elements of your StarNow profile. Make the most of your introduction by writing a short, snappy paragraph about yourself. Be professional and include elements of your personality in the text. Remember to include a link to your personal website if you have one. Your credits should outline your relevant experience in the industry and be simple to read.our introduction and credits are two of the most important elements of your StarNow profile. Make the most of your introduction by writing a short, snappy paragraph aboutYour introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. "
                 android:textColor="@color/grey"

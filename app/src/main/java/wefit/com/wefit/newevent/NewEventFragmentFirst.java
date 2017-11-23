@@ -19,12 +19,16 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.viewmodels.MainViewModel;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -37,6 +41,7 @@ public class NewEventFragmentFirst extends Fragment {
     private Button mButtonAhead;
     private DatePicker mDatePicker;
     private ImageButton mImageButton;
+    private Location location;
 
     public NewEventFragmentFirst() {
         // Required empty public constructor
@@ -45,6 +50,7 @@ public class NewEventFragmentFirst extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        location = mListener.getUserLocation();
     }
 
     @Override
@@ -64,7 +70,10 @@ public class NewEventFragmentFirst extends Fragment {
             @Override
             public void onClick(View view) {
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
+                LatLng southest = new LatLng(location.getLatitude() - 0.000001, location.getLongitude() - 0.000001);
+                LatLng northest = new LatLng(location.getLatitude() + 0.000001, location.getLongitude() + 0.000001);
+                LatLngBounds bounds = new LatLngBounds(southest, northest);
+                builder.setLatLngBounds(bounds);
                 try {
                     startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {

@@ -33,4 +33,8 @@ public class MainViewModel {
     public void createNewEvent(Event newEvent) {
         mEventModel.createEvent(newEvent);
     }
+
+    public Location getUserLocation() {
+        return mEventModel.getUserLocation();
+    }
 }

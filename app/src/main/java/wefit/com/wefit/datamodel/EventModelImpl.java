@@ -26,6 +26,7 @@ public class EventModelImpl implements EventModel {
     private RemoteEventDao eventDao;
     private RemoteUserDao userDao;
     private Event event;
+    private Location dublin = new Location(53.3498, 6.2603);
 
 
     public EventModelImpl(RemoteEventDao eventPersistence, RemoteUserDao userPersistence) {
@@ -104,6 +105,13 @@ public class EventModelImpl implements EventModel {
     @Override
     public void createEvent(Event event) {
         eventDao.save(event);
+    }
+
+    @Override
+    public Location getUserLocation() {
+        if (currentLocation != null)
+            return currentLocation;
+        return dublin;
     }
 
     private void sortByLocation() {

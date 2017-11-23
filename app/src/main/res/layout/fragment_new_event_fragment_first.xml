@@ -5,7 +5,9 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:layout_above="@+id/new_event_button_ahead"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
@@ -20,15 +22,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:gravity="center"
-                android:text="Name" />
+                android:hint="Name" />
 
             <ImageButton
-                android:layout_width="100dp"
-                android:layout_height="50dp"
                 android:id="@+id/new_event_map"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/calendar_ico" />
+                android:src="@drawable/maps_icon" />
 
             <DatePicker
                 android:id="@+id/new_event_datepicker"
@@ -41,17 +43,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="18sp"
-                android:text="Participants"/>
+                android:text="Participants"
+                android:textSize="18sp" />
 
             <NumberPicker
                 android:id="@+id/new_event_participants"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
-                android:text="Number of attendingUsers">
-            </NumberPicker>
+                android:layout_marginTop="10dp"
+                android:text="Number of attendees"></NumberPicker>
 
         </LinearLayout>
 
@@ -65,5 +66,6 @@
         android:background="@color/colorPrimary"
         android:padding="20dp"
         android:text="Go ahead" />
+
 
 </RelativeLayout>
