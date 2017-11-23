@@ -18,4 +18,6 @@ public interface EventModel {
     Flowable<List<Event>> getUserEvents();
 
     void createEvent(Event event);
+
+    Location getUserLocation();
 }

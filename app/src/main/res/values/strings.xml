@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wefit</string>
+    <string name="app_name">WeFit</string>
     <string name="facebook_app_id">152858705454431</string>
     <string name="fb_login_protocol_scheme">fb152858705454431</string>
 
