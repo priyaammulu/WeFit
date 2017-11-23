@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,9 @@ import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.eventutils.wheater.OpenWeatherMapForecastImpl;
+import wefit.com.wefit.utils.eventutils.wheater.Weather;
+import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
@@ -71,12 +75,12 @@ public class GioTestActivity extends AppCompatActivity {
         event.setDescription("locamente innamorado");
         event.setImage("245236tddwhtsr");
         event.setPublicationDate(652432);
-        event.setEventDate(124534765);
+        event.setEventDate(1511481600);
         event.setMaxAttendee(20);
 
         Location location = new Location();
-        location.setLatitude(200);
-        location.setLongitude(300);
+        location.setLatitude(14);
+        location.setLongitude(13);
         location.setName("guantanamera city");
         event.setEventLocation(location);
         event.setCategoryID("volleyball");
@@ -105,12 +109,23 @@ public class GioTestActivity extends AppCompatActivity {
         RemoteEventDao remoteEventDao = new RestructuredEventDao(FirebaseDatabase.getInstance(), "test_event_store");
 
 
+        WeatherForecast forecaster = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
+
+        forecaster.getForecast(event.getEventLocation(), new Date(event.getEventDate())).subscribe(new Consumer<Weather>() {
+            @Override
+            public void accept(Weather weather) throws Exception {
+                // TODO fai qualcosa
+            }
+        });
+
+        /*
         remoteEventDao.loadEventsByAdmin("dsagsfdgghg").subscribe(new Consumer<List<Event>>() {
             @Override
             public void accept(List<Event> events) throws Exception {
                 Log.i("ALMOND", events.toString());
             }
         });
+        */
 
         /*
         remoteEventDao.loadEventsByIDs(Arrays.asList("-KzYaxwmKpyJsNsajIke", "-KzYbCoF3yjm1CHYm_hE")).subscribe(new Consumer<List<Event>>() {
