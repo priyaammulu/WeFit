@@ -233,7 +233,7 @@ public class RestructuredEventDao implements RemoteEventDao {
 
             mEventStorage
                     .limitToFirst(mNumberResults)
-                    .addValueEventListener(new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 

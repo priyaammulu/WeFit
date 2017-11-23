@@ -63,6 +63,7 @@ public class GioTestActivity extends AppCompatActivity {
 
         // TODO creazione evento fittizio
 
+        /*
         User creator = new User();
         creator.setId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
 
@@ -100,6 +101,7 @@ public class GioTestActivity extends AppCompatActivity {
         newuser.setGender("M");
         newuser.setBiography("lorem ipsum");
 
+
         final RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "test_users");
         //remoteUserDao.save(newuser);
 
@@ -120,6 +122,7 @@ public class GioTestActivity extends AppCompatActivity {
                 Log.i("weather", weather.toString());
             }
         });
+        */
 
         /*
         remoteEventDao.loadEventsByAdmin("dsagsfdgghg").subscribe(new Consumer<List<Event>>() {

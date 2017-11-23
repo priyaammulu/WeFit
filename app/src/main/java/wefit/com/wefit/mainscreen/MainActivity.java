@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     protected void onCreate(Bundle savedInstanceState) {
 
         // TODO rimuovere gioacchino
-        startActivity(new Intent(this, GioTestActivity.class));
+        //startActivity(new Intent(this, GioTestActivity.class));
 
         super.onCreate(savedInstanceState);
         mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();

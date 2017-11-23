@@ -38,9 +38,8 @@ public class MyEventsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
 
-        // TODO to be modified it later (not user events, but for test is the same
-        //Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
-        Flowable<List<Event>> stream = mMainViewModel.getEvents();
+        // download the user events and show them
+        Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
         stream.subscribe(new Consumer<List<Event>>() {
             @Override
             public void accept(List<Event> events) throws Exception {
@@ -58,7 +57,6 @@ public class MyEventsFragment extends Fragment {
     }
 
     private void initilizeListView(List<Event> events) {
-        Log.i("LIsta eventi", events.toString());
         myEventsAdapter = new MyEventsAdapter(events, getActivity());
         mListView.setAdapter(myEventsAdapter);
     }

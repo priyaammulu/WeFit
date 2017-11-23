@@ -13,12 +13,14 @@ import wefit.com.wefit.datamodel.UserModel;
 import wefit.com.wefit.datamodel.UserModelAsyncImpl;
 import wefit.com.wefit.utils.auth.Auth20FirebaseHandlerImpl;
 import wefit.com.wefit.utils.auth.Auth20Handler;
+import wefit.com.wefit.utils.eventutils.location.DistanceSorter;
+import wefit.com.wefit.utils.eventutils.location.DistanceSorterImpl;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.LocalEventDao;
 import wefit.com.wefit.utils.persistence.LocalUserDao;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
+import wefit.com.wefit.utils.persistence.firebasepersistence.RestructuredEventDao;
 import wefit.com.wefit.utils.persistence.sharedpreferencepersistence.LocalUserDaoImpl;
 import wefit.com.wefit.utils.persistence.sqlitelocalpersistence.LocalSQLiteEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
@@ -29,7 +31,7 @@ import wefit.com.wefit.viewmodels.MainViewModel;
  */
 
 public class WefitApplication extends Application {
-    private UserModel mLoginModel;
+    private UserModel mUserModel;
     private EventModel mEventModel;
 
     @Override
@@ -39,21 +41,22 @@ public class WefitApplication extends Application {
         // TODO remove in the end (local storage debugging)
         Stetho.initializeWithDefaults(this);
 
-        // initialize remote persistence
+        // initialise remote persistence
         FirebaseApp.initializeApp(this);
-        RemoteUserDao userDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
-        RemoteEventDao eventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "event_store", userDao);
-        Auth20Handler loginHandler = new Auth20FirebaseHandlerImpl(FirebaseAuth.getInstance(), userDao);
+        RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "test_users");
+        RemoteEventDao remoteEventDao = new RestructuredEventDao(FirebaseDatabase.getInstance(), "test_event_store");
+        Auth20Handler loginHandler = new Auth20FirebaseHandlerImpl(FirebaseAuth.getInstance(), remoteUserDao);
+
+        // initialise local persistence
+        LocalEventDao localEventDao = new LocalSQLiteEventDao(this);
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 
-        // local persistence
-        LocalEventDao localEventDao = new LocalSQLiteEventDao(this);
+        // distance sorter
+        DistanceSorter sorter = new DistanceSorterImpl();
 
-
-        // initialise loginModel
-        //mLoginModel = new UserModelImpl(this, userDao); // TODO vedi come devi modificare questa implemetnazione
-        mLoginModel = new UserModelAsyncImpl(loginHandler, localUserDao, userDao);
-        mEventModel = new EventModelImpl(eventDao, userDao);
+        // initialise models
+        mUserModel = new UserModelAsyncImpl(loginHandler, localUserDao, remoteUserDao);
+        mEventModel = new EventModelImpl(remoteEventDao, remoteUserDao, localEventDao, mUserModel, sorter);
     }
 
     public UserViewModel getUserViewModel() {
@@ -61,7 +64,7 @@ public class WefitApplication extends Application {
     }
 
     private UserModel getLoginModel() {
-        return mLoginModel;
+        return mUserModel;
     }
 
     public MainViewModel getMainViewModel() {
