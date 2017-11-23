@@ -6,7 +6,6 @@ package wefit.com.wefit.utils.eventutils.wheater;
 
 public enum Weather {
 
-    CLOUDY,
     SUNNY,
     RAINY,
     SNOWY,

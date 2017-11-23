@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,14 +61,11 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
 
     @Override
     public Flowable<Weather> getForecast(Event event) {
-
-        Location eventLocation = event.getEventLocation();
-        Date eventDate = new Date(event.getEventDate());
-        return this.getForecast(eventLocation, eventDate);
+        return this.getForecast(event.getEventLocation(), event.getEventDate());
     }
 
     @Override
-    public Flowable<Weather> getForecast(final Location location, final Date date) {
+    public Flowable<Weather> getForecast(final Location location, final long date) {
 
 
         URL associateURL = null;
@@ -84,8 +82,6 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
                 .appendQueryParameter(LONGITUDE, String.valueOf(location.getLongitude()))
                 .build();
 
-        final long dateUnixSeconds = date.getTime(); // get the date in seconds
-
         try {
             associateURL = new URL(requestURI.toString());
             Log.i("created_url", associateURL.toString());
@@ -100,7 +96,7 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
             @Override
             public void subscribe(final FlowableEmitter<Weather> flowableEmitter) throws Exception {
 
-                new WeatherForecastDownloader(flowableEmitter, dateUnixSeconds).execute(requestURL);
+                new WeatherForecastDownloader(flowableEmitter, date).execute(requestURL);
 
             }
 
@@ -182,22 +178,42 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
 
                 }
 
-                Log.i("downloaded", digestForecasts.toString());
-                Log.i("downloaded", String.valueOf(digestForecasts.keySet()));
-                Log.i("downloaded", String.valueOf(secondsDate));
-
                 List<Long> listDates = new ArrayList<>(digestForecasts.keySet());
-                Log.i("downloaded", String.valueOf(listDates));
+                Collections.sort(listDates);
 
-                long closest = this.searchClosestUnixDate(secondsDate, listDates);
-                Log.i("downloaded", String.valueOf(closest));
+                // get the closest forecast (chosen by date)
+                int forecastID = digestForecasts.get(this.searchClosestUnixDate(secondsDate, listDates));
+
+                // need just the first number of the ID
+                forecastID = Integer.parseInt(String.valueOf(forecastID).substring(0,1));
+
+                Weather forecastCondition;
+
+                switch (forecastID) {
+
+                    case 2:
+                    case 3:
+                    case 5:
+                        forecastCondition = Weather.RAINY;
+                        break;
+                    case 6:
+                        forecastCondition = Weather.SNOWY;
+                        break;
+                    case 8:
+                        forecastCondition = Weather.SUNNY;
+                        break;
+                    default:
+                        forecastCondition = Weather.DISASTROUS;
+                        break;
+
+                }
+
+                flowableEmitter.onNext(forecastCondition);
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            //flowableEmitter.onNext();
 
         }
 

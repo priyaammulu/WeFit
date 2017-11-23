@@ -75,7 +75,7 @@ public class GioTestActivity extends AppCompatActivity {
         event.setDescription("locamente innamorado");
         event.setImage("245236tddwhtsr");
         event.setPublicationDate(652432);
-        event.setEventDate(1511481600);
+        event.setEventDate(1511870400);
         event.setMaxAttendee(20);
 
         Location location = new Location();
@@ -111,10 +111,13 @@ public class GioTestActivity extends AppCompatActivity {
 
         WeatherForecast forecaster = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
 
-        forecaster.getForecast(event.getEventLocation(), new Date(event.getEventDate())).subscribe(new Consumer<Weather>() {
+        forecaster.getForecast(event.getEventLocation(), event.getEventDate()).subscribe(new Consumer<Weather>() {
             @Override
             public void accept(Weather weather) throws Exception {
                 // TODO fai qualcosa
+
+
+                Log.i("weather", weather.toString());
             }
         });
 

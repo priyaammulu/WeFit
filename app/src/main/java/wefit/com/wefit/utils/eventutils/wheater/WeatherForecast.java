@@ -27,6 +27,6 @@ public interface WeatherForecast {
      * @param date forecast for this date
      * @return Weather forecast
      */
-    Flowable<Weather> getForecast(Location location, Date date);
+    Flowable<Weather> getForecast(Location location, long date);
 
 }
