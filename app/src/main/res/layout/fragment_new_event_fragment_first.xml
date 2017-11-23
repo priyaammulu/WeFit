@@ -8,6 +8,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
+        android:layout_above="@+id/new_event_button_ahead">
 
         <LinearLayout
             android:layout_width="match_parent"

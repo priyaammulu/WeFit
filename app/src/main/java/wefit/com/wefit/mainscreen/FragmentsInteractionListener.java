@@ -16,4 +16,5 @@ public interface FragmentsInteractionListener {
     MainViewModel getMainViewModel();
     void provideLocation();
     void fillInIcons(int IconLeft, String iconMiddle, int iconRight);
+    void fillInIconWithLogo(int IconLeft, int logo, int iconRight);
 }

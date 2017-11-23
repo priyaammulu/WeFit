@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     private ImageView leftTopBottom;
     private TextView middleTopBottom;
+    private ImageView logoButton;
     private ImageView rightTopButtom;
 
     @Override
@@ -192,6 +193,18 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
         middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
         middleTopBottom.setText(iconMiddle);
+
+        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+        rightTopButtom.setImageResource(iconRight);
+    }
+
+    @Override
+    public void fillInIconWithLogo(int IconLeft, int logo, int iconRight) {
+        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+        leftTopBottom.setImageResource(IconLeft);
+
+        logoButton = (ImageView) findViewById(R.id.logoButton);
+        logoButton.setImageResource(logo);
 
         rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
         rightTopButtom.setImageResource(iconRight);

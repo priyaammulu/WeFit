@@ -59,7 +59,8 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
-        mListener.fillInIcons(R.drawable.ic_edit, "Events", R.drawable.ic_search);
+       // mListener.fillInIcons(R.drawable.ic_edit, "Events", R.drawable.ic_search);
+        mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.ic_logo, R.drawable.ic_search);
 
     }
 
