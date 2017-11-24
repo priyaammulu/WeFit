@@ -28,18 +28,23 @@ import static wefit.com.wefit.mainscreen.fragments.MainFragment.EVENT;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 
-    ActionBar mActionBar;
-    Event mEvent;
+    private ActionBar mActionBar;
+
+    private Event showedEvent;
 
     // view components
     private ImageView mEventImage;
     private TextView mEventName;
     private TextView mEventDescription;
     private TextView mEventPublishDate;
+    private TextView mEventDate;
+    private TextView mEventTime;
+    private TextView mEventPlace;
+    private TextView mEventCity;
 
     // viewmodels
-    UserViewModel mUserViewModel;
-    EventViewModel mEventViewModel;
+    private UserViewModel mUserViewModel;
+    private EventViewModel mEventViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +72,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
         mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
             @Override
             public void accept(Event event) throws Exception {
-                //Log.i("evento", event.toString());
+
+                // store the retrieved infos
+                showedEvent = event;
+
+                // fill the activity with the new data
                 fillActivity(event);
+
             }
         });
 
@@ -80,6 +90,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventName = (TextView) findViewById(R.id.event_title_txt);
         this.mEventDescription = (TextView) findViewById(R.id.event_description_txt);
         this.mEventPublishDate = (TextView) findViewById(R.id.event_date_posted);
+        this.mEventDate = (TextView) findViewById(R.id.event_date);
+        this.mEventTime = (TextView) findViewById(R.id.event_time);
+        this.mEventPlace = (TextView) findViewById(R.id.place_name_txt);;
+        this.mEventCity = (TextView) findViewById(R.id.city_name_txt);;
 
     }
 
@@ -89,8 +103,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventImage.setImageBitmap(this.decodeBase64BitmapString(retrievedEvent.getImage()));
         this.mEventDescription.setText(retrievedEvent.getDescription());
         this.mEventPublishDate.setText(getDate(new Date(retrievedEvent.getPublicationDate())));
+        this.mEventDate.setText(getDate(new Date(retrievedEvent.getEventDate())));
+        this.mEventTime.setText(getTime(new Date(retrievedEvent.getEventDate())));
+        this.mEventPlace.setText(retrievedEvent.getEventLocation().getName().split(",")[0].trim());
+        this.mEventCity.setText(retrievedEvent.getEventLocation().getName().split(",")[1].trim());
 
         // check if the user is the admin of the event
+        //TODO remove
         if (retrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
             Log.i("Admin", "si");
         }
