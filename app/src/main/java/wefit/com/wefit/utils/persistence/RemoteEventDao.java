@@ -14,10 +14,23 @@ import wefit.com.wefit.pojo.Location;
 
 public interface RemoteEventDao {
 
-    Flowable<List<Event>> getEvents(int numResults, int startOffset, @Nullable Location centralPosition);
+    @Deprecated
+    Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable Location centralPosition);
+
+    Flowable<List<Event>> loadNewEvents(int numResults, @Nullable String anchorID);
+
+    Flowable<Event> loadEventByID(String eventID);
+
+    Flowable<List<Event>> loadEventsByIDs(List<String> eventIDs);
+
+    Flowable<List<Event>> loadEventsByAdmin(String adminID);
 
     Event save(Event eventToStore);
 
-    Flowable<Event> loadEventByID(String eventID);
+    void setAttendanceState(String eventID, String userID, boolean state);
+
+    void addAttendee(String eventID, String userID);
+    void removeAttendee(String eventID, String userID);
+    void deleteEvent(String eventID);
 
 }

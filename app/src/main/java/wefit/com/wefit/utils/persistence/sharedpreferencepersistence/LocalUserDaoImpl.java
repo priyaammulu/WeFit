@@ -43,8 +43,8 @@ public class LocalUserDaoImpl implements LocalUserDao {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         // save the user fields
-        editor.putString(ID_FIELD, userToSave.getUserId());
-        editor.putString(NAME_FIELD, userToSave.getName());
+        editor.putString(ID_FIELD, userToSave.getId());
+        editor.putString(NAME_FIELD, userToSave.getFullName());
         editor.putString(CONTACT_FIELD, userToSave.getEmail());
         editor.putString(GENDER_FIELD, userToSave.getGender());
         editor.putString(IMAGE_FIELD, userToSave.getPhoto());
@@ -54,9 +54,9 @@ public class LocalUserDaoImpl implements LocalUserDao {
         Set<String> events = new HashSet<>();
 
 
-        List<String> partecipations = userToSave.getEventPartecipations();
+        List<String> partecipations = userToSave.getAttendances();
         if (partecipations != null) {
-            events.addAll(userToSave.getEventPartecipations());
+            events.addAll(userToSave.getAttendances());
             editor.putStringSet(EVENTS_FIELD, events);
         }
 
@@ -72,8 +72,8 @@ public class LocalUserDaoImpl implements LocalUserDao {
         User localStoredUser = new User();
 
         // retrieve the user from the local store
-        localStoredUser.setUserId(sharedPreferences.getString(ID_FIELD, null));
-        localStoredUser.setName(sharedPreferences.getString(NAME_FIELD, null));
+        localStoredUser.setId(sharedPreferences.getString(ID_FIELD, null));
+        localStoredUser.setFullName(sharedPreferences.getString(NAME_FIELD, null));
         localStoredUser.setEmail(sharedPreferences.getString(CONTACT_FIELD, null));
         localStoredUser.setGender(sharedPreferences.getString(GENDER_FIELD, null));
         localStoredUser.setPhoto(sharedPreferences.getString(IMAGE_FIELD, null));
@@ -82,7 +82,7 @@ public class LocalUserDaoImpl implements LocalUserDao {
 
         List<String> events = new ArrayList<>();
         events.addAll(sharedPreferences.getStringSet(EVENTS_FIELD, new HashSet<String>()));
-        localStoredUser.setEventPartecipations(events);
+        localStoredUser.setAttendances(events);
 
         return localStoredUser;
     }

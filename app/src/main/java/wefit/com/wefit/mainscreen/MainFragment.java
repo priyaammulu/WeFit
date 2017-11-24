@@ -64,6 +64,7 @@ public class MainFragment extends Fragment {
     }
 
     private void fetchEvents() {
+        Log.i("PROMISE creation main", "creazione promessa");
         Flowable<List<Event>> stream = mMainViewModel.getEvents();
         stream.subscribe(new FlowableSubscriber<List<Event>>() {
             @Override
@@ -101,6 +102,12 @@ public class MainFragment extends Fragment {
                 Event selected = mAdapter.getItem(i);
                 intent.putExtra(EVENT, selected);
                 startActivity(intent);
+            }
+        });
+        view.findViewById(R.id.new_event).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().startActivity(new Intent(getActivity(), NewEventActivity.class));
             }
         });
     }
