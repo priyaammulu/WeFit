@@ -1,10 +1,9 @@
-package wefit.com.wefit.mainscreen;
+package wefit.com.wefit.mainscreen.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,23 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.functions.Consumer;
-import wefit.com.wefit.MyEventsAdapter;
+import wefit.com.wefit.mainscreen.adapters.AttendancesEventAdapter;
 import wefit.com.wefit.R;
+import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
 
-public class MyEventsFragment extends Fragment {
+public class MyAttendancesFragment extends Fragment {
     private FragmentsInteractionListener mActivity;
     private MainViewModel mMainViewModel;
-    private Subscription mSubscription;
+    private Subscription mSubscription; // TODO what to do with this?
     private ListView mListView;
-    private MyEventsAdapter myEventsAdapter;
+    private AttendancesEventAdapter attendancesEventAdapter;
 
 
-    public MyEventsFragment() {
+    public MyAttendancesFragment() {
         // Required empty public constructor
     }
 
@@ -39,13 +38,16 @@ public class MyEventsFragment extends Fragment {
         bind(view);
 
         // download the user events and show them
-        Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
-        stream.subscribe(new Consumer<List<Event>>() {
-            @Override
-            public void accept(List<Event> events) throws Exception {
-                initilizeListView(events);
-            }
-        });
+        mMainViewModel
+                .getUserEvents()
+                .subscribe(new Consumer<List<Event>>() {
+                    @Override
+                    public void accept(List<Event> events) throws Exception {
+
+                        initializeListView(events);
+
+                    }
+                });
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -56,9 +58,9 @@ public class MyEventsFragment extends Fragment {
 
     }
 
-    private void initilizeListView(List<Event> events) {
-        myEventsAdapter = new MyEventsAdapter(events, getActivity());
-        mListView.setAdapter(myEventsAdapter);
+    private void initializeListView(List<Event> events) {
+        attendancesEventAdapter = new AttendancesEventAdapter(events, getActivity());
+        mListView.setAdapter(attendancesEventAdapter);
     }
 
     private void bind(View view) {
@@ -75,7 +77,7 @@ public class MyEventsFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             mActivity.fillInIcons(R.drawable.ic_edit, "MyEvents", R.drawable.ic_search);
 
         }

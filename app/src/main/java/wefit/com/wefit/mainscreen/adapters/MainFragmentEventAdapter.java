@@ -1,4 +1,4 @@
-package wefit.com.wefit;
+package wefit.com.wefit.mainscreen.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
@@ -30,12 +31,12 @@ import wefit.com.wefit.utils.eventutils.category.CategoryFactory;
  * Created by lorenzo on 11/3/17.
  */
 
-public class EventAdapter extends BaseAdapter {
+public class MainFragmentEventAdapter extends BaseAdapter {
 
     private List<Event> events;
     private Context context;
 
-    public EventAdapter(List<Event> events, Context context) {
+    public MainFragmentEventAdapter(List<Event> events, Context context) {
         this.events = events;
         this.context = context;
     }

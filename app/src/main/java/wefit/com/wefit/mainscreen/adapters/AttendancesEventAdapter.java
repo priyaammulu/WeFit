@@ -1,4 +1,4 @@
-package wefit.com.wefit;
+package wefit.com.wefit.mainscreen.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,20 +13,20 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
 
 /**
  * Created by lorenzo on 11/3/17.
  */
 
-public class MyEventsAdapter extends BaseAdapter {
+public class AttendancesEventAdapter extends BaseAdapter {
 
     private List<Event> events;
     private Context context;
 
-    public MyEventsAdapter(List<Event> events, Context context) {
+    public AttendancesEventAdapter(List<Event> events, Context context) {
 
-        Log.i("my_event_adapter", events.toString());
         this.events = events;
         this.context = context;
     }
@@ -55,14 +55,17 @@ public class MyEventsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.myevents_item, parent, false);
         }
+
         EventViewHolder holder = (EventViewHolder) convertView.getTag();
         if (holder == null) {
             holder = new EventViewHolder(convertView);
             convertView.setTag(holder);
         }
+
 
         Event event = events.get(position);
         holder.title.setText(event.getName());

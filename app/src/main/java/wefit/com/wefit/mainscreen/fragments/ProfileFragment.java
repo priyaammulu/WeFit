@@ -1,4 +1,4 @@
-package wefit.com.wefit.mainscreen;
+package wefit.com.wefit.mainscreen.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import wefit.com.wefit.R;
+import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 
 
 public class ProfileFragment extends Fragment {
+
     private FragmentsInteractionListener mListener;
 
     public ProfileFragment() {

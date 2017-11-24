@@ -5,9 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
 
-import static wefit.com.wefit.mainscreen.MainFragment.EVENT;
+import static wefit.com.wefit.mainscreen.fragments.MainFragment.EVENT;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 

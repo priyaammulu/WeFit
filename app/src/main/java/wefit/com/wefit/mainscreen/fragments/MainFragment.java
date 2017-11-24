@@ -1,4 +1,4 @@
-package wefit.com.wefit.mainscreen;
+package wefit.com.wefit.mainscreen.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +19,10 @@ import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
-import wefit.com.wefit.EventAdapter;
-import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
+import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
+import wefit.com.wefit.mainscreen.adapters.MainFragmentEventAdapter;
+import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
@@ -35,7 +36,7 @@ import wefit.com.wefit.viewmodels.MainViewModel;
  */
 public class MainFragment extends Fragment {
     public static final String EVENT = "selected";
-    private EventAdapter mAdapter;
+    private MainFragmentEventAdapter mAdapter;
     private ListView mEventList;
     private MainViewModel mMainViewModel;
     private FragmentsInteractionListener mListener;
@@ -120,6 +121,7 @@ public class MainFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden){
 
+            // TODO I don't know what it's supposed to do
             //mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
 
         }
@@ -132,7 +134,7 @@ public class MainFragment extends Fragment {
 
     private void handleAdapter(List<Event> events) {
         if (mAdapter == null) {
-            mAdapter = new EventAdapter(events, getActivity());
+            mAdapter = new MainFragmentEventAdapter(events, getActivity());
             mEventList.setAdapter(mAdapter);
         } else
             mAdapter.setEvents(events);

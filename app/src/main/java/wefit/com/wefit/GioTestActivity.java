@@ -15,29 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.reactivex.functions.Consumer;
-import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.utils.eventutils.wheater.OpenWeatherMapForecastImpl;
-import wefit.com.wefit.utils.eventutils.wheater.Weather;
-import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
-import wefit.com.wefit.utils.persistence.RemoteEventDao;
-import wefit.com.wefit.utils.persistence.RemoteUserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.RestructuredEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class GioTestActivity extends AppCompatActivity {
@@ -108,7 +91,7 @@ public class GioTestActivity extends AppCompatActivity {
         //RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
         //remoteDao.save(event);
 
-        RemoteEventDao remoteEventDao = new RestructuredEventDao(FirebaseDatabase.getInstance(), "test_event_store");
+        RemoteEventDao remoteEventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store");
 
 
         WeatherForecast forecaster = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");

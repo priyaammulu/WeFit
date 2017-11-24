@@ -29,7 +29,7 @@ import wefit.com.wefit.utils.persistence.RemoteEventDao;
  * Created by gioacchino on 22/11/2017.
  */
 
-public class RestructuredEventDao implements RemoteEventDao {
+public class FirebaseEventDao implements RemoteEventDao {
 
 
     /**
@@ -93,15 +93,13 @@ public class RestructuredEventDao implements RemoteEventDao {
                                     retrieved = new Event();
                                 }
 
-                                //Log.i("ALMOND", retrieved.toString());
-                                // send event user retrieved
                                 flowableEmitter.onNext(retrieved);
 
                             }
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                // TODO what to do here?
+                                // required, but it cannot happen
                             }
                         });
 
@@ -175,7 +173,7 @@ public class RestructuredEventDao implements RemoteEventDao {
 
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
-                                // TODO what to do here?
+                                // required, but it cannot happen
                             }
                         });
 
@@ -203,7 +201,7 @@ public class RestructuredEventDao implements RemoteEventDao {
         this.mEventStorage.child(eventID).removeValue();
     }
 
-    public RestructuredEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName) {
+    public FirebaseEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName) {
 
         // access to the remote user store
         this.mEventStorage = firebaseDatabase.getReference(eventStoreName);
@@ -248,7 +246,7 @@ public class RestructuredEventDao implements RemoteEventDao {
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            // TODO what to do here?
+                            // required, but it cannot happen
                         }
                     });
         }
