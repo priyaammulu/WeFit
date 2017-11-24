@@ -100,7 +100,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     private String getTime(Date date) {
-        Locale locale = Locale.ITALIAN;
+        Locale locale = Locale.ENGLISH;
         return DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
     }
 
