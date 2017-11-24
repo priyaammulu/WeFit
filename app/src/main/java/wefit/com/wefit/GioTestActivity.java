@@ -102,7 +102,7 @@ public class GioTestActivity extends AppCompatActivity {
         newuser.setBiography("lorem ipsum");
 
 
-        final RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "test_users");
+        final
         //remoteUserDao.save(newuser);
 
         //RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
@@ -334,6 +334,7 @@ public class GioTestActivity extends AppCompatActivity {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 logged.setFullName(mNameTextbox.getText().toString());
                 logged.setBiography(mBiography.getText().toString());
                 //logged.setGender(mGenderPick.getText().toString());
@@ -367,6 +368,15 @@ public class GioTestActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             mUserPic.setImageBitmap(imageBitmap);
+
+            // show image content
+            ByteArrayOutputStream blob = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 0 /* Ignored for PNGs */, blob);
+            byte[] bitmapdata = blob.toByteArray();
+
+            Log.i("image", new String(bitmapdata));
+
+
         }
     }
 }

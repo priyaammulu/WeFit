@@ -34,8 +34,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private UserViewModel mLoginViewModel;
     private MainViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
-    private MyEventsFragment myEventsFragment = new MyEventsFragment();
+
+    private MyEventsFragment myeventsFragment = new MyEventsFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
+
+    private MyEventsFragment myEventsFragment = new MyEventsFragment();
+    private ProfileFragment settingsFragment = new ProfileFragment();
+
     private LinkedList<Fragment> stack = new LinkedList<>();
 
     private ImageView leftTopBottom;
@@ -45,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // TODO rimuovere gioacchino
         //startActivity(new Intent(this, GioTestActivity.class));
 
         super.onCreate(savedInstanceState);
@@ -54,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         if (!mLoginViewModel.isAuth())
             signOut();
         setContentView(R.layout.activity_main);
-
-
         bind();
         setFragments();
     }
@@ -94,11 +96,12 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private void setFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.main_fragment, myEventsFragment)
-                .add(R.id.main_fragment, profileFragment)
                 .add(R.id.main_fragment, mainFragment)
-                .hide(myEventsFragment)
+                .add(R.id.main_fragment, myeventsFragment)
+                .add(R.id.main_fragment, profileFragment)
+                .hide(myeventsFragment)
                 .hide(profileFragment)
+
                 .commit();
         stack.push(mainFragment);
     }
@@ -108,8 +111,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mainFragment)
-                .hide(myEventsFragment)
+
+                .hide(myeventsFragment)
                 .hide(profileFragment)
+
+                .hide(myEventsFragment)
+                .hide(settingsFragment)
+
                 .show(fragment)
                // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
@@ -146,6 +154,19 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         } else {
             enableGoogleApiClient();
         }
+    }
+
+    @Override
+    public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
+        //Icons for main Activity
+        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+        leftTopBottom.setImageResource(IconLeft);
+
+        middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
+        middleTopBottom.setText(iconMiddle);
+
+        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+        rightTopButtom.setImageResource(iconRight);
     }
 
     @SuppressLint("MissingPermission")
@@ -187,18 +208,5 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             // other 'case' lines to check for other
             // permissions this app might request
         }
-    }
-
-    @Override
-    public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
-        //Icons for main Activity
-        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
-        leftTopBottom.setImageResource(IconLeft);
-
-        middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
-        middleTopBottom.setText(iconMiddle);
-
-        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
-        rightTopButtom.setImageResource(iconRight);
     }
 }

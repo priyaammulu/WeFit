@@ -3,6 +3,7 @@ package wefit.com.wefit;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.utils.eventutils.category.CategoryFactory;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -71,20 +74,25 @@ public class EventAdapter extends BaseAdapter {
         }
 
         Event event = events.get(position);
-        holder.title.setText(event.getTitle());
-        holder.location.setText(event.getLocation().getName());
-        holder.monthDay.setText(getMonthDay(event.getExpire()));
-        holder.time.setText(getTime(event.getExpire()));
-        holder.organizer.setText(event.getCreator().getName());
-        holder.published.setText("Published on: " + getDate(event.getPublished()));
+        holder.title.setText(event.getName());
+        holder.location.setText(event.getEventLocation().getName());
+        holder.monthDay.setText(getMonthDay(new Date(event.getEventDate())));
+        holder.time.setText(getTime(new Date(event.getEventDate())));
+        holder.organizer.setText(event.getAdmin().getFullName());
+        holder.published.setText("Published on: " + getDate(new Date(event.getPublicationDate())));
+
         holder.mEvent.setImageBitmap(getBitmapFromString(event.getImage()));
-        holder.mUser.setImageBitmap(getBitmapFromString(event.getCreator().getPhoto()));
-        Picasso.with(context).load(event.getCategory().getImage()).into(holder.mGame);
+        holder.mUser.setImageBitmap(getBitmapFromString(event.getAdmin().getPhoto()));
+
+        Category category = CategoryFactory.getInstance().getCategoryByID(event.getCategoryID());
+        Picasso.with(context).load(category.getImage()).into(holder.mGame);
+
         return convertView;
     }
 
-    private Bitmap getBitmapFromString(String image) {
-        return BitmapFactory.decodeByteArray(image.getBytes(), 0, image.getBytes().length);
+    private Bitmap getBitmapFromString(String encodedImage) {
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     private String getMonthDay(Date date) {
