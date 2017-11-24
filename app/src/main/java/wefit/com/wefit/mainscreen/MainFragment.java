@@ -120,7 +120,7 @@ public class MainFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden){
 
-            mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
+            //mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
 
         }
     }
