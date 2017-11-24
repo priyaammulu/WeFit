@@ -1,6 +1,8 @@
 package wefit.com.wefit;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,10 +77,14 @@ public class EventAdapter extends BaseAdapter {
         holder.time.setText(getTime(event.getExpire()));
         holder.organizer.setText(event.getCreator().getName());
         holder.published.setText("Published on: " + getDate(event.getPublished()));
-        Picasso.with(context).load(event.getImage()).into(holder.mEvent);
-        Picasso.with(context).load(event.getCreator().getPhoto()).into(holder.mUser);
+        holder.mEvent.setImageBitmap(getBitmapFromString(event.getImage()));
+        holder.mUser.setImageBitmap(getBitmapFromString(event.getCreator().getPhoto()));
         Picasso.with(context).load(event.getCategory().getImage()).into(holder.mGame);
         return convertView;
+    }
+
+    private Bitmap getBitmapFromString(String image) {
+        return BitmapFactory.decodeByteArray(image.getBytes(), 0, image.getBytes().length);
     }
 
     private String getMonthDay(Date date) {
