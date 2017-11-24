@@ -1,7 +1,9 @@
 package wefit.com.wefit.mainscreen.adapters;
 
 import android.content.Context;
-import android.util.Log;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +13,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import wefit.com.wefit.R;
+import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.eventutils.category.CategoryFactory;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -67,20 +76,49 @@ public class AttendancesEventAdapter extends BaseAdapter {
         }
 
 
+        // write the event on the screen
         Event event = events.get(position);
+
         holder.title.setText(event.getName());
         holder.location.setText(event.getEventLocation().getName());
-        //holder.monthDay.setText(event.getEventDate().toString().substring(5));
-        //holder.time.setText(event.getEventDate().toString().substring(5));
-        Picasso.with(context).load(event.getImage()).into(holder.mEvent);
-        Picasso.with(context).load(event.getImage()).into(holder.mGame);
+        holder.monthDay.setText(this.getMonthDay(new Date(event.getEventDate())));
+        holder.time.setText(getTime(new Date(event.getEventDate())));
+        holder.mEventImage.setImageBitmap(decodeBase64BitmapString(event.getImage()));
+
+        Category category = CategoryFactory.getInstance().getCategoryByID(event.getCategoryID());
+        Picasso.with(context).load(category.getImage()).into(holder.mCategoryPic);
+
         Picasso.with(context).load(event.getImage()).into(holder.mImageOrganizer);
+
         return convertView;
     }
 
+    private Bitmap decodeBase64BitmapString(String encodedImage) {
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    }
+
+    private String getMonthDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+        String month = new SimpleDateFormat("MMM").format(cal.getTime());
+        return month.concat(" ").concat(day);
+    }
+
+    private String getDate(Date date) {
+        Locale locale = Locale.ENGLISH;
+        return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
+    }
+
+    private String getTime(Date date) {
+        Locale locale = Locale.ITALIAN;
+        return DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
+    }
+
     private static class EventViewHolder {
-        private ImageView mEvent;
-        private ImageView mGame;
+        private ImageView mEventImage;
+        private ImageView mCategoryPic;
         private ImageView mImageOrganizer;
         private TextView title;
         private TextView location;
@@ -92,8 +130,8 @@ public class AttendancesEventAdapter extends BaseAdapter {
             this.location = (TextView) row.findViewById(R.id.myevents_location);
             this.monthDay = (TextView) row.findViewById(R.id.myevents_expire_date);
             this.time = (TextView) row.findViewById(R.id.myevents_expire_time);
-            this.mEvent = (ImageView) row.findViewById(R.id.myevents_image);
-            this.mGame = (ImageView) row.findViewById(R.id.myevents_game_image);
+            this.mEventImage = (ImageView) row.findViewById(R.id.myevents_image);
+            this.mCategoryPic = (ImageView) row.findViewById(R.id.myevents_game_image);
             this.mImageOrganizer = (ImageView) row.findViewById(R.id.myevents_organizer_image);
         }
 
