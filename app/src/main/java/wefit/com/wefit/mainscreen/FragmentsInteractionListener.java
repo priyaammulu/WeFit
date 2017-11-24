@@ -1,7 +1,6 @@
 package wefit.com.wefit.mainscreen;
 
 import wefit.com.wefit.viewmodels.MainViewModel;
-import wefit.com.wefit.viewmodels.UserViewModel;
 
 /**
  * This interface must be implemented by activities that contain this
@@ -17,8 +16,4 @@ public interface FragmentsInteractionListener {
     MainViewModel getMainViewModel();
     void provideLocation();
     void fillInIcons(int IconLeft, String iconMiddle, int iconRight);
-    void fillInIconWithLogo(int IconLeft, int logo, int iconRight);
-
-    UserViewModel getLoginViewModel();
-
 }

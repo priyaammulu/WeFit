@@ -5,9 +5,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.media.Image;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -24,10 +22,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.LinkedList;
 
+import wefit.com.wefit.GioTestActivity;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
-import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
@@ -36,32 +34,30 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private UserViewModel mLoginViewModel;
     private MainViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
-    private MyEventsFragment myEventsFragment = new MyEventsFragment();
+
+    private MyEventsFragment myeventsFragment = new MyEventsFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
+
+    private MyEventsFragment myEventsFragment = new MyEventsFragment();
+    private ProfileFragment settingsFragment = new ProfileFragment();
+
     private LinkedList<Fragment> stack = new LinkedList<>();
 
     private ImageView leftTopBottom;
     private TextView middleTopBottom;
-    private ImageView logoButton;
     private ImageView rightTopButtom;
-    private Button newEventButton;
-
-    private ImageView homeImage;
-    private ImageView profileImage;
-    private ImageView myEventsImage;
-    private ImageView searchImage;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //startActivity(new Intent(this, GioTestActivity.class));
+
         super.onCreate(savedInstanceState);
         mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         mMainViewModel = getMainViewModel();
         if (!mLoginViewModel.isAuth())
             signOut();
         setContentView(R.layout.activity_main);
-
-
         bind();
         setFragments();
     }
@@ -79,14 +75,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(myEventsFragment);
-                homeImage = (ImageView) findViewById(R.id.image_main);
-                homeImage.setImageResource(R.drawable.ic_home);
-
-                profileImage = (ImageView) findViewById(R.id.image_profile);
-                profileImage.setImageResource(R.drawable.ic_user);
-
-                myEventsImage = (ImageView) findViewById(R.id.image_myEvents);
-                myEventsImage.setImageResource(R.drawable.ic_caledar_pressed);
             }
         });
         final LinearLayout settings = (LinearLayout) findViewById(R.id.button_settings);
@@ -94,15 +82,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(profileFragment);
-                homeImage = (ImageView) findViewById(R.id.image_main);
-                homeImage.setImageResource(R.drawable.ic_home);
-
-                myEventsImage = (ImageView) findViewById(R.id.image_myEvents);
-                myEventsImage.setImageResource(R.drawable.ic_calendar);
-
-                profileImage = (ImageView) findViewById(R.id.image_profile);
-                profileImage.setImageResource(R.drawable.ic_user_pressed);
-
             }
         });
         LinearLayout main = (LinearLayout) findViewById(R.id.button_main);
@@ -110,21 +89,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(mainFragment);
-                myEventsImage = (ImageView) findViewById(R.id.image_myEvents);
-                myEventsImage.setImageResource(R.drawable.ic_calendar);
-
-                profileImage = (ImageView) findViewById(R.id.image_profile);
-                profileImage.setImageResource(R.drawable.ic_user);
-
-                homeImage = (ImageView) findViewById(R.id.image_main);
-                homeImage.setImageResource(R.drawable.ic_home_pressed);
-            }
-        });
-        newEventButton = (Button) findViewById(R.id.new_event);
-        newEventButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NewEventActivity.class));
             }
         });
     }
@@ -132,11 +96,12 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private void setFragments() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.main_fragment, myEventsFragment)
-                .add(R.id.main_fragment, profileFragment)
                 .add(R.id.main_fragment, mainFragment)
-                .hide(myEventsFragment)
+                .add(R.id.main_fragment, myeventsFragment)
+                .add(R.id.main_fragment, profileFragment)
+                .hide(myeventsFragment)
                 .hide(profileFragment)
+
                 .commit();
         stack.push(mainFragment);
     }
@@ -146,8 +111,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mainFragment)
-                .hide(myEventsFragment)
+
+                .hide(myeventsFragment)
                 .hide(profileFragment)
+
+                .hide(myEventsFragment)
+                .hide(settingsFragment)
+
                 .show(fragment)
                // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
@@ -184,6 +154,19 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         } else {
             enableGoogleApiClient();
         }
+    }
+
+    @Override
+    public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
+        //Icons for main Activity
+        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+        leftTopBottom.setImageResource(IconLeft);
+
+        middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
+        middleTopBottom.setText(iconMiddle);
+
+        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+        rightTopButtom.setImageResource(iconRight);
     }
 
     @SuppressLint("MissingPermission")
@@ -225,48 +208,5 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             // other 'case' lines to check for other
             // permissions this app might request
         }
-    }
-
-    @Override
-    public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
-        //Icons for main Activity
-        logoButton.setVisibility(View.GONE);
-
-        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
-        leftTopBottom.setImageResource(IconLeft);
-
-        middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
-        middleTopBottom.setText(iconMiddle);
-        middleTopBottom.setVisibility(View.VISIBLE);
-
-        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
-        rightTopButtom.setImageResource(iconRight);
-
-
-
-
-    }
-
-    @Override
-    public void fillInIconWithLogo(int IconLeft, int logo, int iconRight) {
-        middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
-        middleTopBottom.setVisibility(View.GONE);
-
-        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
-        leftTopBottom.setImageResource(IconLeft);
-
-        logoButton = (ImageView) findViewById(R.id.logoButton);
-        logoButton.setImageResource(logo);
-        logoButton.setVisibility(View.VISIBLE);
-
-        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
-        rightTopButtom.setImageResource(iconRight);
-
-
-    }
-
-    @Override
-    public UserViewModel getLoginViewModel() {
-        return mLoginViewModel;
     }
 }

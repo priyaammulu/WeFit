@@ -38,6 +38,8 @@
             android:name=".LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
         <!-- facebook login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -51,7 +53,7 @@
             android:name=".newevent.NewEventActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".UserParameterModification"></activity>
+        <activity android:name=".GioTestActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

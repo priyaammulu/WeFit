@@ -88,11 +88,9 @@ public class NewEventFragmentFirst extends Fragment {
             @Override
             public void onClick(View view) {
                 Event event = new Event();
-                event.setTitle(mName.getText().toString());
-                event.setNumberParticipants(mParticipants.getValue());
-                event.setExpire(getDateFromDatePicker(mDatePicker));
-                event.setCreator(mListener.getEventCreator());
-                event.setLocation(location);
+                event.setName(mName.getText().toString());
+                //event.setMaxAttendee(mParticipants.getValue());
+                //event.setEventDate(getDateFromDatePicker(mDatePicker));
                 mListener.secondFragment(event);
             }
         });
@@ -102,7 +100,8 @@ public class NewEventFragmentFirst extends Fragment {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, getActivity());
-                location = new Location(place.getLatLng().latitude, place.getLatLng().longitude);
+                String toastMsg = String.format("Place: %s", place.getName());
+                Toast.makeText(getActivity(), toastMsg, Toast.LENGTH_LONG).show();
             }
         }
     }

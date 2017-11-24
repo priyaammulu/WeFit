@@ -6,12 +6,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
@@ -29,10 +35,46 @@ public class FirebaseUserDao implements RemoteUserDao {
     }
 
     @Override
+    public Flowable<Map<String, User>> loadByIDs(final List<String> userIds) {
+
+        return Flowable.create(new FlowableOnSubscribe<Map<String, User>>() {
+            @Override
+            public void subscribe(final FlowableEmitter<Map<String, User>> flowableEmitter) throws Exception {
+
+                final Map<String, User> retrievedUser = new HashMap<>();
+
+                // make sure that the IDs are unique
+                final Set<String> uniqueIDs = new HashSet<>(userIds);
+
+                for (String userID : uniqueIDs) {
+
+                    // retrieve the user from the system async
+                    loadByID(userID).subscribe(new Consumer<User>() {
+                        @Override
+                        public void accept(User user) throws Exception {
+
+                            retrievedUser.put(user.getId(), user);
+
+                            // if the retrieved user number equals the size of the requested IDs
+                            // then the load is complete
+                            if (retrievedUser.size() == uniqueIDs.size()) {
+                                flowableEmitter.onNext(retrievedUser);
+                            }
+
+                        }
+                    });
+
+                }
+
+            }
+        }, BackpressureStrategy.BUFFER);
+    }
+
+    @Override
     public void save(User userToStore) {
 
         // the user has always an ID
-        String userID = userToStore.getUserId();
+        String userID = userToStore.getId();
 
         // save the event in the store
         userID = this.mUserStorage.child(userID).getKey();
@@ -58,7 +100,7 @@ public class FirebaseUserDao implements RemoteUserDao {
 
             // reitrieve the user by ID
             mUserStorage
-//                    .orderByKey()
+                    .orderByKey() // It's necessary to access the children
                     .equalTo(userID)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override

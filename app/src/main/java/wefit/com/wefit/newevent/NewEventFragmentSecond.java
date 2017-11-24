@@ -1,14 +1,10 @@
 package wefit.com.wefit.newevent;
 
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,20 +18,14 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 
-import static android.app.Activity.RESULT_OK;
-
-
 public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
-    private static final int IMAGE_RESULT = 1;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -67,36 +57,11 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == IMAGE_RESULT) {
-            if (resultCode == RESULT_OK) {
-                Uri selectedImageUri = data.getData();
-                try {
-                    Bitmap image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImageUri);
-                    mImage.setImageBitmap(image);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private void bind(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.category_event_recycler_view);
         initRecyclerView();
         mButtonFinish = (Button) view.findViewById(R.id.new_event_finish);
         mImage = (ImageView) view.findViewById(R.id.new_event_image);
-        mImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select file to upload "), IMAGE_RESULT);
-            }
-        });
         mDescription = (EditText) view.findViewById(R.id.new_event_description);
         scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview) ;
         scrollView.scrollTo((int) mDescription.getX(), (int) mDescription.getY());
@@ -110,8 +75,7 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] imageInByte = baos.toByteArray();
                 newEvent.setImage(imageInByte.toString()); // todo delete toString
-                newEvent.setCategory(mCategory);
-                newEvent.setPublished(new Date());
+                newEvent.setCategoryID(mCategory.getDisplayName());
                 mListener.finish(newEvent);
             }
         });

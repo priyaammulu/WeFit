@@ -20,7 +20,6 @@ import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
-import wefit.com.wefit.viewmodels.UserViewModel;
 
 
 public class MyEventsFragment extends Fragment {
@@ -29,7 +28,6 @@ public class MyEventsFragment extends Fragment {
     private Subscription mSubscription;
     private ListView mListView;
     private MyEventsAdapter myEventsAdapter;
-    private UserViewModel mLoginViewModel;
 
 
     public MyEventsFragment() {
@@ -40,9 +38,8 @@ public class MyEventsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
 
-        // TODO to be modified it later (not user events, but for test is the same
-        //Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
-        Flowable<List<Event>> stream = mMainViewModel.getEvents();
+        // download the user events and show them
+        Flowable<List<Event>> stream = mMainViewModel.getUserEvents();
         stream.subscribe(new Consumer<List<Event>>() {
             @Override
             public void accept(List<Event> events) throws Exception {
@@ -56,12 +53,11 @@ public class MyEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
-        mLoginViewModel = mActivity.getLoginViewModel();
+
     }
 
     private void initilizeListView(List<Event> events) {
-        Log.i("LIsta eventi", events.toString());
-        myEventsAdapter = new MyEventsAdapter(events, getActivity(), mLoginViewModel.retrieveCachedUser());
+        myEventsAdapter = new MyEventsAdapter(events, getActivity());
         mListView.setAdapter(myEventsAdapter);
     }
 

@@ -30,7 +30,7 @@ public class LocalSQLiteEventDao implements LocalEventDao {
      * Current DB version infos
      */
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "FeedReader.db";
+    private static final String DATABASE_NAME = "EventStore.db";
 
     /**
      * Creation command for the table
@@ -128,24 +128,36 @@ public class LocalSQLiteEventDao implements LocalEventDao {
 
         SQLiteHelper helper = new SQLiteHelper(applicationContext);
 
-        long newid;
 
         ContentValues valuesToStore = new ContentValues();
-        valuesToStore.put(EventEntry.COLUMN_EVENT_NAME, eventToStore.getTitle());
+        valuesToStore.put(EventEntry.COLUMN_EVENT_NAME, eventToStore.getName());
         valuesToStore.put(EventEntry.COLUMN_DESCRIPTION, eventToStore.getDescription());
         valuesToStore.put(EventEntry.COLUMN_IMAGE, eventToStore.getImage());
-        valuesToStore.put(EventEntry.COLUMN_LONGITUDE, eventToStore.getLocation().getLongitude());
-        valuesToStore.put(EventEntry.COLUMN_LATITUDE, eventToStore.getLocation().getLatitude());
-        valuesToStore.put(EventEntry.COLUMN_PLACE_NAME, eventToStore.getLocation().getName());
-        valuesToStore.put(EventEntry.COLUMN_EVENT_DATE, eventToStore.getExpire().getTime());
-        valuesToStore.put(EventEntry.COLUMN_CREATION_DATE, eventToStore.getPublished().getTime());
-        valuesToStore.put(EventEntry.COLUMN_CATEGORY, eventToStore.getCategoryName());
+        valuesToStore.put(EventEntry.COLUMN_LONGITUDE, eventToStore.getEventLocation().getLongitude());
+        valuesToStore.put(EventEntry.COLUMN_LATITUDE, eventToStore.getEventLocation().getLatitude());
+        valuesToStore.put(EventEntry.COLUMN_PLACE_NAME, eventToStore.getEventLocation().getName());
+        valuesToStore.put(EventEntry.COLUMN_EVENT_DATE, eventToStore.getEventDate());
+        valuesToStore.put(EventEntry.COLUMN_CREATION_DATE, eventToStore.getPublicationDate());
+        valuesToStore.put(EventEntry.COLUMN_CATEGORY, eventToStore.getCategoryID());
 
-        // store and retrieve ID
-        newid = helper.getWritableDatabase().insert(EventEntry.TABLE_NAME, null, valuesToStore);
 
-        // set the new id to the event
-        eventToStore.setId(String.valueOf(newid));
+        // if the event is already in the store just update it
+        if (eventToStore.getId() != null) {
+            helper.getWritableDatabase().update(
+                    EventEntry.TABLE_NAME,
+                    valuesToStore,
+                    EventEntry._ID + "=" + eventToStore.getId(),
+                    null);
+        }
+        else {
+
+            // store and retrieve ID
+            long newid = helper.getWritableDatabase().insert(EventEntry.TABLE_NAME, null, valuesToStore);
+
+            // set the new id to the event
+            eventToStore.setId(String.valueOf(newid));
+
+        }
 
         helper.close();
 
@@ -208,25 +220,23 @@ public class LocalSQLiteEventDao implements LocalEventDao {
 
 
         retrievedEvent.setId(cursor.getString(idC));
-        retrievedEvent.setTitle(cursor.getString(nameC));
+        retrievedEvent.setName(cursor.getString(nameC));
         retrievedEvent.setDescription(cursor.getString(descrC));
         retrievedEvent.setImage(cursor.getString(imgC));
-        retrievedEvent.setTitle(cursor.getString(nameC));
-        retrievedEvent.setTitle(cursor.getString(nameC));
-        retrievedEvent.setCategoryName(cursor.getString(categoryC));
+        retrievedEvent.setName(cursor.getString(nameC));
+        retrievedEvent.setName(cursor.getString(nameC));
+        retrievedEvent.setCategoryID(cursor.getString(categoryC));
 
         // set location
         Location location = new Location();
         location.setLatitude(cursor.getDouble(latC));
         location.setLatitude(cursor.getDouble(lonC));
         location.setName(cursor.getString(placeNameC));
-        retrievedEvent.setLocation(location);
+        retrievedEvent.setEventLocation(location);
 
         // date creation and event date
-        Date creationdate = new Date(cursor.getLong(creationDateC));
-        retrievedEvent.setPublished(creationdate);
-        Date eventdate = new Date(cursor.getLong(eventDateC));
-        retrievedEvent.setExpire(eventdate);
+        retrievedEvent.setPublicationDate(cursor.getLong(creationDateC));
+        retrievedEvent.setEventDate(cursor.getLong(eventDateC));
 
         return retrievedEvent;
 

@@ -60,13 +60,13 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
                     @Override
                     public void accept(User loggedUser) throws Exception {
 
-                        if (loggedUser.getUserId() == null) {
+                        if (loggedUser.getId() == null) {
 
 
                             firebaseUser.sendEmailVerification();
 
-                            loggedUser.setUserId(firebaseUser.getUid());
-                            loggedUser.setName(firebaseUser.getDisplayName());
+                            loggedUser.setId(firebaseUser.getUid());
+                            loggedUser.setFullName(firebaseUser.getDisplayName());
                             loggedUser.setEmail(getContact());
 
                             mUserDao.save(loggedUser);
