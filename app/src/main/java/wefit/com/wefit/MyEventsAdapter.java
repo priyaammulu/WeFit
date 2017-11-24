@@ -1,6 +1,7 @@
 package wefit.com.wefit;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,8 @@ public class MyEventsAdapter extends BaseAdapter {
     private Context context;
 
     public MyEventsAdapter(List<Event> events, Context context) {
+
+        Log.i("my_event_adapter", events.toString());
         this.events = events;
         this.context = context;
     }
