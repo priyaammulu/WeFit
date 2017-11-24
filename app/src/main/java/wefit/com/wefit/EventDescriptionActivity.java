@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.viewmodels.EventViewModel;
+import wefit.com.wefit.viewmodels.UserViewModel;
 
 import static wefit.com.wefit.mainscreen.fragments.MainFragment.EVENT;
 
@@ -17,6 +20,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // retrieve the view-models
+        UserViewModel userViewModel = ((WefitApplication) getApplication()).getUserViewModel();
+        EventViewModel eventViewModel = ((WefitApplication) getApplication()).getEventViewModel();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_description);
 
@@ -28,6 +36,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
         String eventID = this.getIntent().getStringExtra(EVENT);
 
         Log.i("evento", eventID);
+
+        eventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
+            @Override
+            public void accept(Event event) throws Exception {
+                Log.i("evento", event.toString());
+            }
+        });
 
     }
 

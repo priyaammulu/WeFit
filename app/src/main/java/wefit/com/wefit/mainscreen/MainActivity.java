@@ -29,12 +29,12 @@ import wefit.com.wefit.mainscreen.fragments.MainFragment;
 import wefit.com.wefit.mainscreen.fragments.MyAttendancesFragment;
 import wefit.com.wefit.mainscreen.fragments.ProfileFragment;
 import wefit.com.wefit.viewmodels.UserViewModel;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
     private static final int LOCATION_PERMISSION = 1;
     private UserViewModel mLoginViewModel;
-    private MainViewModel mMainViewModel;
+    private EventViewModel mMainViewModel;
     private MainFragment mainFragment = new MainFragment();
 
     private MyAttendancesFragment myAttendancesFragment = new MyAttendancesFragment();
@@ -133,9 +133,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     }
 
     @Override
-    public MainViewModel getMainViewModel() {
+    public EventViewModel getMainViewModel() {
         if (mMainViewModel == null)
-            mMainViewModel = ((WefitApplication) getApplication()).getMainViewModel();
+            mMainViewModel = ((WefitApplication) getApplication()).getEventViewModel();
         return mMainViewModel;
     }
 

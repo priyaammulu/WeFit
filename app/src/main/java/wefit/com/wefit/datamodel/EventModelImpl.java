@@ -155,4 +155,9 @@ public class EventModelImpl implements EventModel {
             return currentLocation;
         return dublin;
     }
+
+    @Override
+    public Flowable<Event> getEvent(String eventID) {
+        return remoteEventDao.loadEventByID(eventID);
+    }
 }

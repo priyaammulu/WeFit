@@ -9,21 +9,21 @@ import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class NewEventActivity extends AppCompatActivity implements NewFragmentListener {
     private NewEventFragmentFirst fragmentFirst = new NewEventFragmentFirst();
     private NewEventFragmentSecond fragmentSecond = new NewEventFragmentSecond();
     private Event newEvent;
-    private MainViewModel mainViewModel;
+    private EventViewModel mainViewModel;
     private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
-        mainViewModel = ((WefitApplication) getApplication()).getMainViewModel();
+        mainViewModel = ((WefitApplication) getApplication()).getEventViewModel();
         userViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         bind();
         getSupportFragmentManager()

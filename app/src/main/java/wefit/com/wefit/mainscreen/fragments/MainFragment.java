@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
@@ -25,7 +23,7 @@ import wefit.com.wefit.mainscreen.adapters.MainFragmentEventAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 
 
 /**
@@ -38,7 +36,7 @@ public class MainFragment extends Fragment {
     public static final String EVENT = "selected";
     private MainFragmentEventAdapter mAdapter;
     private ListView mEventList;
-    private MainViewModel mMainViewModel;
+    private EventViewModel mMainViewModel;
     private FragmentsInteractionListener mListener;
     // this should be handled by another class
     private Subscription mSubscription;

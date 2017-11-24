@@ -18,12 +18,12 @@ import wefit.com.wefit.mainscreen.adapters.AttendancesEventAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 
 
 public class MyAttendancesFragment extends Fragment {
     private FragmentsInteractionListener mActivity;
-    private MainViewModel mMainViewModel;
+    private EventViewModel mMainViewModel;
     private Subscription mSubscription; // TODO what to do with this?
     private ListView mListView;
     private AttendancesEventAdapter attendancesEventAdapter;

@@ -28,7 +28,6 @@ import java.util.Date;
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
-import wefit.com.wefit.viewmodels.MainViewModel;
 
 import static android.app.Activity.RESULT_OK;
 
