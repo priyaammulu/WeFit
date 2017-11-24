@@ -73,7 +73,7 @@ public class NewEventFragmentFirst extends Fragment {
                 LatLng southest = new LatLng(location.getLatitude() - 0.000001, location.getLongitude() - 0.000001);
                 LatLng northest = new LatLng(location.getLatitude() + 0.000001, location.getLongitude() + 0.000001);
                 LatLngBounds bounds = new LatLngBounds(southest, northest);
-                builder.setLatLngBounds(bounds);
+                //builder.setLatLngBounds(bounds);
                 try {
                     startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {
