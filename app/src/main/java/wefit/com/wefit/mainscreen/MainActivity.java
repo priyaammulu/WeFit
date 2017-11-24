@@ -33,8 +33,8 @@ import wefit.com.wefit.viewmodels.EventViewModel;
 
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
     private static final int LOCATION_PERMISSION = 1;
-    private UserViewModel mLoginViewModel;
-    private EventViewModel mMainViewModel;
+    private UserViewModel mUserViewModel;
+    private EventViewModel mEventViewModel;
     private MainFragment mainFragment = new MainFragment();
 
     private MyAttendancesFragment myAttendancesFragment = new MyAttendancesFragment();
@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         //startActivity(new Intent(this, GioTestActivity.class));
 
         super.onCreate(savedInstanceState);
-        mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
-        mMainViewModel = getMainViewModel();
-        if (!mLoginViewModel.isAuth())
+        mUserViewModel = getUserViewModel();
+        mEventViewModel = getEventViewModel();
+        if (!mUserViewModel.isAuth())
             signOut();
         setContentView(R.layout.activity_main);
         bind();
@@ -127,16 +127,23 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     }
 
     private void signOut() {
-        mLoginViewModel.signOut();
+        mUserViewModel.signOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }
 
     @Override
-    public EventViewModel getMainViewModel() {
-        if (mMainViewModel == null)
-            mMainViewModel = ((WefitApplication) getApplication()).getEventViewModel();
-        return mMainViewModel;
+    public EventViewModel getEventViewModel() {
+        if (mEventViewModel == null)
+            mEventViewModel = ((WefitApplication) getApplication()).getEventViewModel();
+        return mEventViewModel;
+    }
+
+    @Override
+    public UserViewModel getUserViewModel() {
+        if (this.mUserViewModel == null)
+            mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
+        return mUserViewModel;
     }
 
     @Override
@@ -174,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                             wefit.com.wefit.pojo.Location loc = new wefit.com.wefit.pojo.Location();
                             loc.setLatitude(location.getLatitude());
                             loc.setLongitude(location.getLongitude());
-                            mMainViewModel.setLocation(loc);
+                            mEventViewModel.setLocation(loc);
                         }
                     }
                 });

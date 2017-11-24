@@ -2,14 +2,17 @@ package wefit.com.wefit;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -19,6 +22,9 @@ import java.util.Locale;
 
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.eventutils.wheater.Weather;
+import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
+import wefit.com.wefit.utils.eventutils.wheater.WeatherIconFactory;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
@@ -39,10 +45,14 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private TextView mEventTime;
     private TextView mEventPlace;
     private TextView mEventCity;
+    private ImageView mWeatherForecast;
 
     // viewmodels
     private UserViewModel mUserViewModel;
     private EventViewModel mEventViewModel;
+
+    // utils
+    private WeatherForecast weatherForecast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
         // retrieve the view-models
         mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         mEventViewModel = ((WefitApplication) getApplication()).getEventViewModel();
+
+        // retrieve utils
+        weatherForecast = ((WefitApplication) getApplication()).getWeatherForecast();
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_description);
@@ -91,9 +105,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventDate = (TextView) findViewById(R.id.event_date);
         this.mEventTime = (TextView) findViewById(R.id.event_time);
         this.mEventPlace = (TextView) findViewById(R.id.place_name_txt);
-        ;
         this.mEventCity = (TextView) findViewById(R.id.city_name_txt);
-        ;
+        this.mWeatherForecast = (ImageView) findViewById(R.id.weather_shower_pic);
 
     }
 
@@ -107,6 +120,25 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventTime.setText(getTime(new Date(retrievedEvent.getEventDate())));
         this.mEventPlace.setText(retrievedEvent.getEventLocation().getName().split(",")[0].trim());
         this.mEventCity.setText(retrievedEvent.getEventLocation().getName().split(",")[1].trim());
+
+        // hide weather forecast
+        this.mWeatherForecast.setVisibility(View.INVISIBLE);
+
+        // retrieve weather if the date is closer than 5 days
+        if ((retrievedEvent.getEventDate() - new Date().getTime()) < 4.32e+8) {
+            this.weatherForecast.getForecast(retrievedEvent).subscribe(new Consumer<Weather>() {
+                @Override
+                public void accept(Weather weather) throws Exception {
+
+                    int weatherIcon = WeatherIconFactory.getInstance().getWeatherIconByID(weather);
+                    mWeatherForecast.setImageResource(weatherIcon);
+
+                    mWeatherForecast.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
+
 
         // check if the user is the admin of the event
         //TODO remove

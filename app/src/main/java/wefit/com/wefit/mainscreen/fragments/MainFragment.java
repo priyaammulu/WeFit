@@ -58,7 +58,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainViewModel = mListener.getMainViewModel();
+        mMainViewModel = mListener.getEventViewModel();
         mListener.provideLocation();
         //mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
 

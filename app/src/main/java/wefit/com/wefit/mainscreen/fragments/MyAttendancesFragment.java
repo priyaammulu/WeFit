@@ -19,11 +19,12 @@ import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.EventViewModel;
+import wefit.com.wefit.viewmodels.UserViewModel;
 
 
 public class MyAttendancesFragment extends Fragment {
     private FragmentsInteractionListener mActivity;
-    private EventViewModel mMainViewModel;
+    private EventViewModel mEventViewModel;
     private Subscription mSubscription; // TODO what to do with this?
     private ListView mListView;
     private AttendancesEventAdapter attendancesEventAdapter;
@@ -38,23 +39,28 @@ public class MyAttendancesFragment extends Fragment {
         bind(view);
 
         // download the user events and show them
-        mMainViewModel
+        mEventViewModel
                 .getUserEvents()
                 .subscribe(new Consumer<List<Event>>() {
                     @Override
                     public void accept(List<Event> events) throws Exception {
 
-                        initializeListView(events);
+
+                        if (events.size() != 0) { // if the use has some joined events!!!
+                            initializeListView(events);
+                        }
 
                     }
                 });
+        //}
+
         super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainViewModel = mActivity.getMainViewModel();
+        mEventViewModel = mActivity.getEventViewModel();
 
     }
 

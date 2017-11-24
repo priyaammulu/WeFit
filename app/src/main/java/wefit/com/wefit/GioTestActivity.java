@@ -222,7 +222,7 @@ public class GioTestActivity extends AppCompatActivity {
         */
 
 
-        //Log.i("gen_cat", CategoryFactory.getInstance().getCategoryByID(mEvent.getCategoryID()).toString());
+        //Log.i("gen_cat", CategoryIconFactory.getInstance().getCategoryByID(mEvent.getCategoryID()).toString());
 
 
 

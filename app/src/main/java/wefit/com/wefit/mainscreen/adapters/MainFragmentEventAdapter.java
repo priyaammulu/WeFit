@@ -23,7 +23,7 @@ import java.util.Locale;
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.utils.eventutils.category.CategoryFactory;
+import wefit.com.wefit.utils.eventutils.category.CategoryIconFactory;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -82,7 +82,7 @@ public class MainFragmentEventAdapter extends BaseAdapter {
         holder.mEventImage.setImageBitmap(decodeBase64BitmapString(event.getImage()));
         holder.mUserImage.setImageBitmap(decodeBase64BitmapString(event.getAdmin().getPhoto()));
 
-        Category category = CategoryFactory.getInstance().getCategoryByID(event.getCategoryID());
+        Category category = CategoryIconFactory.getInstance().getCategoryByID(event.getCategoryID());
         Picasso.with(context).load(category.getImage()).into(holder.mCategoryPic);
 
         return convertView;

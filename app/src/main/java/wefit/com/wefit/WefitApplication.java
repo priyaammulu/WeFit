@@ -15,6 +15,8 @@ import wefit.com.wefit.utils.auth.Auth20FirebaseHandlerImpl;
 import wefit.com.wefit.utils.auth.Auth20Handler;
 import wefit.com.wefit.utils.eventutils.location.DistanceSorter;
 import wefit.com.wefit.utils.eventutils.location.DistanceSorterImpl;
+import wefit.com.wefit.utils.eventutils.wheater.OpenWeatherMapForecastImpl;
+import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.LocalEventDao;
 import wefit.com.wefit.utils.persistence.LocalUserDao;
@@ -33,6 +35,7 @@ import wefit.com.wefit.viewmodels.EventViewModel;
 public class WefitApplication extends Application {
     private UserModel mUserModel;
     private EventModel mEventModel;
+    private WeatherForecast forecastManager;
 
     @Override
     public void onCreate() {
@@ -51,8 +54,9 @@ public class WefitApplication extends Application {
         LocalEventDao localEventDao = new LocalSQLiteEventDao(this);
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 
-        // distance sorter
+        // utils
         DistanceSorter sorter = new DistanceSorterImpl();
+        forecastManager = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
 
         // initialise models
         mUserModel = new UserModelAsyncImpl(loginHandler, localUserDao, remoteUserDao);
@@ -73,5 +77,9 @@ public class WefitApplication extends Application {
 
     private EventModel getMainModel() {
         return mEventModel;
+    }
+
+    public WeatherForecast getWeatherForecast() {
+        return this.forecastManager;
     }
 }

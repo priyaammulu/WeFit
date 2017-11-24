@@ -10,17 +10,17 @@ import wefit.com.wefit.pojo.Category;
  * Created by gioacchino on 21/11/2017.
  */
 
-public class CategoryFactory {
+public class CategoryIconFactory {
 
     private Map<String, Category> availableCategories = new HashMap<>();
 
-    private static final CategoryFactory ourInstance = new CategoryFactory();
+    private static final CategoryIconFactory ourInstance = new CategoryIconFactory();
 
-    public static CategoryFactory getInstance() {
+    public static CategoryIconFactory getInstance() {
         return ourInstance;
     }
 
-    private CategoryFactory() {
+    private CategoryIconFactory() {
 
         // TODO si può caricare meglio sta cosa
         this.availableCategories.put("volleyball", new Category("Volleyball", R.drawable.ic_volleyball));
