@@ -5,7 +5,6 @@
     android:background="@color/white"
     android:theme="@style/AppTheme.NoActionBar">
 
-
     <ImageView
         android:id="@+id/logoSVG"
         android:layout_width="300dp"
@@ -15,6 +14,7 @@
         android:layout_marginRight="70dp"
         android:layout_marginTop="30dp"
         android:src="@drawable/ic_launcher" />
+
 
 
     <Button

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.reactivestreams.Subscription;
 
@@ -41,6 +42,8 @@ public class MainFragment extends Fragment {
     // this should be handled by another class
     private Subscription mSubscription;
 
+    private TextView middleTopBottom;
+
 
 
     public MainFragment() {
@@ -59,7 +62,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
-        mListener.fillInIcons(R.drawable.ic_edit, "Events", R.drawable.ic_search);
+        mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
 
     }
 
@@ -116,7 +119,8 @@ public class MainFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden){
-            mListener.fillInIcons(R.drawable.ic_edit, "Events", R.drawable.ic_search);
+
+            mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
 
         }
     }
