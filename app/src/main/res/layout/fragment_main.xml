@@ -10,9 +10,11 @@
         android:id="@+id/new_event"/>
 
     <ListView
-        android:layout_width="match_parent"
         android:id="@+id/event_list"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@color/cardview_light_background"
+        android:dividerHeight="10dp">
     </ListView>
 
 </FrameLayout>

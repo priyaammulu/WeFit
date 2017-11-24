@@ -72,7 +72,6 @@ public class EventAdapter extends BaseAdapter {
             holder = new EventViewHolder(convertView);
             convertView.setTag(holder);
         }
-
         Event event = events.get(position);
         holder.title.setText(event.getName());
         holder.location.setText(event.getEventLocation().getName());
