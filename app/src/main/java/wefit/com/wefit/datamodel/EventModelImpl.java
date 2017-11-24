@@ -118,7 +118,7 @@ public class EventModelImpl implements EventModel {
 
                                 // TODO check what happens if the user joins an event
                                 // if the user has some attendances, download them
-                                if (userModel.getLocalUser().getAttendances().size() != 0) {
+                                if (!userModel.getLocalUser().getAttendances().get(0).equals("")) {
                                     remoteEventDao
                                             .loadEventsByIDs(userModel.getLocalUser().getAttendances())
                                             .subscribe(new Consumer<List<Event>>() {
@@ -132,8 +132,10 @@ public class EventModelImpl implements EventModel {
                                                 }
                                             });
                                 }
+                                else {
+                                    flowableEmitter.onNext(retrievedEvents);
+                                }
 
-                                flowableEmitter.onNext(retrievedEvents);
 
 
                             }
@@ -152,5 +154,10 @@ public class EventModelImpl implements EventModel {
         if (currentLocation != null)
             return currentLocation;
         return dublin;
+    }
+
+    @Override
+    public Flowable<Event> getEvent(String eventID) {
+        return remoteEventDao.loadEventByID(eventID);
     }
 }

@@ -89,7 +89,7 @@ public class User {
         this.birthDate = birthDate;
     }
 
-    public List<String> getAttendances() {
+    public List<String>     getAttendances() {
         return attendances;
     }
 

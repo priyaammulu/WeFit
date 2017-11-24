@@ -20,11 +20,11 @@ import wefit.com.wefit.utils.persistence.LocalEventDao;
 import wefit.com.wefit.utils.persistence.LocalUserDao;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.RestructuredEventDao;
+import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.sharedpreferencepersistence.LocalUserDaoImpl;
 import wefit.com.wefit.utils.persistence.sqlitelocalpersistence.LocalSQLiteEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 
 /**
  * Created by lorenzo on 10/28/17.
@@ -44,7 +44,7 @@ public class WefitApplication extends Application {
         // initialise remote persistence
         FirebaseApp.initializeApp(this);
         RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "test_users");
-        RemoteEventDao remoteEventDao = new RestructuredEventDao(FirebaseDatabase.getInstance(), "test_event_store");
+        RemoteEventDao remoteEventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store");
         Auth20Handler loginHandler = new Auth20FirebaseHandlerImpl(FirebaseAuth.getInstance(), remoteUserDao);
 
         // initialise local persistence
@@ -67,8 +67,8 @@ public class WefitApplication extends Application {
         return mUserModel;
     }
 
-    public MainViewModel getMainViewModel() {
-        return new MainViewModel(getMainModel());
+    public EventViewModel getEventViewModel() {
+        return new EventViewModel(getMainModel());
     }
 
     private EventModel getMainModel() {

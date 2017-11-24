@@ -1,11 +1,10 @@
-package wefit.com.wefit.mainscreen;
+package wefit.com.wefit.mainscreen.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +16,14 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
 import io.reactivex.FlowableSubscriber;
-import wefit.com.wefit.EventAdapter;
-import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
+import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
+import wefit.com.wefit.mainscreen.adapters.MainFragmentEventAdapter;
+import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 
 
 /**
@@ -35,15 +34,14 @@ import wefit.com.wefit.viewmodels.MainViewModel;
  */
 public class MainFragment extends Fragment {
     public static final String EVENT = "selected";
-    private EventAdapter mAdapter;
+    private MainFragmentEventAdapter mAdapter;
     private ListView mEventList;
-    private MainViewModel mMainViewModel;
+    private EventViewModel mMainViewModel;
     private FragmentsInteractionListener mListener;
     // this should be handled by another class
     private Subscription mSubscription;
 
     private TextView middleTopBottom;
-
 
 
     public MainFragment() {
@@ -62,38 +60,35 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
-        mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
+        //mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
 
     }
 
     private void fetchEvents() {
-        Log.i("PROMISE creation main", "creazione promessa");
-        Flowable<List<Event>> stream = mMainViewModel.getEvents();
-        stream.subscribe(new FlowableSubscriber<List<Event>>() {
-            @Override
-            public void onSubscribe(Subscription subscription) {
-                subscription.request(Long.MAX_VALUE);
-                mSubscription = subscription;
-            }
+        mMainViewModel
+                .getEvents()
+                .subscribe(new FlowableSubscriber<List<Event>>() {
+                    @Override
+                    public void onSubscribe(Subscription subscription) {
+                        subscription.request(Long.MAX_VALUE);
+                        mSubscription = subscription;
+                    }
 
-            @Override
-            public void onNext(List<Event> events) {
-                //handleAdapter(events);
-                Log.i("PROMISE GETEVENT main", events.toString());
-                Log.i("PROMISE RESPEcet main", "respected");
-                handleAdapter(events);
-            }
+                    @Override
+                    public void onNext(List<Event> events) {
+                        handleAdapter(events);
+                    }
 
-            @Override
-            public void onError(Throwable throwable) {
-                handleError(throwable);
-            }
+                    @Override
+                    public void onError(Throwable throwable) {
+                        handleError(throwable);
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
     }
 
     private void bind(View view) {
@@ -101,9 +96,13 @@ public class MainFragment extends Fragment {
         mEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
+
+                // retrieve the event
                 Event selected = mAdapter.getItem(i);
-                intent.putExtra(EVENT, selected);
+
+                // send the event ID
+                Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
+                intent.putExtra(EVENT, selected.getId());
                 startActivity(intent);
             }
         });
@@ -118,9 +117,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
 
-            mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
+            // TODO I don't know what it's supposed to do
+            //mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
 
         }
     }
@@ -132,7 +132,7 @@ public class MainFragment extends Fragment {
 
     private void handleAdapter(List<Event> events) {
         if (mAdapter == null) {
-            mAdapter = new EventAdapter(events, getActivity());
+            mAdapter = new MainFragmentEventAdapter(events, getActivity());
             mEventList.setAdapter(mAdapter);
         } else
             mAdapter.setEvents(events);

@@ -122,7 +122,7 @@ public class FirebaseUserDao implements RemoteUserDao {
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            // TODO what to do here?
+                            // required, but it cannot happen
                         }
                     });
 

@@ -1,6 +1,6 @@
 package wefit.com.wefit.mainscreen;
 
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 
 /**
  * This interface must be implemented by activities that contain this
@@ -13,7 +13,7 @@ import wefit.com.wefit.viewmodels.MainViewModel;
  * >Communicating with Other Fragments</a> for more information.
  */
 public interface FragmentsInteractionListener {
-    MainViewModel getMainViewModel();
+    EventViewModel getMainViewModel();
     void provideLocation();
     void fillInIcons(int IconLeft, String iconMiddle, int iconRight);
 }

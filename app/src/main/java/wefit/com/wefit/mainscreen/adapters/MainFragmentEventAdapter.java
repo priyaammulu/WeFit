@@ -1,4 +1,4 @@
-package wefit.com.wefit;
+package wefit.com.wefit.mainscreen.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,22 +20,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
-import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.eventutils.category.CategoryFactory;
 
 /**
  * Created by lorenzo on 11/3/17.
  */
 
-public class EventAdapter extends BaseAdapter {
+public class MainFragmentEventAdapter extends BaseAdapter {
 
     private List<Event> events;
     private Context context;
 
-    public EventAdapter(List<Event> events, Context context) {
+    public MainFragmentEventAdapter(List<Event> events, Context context) {
         this.events = events;
         this.context = context;
     }
@@ -65,7 +64,7 @@ public class EventAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.mainview_list_item, parent, false);
         }
         EventViewHolder holder = (EventViewHolder) convertView.getTag();
         if (holder == null) {
@@ -80,16 +79,16 @@ public class EventAdapter extends BaseAdapter {
         holder.organizer.setText(event.getAdmin().getFullName());
         holder.published.setText("Published on: " + getDate(new Date(event.getPublicationDate())));
 
-        holder.mEvent.setImageBitmap(getBitmapFromString(event.getImage()));
-        holder.mUser.setImageBitmap(getBitmapFromString(event.getAdmin().getPhoto()));
+        holder.mEventImage.setImageBitmap(decodeBase64BitmapString(event.getImage()));
+        holder.mUserImage.setImageBitmap(decodeBase64BitmapString(event.getAdmin().getPhoto()));
 
         Category category = CategoryFactory.getInstance().getCategoryByID(event.getCategoryID());
-        Picasso.with(context).load(category.getImage()).into(holder.mGame);
+        Picasso.with(context).load(category.getImage()).into(holder.mCategoryPic);
 
         return convertView;
     }
 
-    private Bitmap getBitmapFromString(String encodedImage) {
+    private Bitmap decodeBase64BitmapString(String encodedImage) {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
@@ -113,9 +112,9 @@ public class EventAdapter extends BaseAdapter {
     }
 
     private static class EventViewHolder {
-        private ImageView mEvent;
-        private ImageView mUser;
-        private ImageView mGame;
+        private ImageView mEventImage;
+        private ImageView mUserImage;
+        private ImageView mCategoryPic;
         private TextView title;
         private TextView location;
         private TextView monthDay;
@@ -130,9 +129,9 @@ public class EventAdapter extends BaseAdapter {
             this.time = (TextView) row.findViewById(R.id.event_time);
             this.organizer = (TextView) row.findViewById(R.id.event_organizer);
             this.published = (TextView) row.findViewById(R.id.event_published);
-            this.mEvent = (ImageView) row.findViewById(R.id.event_image);
-            this.mUser = (ImageView) row.findViewById(R.id.event_user_image);
-            this.mGame = (ImageView) row.findViewById(R.id.event_game_image);
+            this.mEventImage = (ImageView) row.findViewById(R.id.event_image);
+            this.mUserImage = (ImageView) row.findViewById(R.id.event_user_image);
+            this.mCategoryPic = (ImageView) row.findViewById(R.id.event_game_image);
         }
 
     }

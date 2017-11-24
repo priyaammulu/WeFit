@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.Map;
  * Created by lorenzo on 11/3/17.
  */
 
-public class Event implements Parcelable {
+public class Event {
 
     private String id;
 
@@ -49,12 +50,21 @@ public class Event implements Parcelable {
      */
     private Map<String, Boolean> attendingUsers = new HashMap<>();
 
-    /**
-     * Required for Parcelable interface
-     */
-    private int mData;
-
     public Event() {
+    }
+
+
+    protected Event(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        description = in.readString();
+        categoryID = in.readString();
+        eventDate = in.readLong();
+        publicationDate = in.readLong();
+        maxAttendee = in.readInt();
+        image = in.readString();
+        adminID = in.readString();
+        // mData = in.readInt();
     }
 
 
@@ -154,29 +164,6 @@ public class Event implements Parcelable {
         this.attendingUsers = attendingUsers;
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(Parcel out, int flags) {
-        //todo, we have to make parcelable even objects that are fields of this object!
-        out.writeInt(mData);
-    }
-
-    public static final Parcelable.Creator<Event> CREATOR
-            = new Parcelable.Creator<Event>() {
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
-
-    private Event(Parcel in) {
-        mData = in.readInt();
-    }
 
     @Override
     public String toString() {

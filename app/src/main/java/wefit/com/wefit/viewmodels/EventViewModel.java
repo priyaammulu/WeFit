@@ -11,15 +11,19 @@ import wefit.com.wefit.pojo.Location;
  * Created by lorenzo on 11/3/17.
  */
 
-public class MainViewModel {
+public class EventViewModel {
     private EventModel mEventModel;
 
-    public MainViewModel(EventModel eventModel) {
+    public EventViewModel(EventModel eventModel) {
         this.mEventModel = eventModel;
     }
 
     public Flowable<List<Event>> getEvents() {
         return mEventModel.getEvents();
+    }
+
+    public Flowable<Event> getEvent(String eventID) {
+        return mEventModel.getEvent(eventID);
     }
 
     public void setLocation(Location location) {

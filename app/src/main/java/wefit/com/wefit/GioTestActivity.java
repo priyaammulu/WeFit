@@ -15,29 +15,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import io.reactivex.functions.Consumer;
-import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.utils.eventutils.wheater.OpenWeatherMapForecastImpl;
-import wefit.com.wefit.utils.eventutils.wheater.Weather;
-import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
-import wefit.com.wefit.utils.persistence.RemoteEventDao;
-import wefit.com.wefit.utils.persistence.RemoteUserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
-import wefit.com.wefit.utils.persistence.firebasepersistence.RestructuredEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class GioTestActivity extends AppCompatActivity {
@@ -67,32 +50,32 @@ public class GioTestActivity extends AppCompatActivity {
         User creator = new User();
         creator.setId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
 
-        final Event event = new Event();
-        //event.setDisplayName("-Kz47m2Qmn623ifrqLJO");
-        //event.setId("hello"); // tODO remove
-        event.setAdmin(creator);
-        event.setAdminID("fake_admin_id");
-        event.setName("evento 0");
-        event.setDescription("locamente innamorado");
-        event.setImage("245236tddwhtsr");
-        event.setPublicationDate(652432);
-        event.setEventDate(1511870400);
-        event.setMaxAttendee(20);
+        final Event mEvent = new Event();
+        //mEvent.setDisplayName("-Kz47m2Qmn623ifrqLJO");
+        //mEvent.setId("hello"); // tODO remove
+        mEvent.setAdmin(creator);
+        mEvent.setAdminID("fake_admin_id");
+        mEvent.setName("evento 0");
+        mEvent.setDescription("locamente innamorado");
+        mEvent.setImage("245236tddwhtsr");
+        mEvent.setPublicationDate(652432);
+        mEvent.setEventDate(1511870400);
+        mEvent.setMaxAttendee(20);
 
         Location location = new Location();
         location.setLatitude(14);
         location.setLongitude(13);
         location.setName("guantanamera city");
-        event.setEventLocation(location);
-        event.setCategoryID("volleyball");
+        mEvent.setEventLocation(location);
+        mEvent.setCategoryID("volleyball");
 
         Map<String, Boolean> attendances = new HashMap<>();
         attendances.put("oMHgmaouzSPyxOVK0gcW3mPp7d42", true);
         attendances.put("IeCvyPwpL6aXbHMAQUdD4BFhcB43", false);
 
-        Log.i("base", event.toString());
+        Log.i("base", mEvent.toString());
 
-        event.setAttendingUsers(attendances);
+        mEvent.setAttendingUsers(attendances);
 
         User newuser = new User();
         newuser.setId("dsfasf");
@@ -106,14 +89,14 @@ public class GioTestActivity extends AppCompatActivity {
         //remoteUserDao.save(newuser);
 
         //RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
-        //remoteDao.save(event);
+        //remoteDao.save(mEvent);
 
-        RemoteEventDao remoteEventDao = new RestructuredEventDao(FirebaseDatabase.getInstance(), "test_event_store");
+        RemoteEventDao remoteEventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store");
 
 
         WeatherForecast forecaster = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
 
-        forecaster.getForecast(event.getEventLocation(), event.getEventDate()).subscribe(new Consumer<Weather>() {
+        forecaster.getForecast(mEvent.getEventLocation(), mEvent.getEventDate()).subscribe(new Consumer<Weather>() {
             @Override
             public void accept(Weather weather) throws Exception {
                 // TODO fai qualcosa
@@ -148,8 +131,8 @@ public class GioTestActivity extends AppCompatActivity {
                 Log.i("retrieved_ev", String.valueOf(events.size()));
 
                 List<String> adminIDs = new ArrayList<>();
-                for (Event event : events) {
-                    adminIDs.add(event.getAdminID());
+                for (Event mEvent : events) {
+                    adminIDs.add(mEvent.getAdminID());
                     Log.i("adminIDs", adminIDs.toString());
                 }
 
@@ -184,7 +167,7 @@ public class GioTestActivity extends AppCompatActivity {
         /*
         LocalEventDao localEventDao = new LocalSQLiteEventDao(getApplicationContext());
         //localEventDao.wipe();
-        //localEventDao.save(event);
+        //localEventDao.save(mEvent);
 
 
         Event ev = localEventDao.loadEventByID("1");
@@ -195,14 +178,14 @@ public class GioTestActivity extends AppCompatActivity {
         */
 
         //LocalEventNotifier notifier = new LocalEventNotifierImpl(this);
-        //notifier.notifyEvent(event);
+        //notifier.notifyEvent(mEvent);
 
 
         //RemoteEventDao remoteDao = new RestructuredFirebaseEventDao(FirebaseDatabase.getInstance(), "event_store");
         //final RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "users");
 
         //RemoteEventDao remoteDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store", remoteUserDao);
-        //remoteDao.save(event);
+        //remoteDao.save(mEvent);
 
 
         /*
@@ -239,23 +222,23 @@ public class GioTestActivity extends AppCompatActivity {
         */
 
 
-        //Log.i("gen_cat", CategoryFactory.getInstance().getCategoryByID(event.getCategoryID()).toString());
+        //Log.i("gen_cat", CategoryFactory.getInstance().getCategoryByID(mEvent.getCategoryID()).toString());
 
 
 
         /*
-        remoteDao.loadEventByID(event.getDisplayName()).subscribe(new Consumer<Event>() {
+        remoteDao.loadEventByID(mEvent.getDisplayName()).subscribe(new Consumer<Event>() {
             @Override
-            public void accept(final Event event) throws Exception {
-                //Log.i("Evento", event.toString());
+            public void accept(final Event mEvent) throws Exception {
+                //Log.i("Evento", mEvent.toString());
 
                 // TODO fill del creatore
-                remoteUserDao.loadByID(event.getAdmin().getDisplayName()).subscribe(new Consumer<User>() {
+                remoteUserDao.loadByID(mEvent.getAdmin().getDisplayName()).subscribe(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
                         //Log.i("Evento", user.toString());
-                        event.setAdmin(user);
-                        Log.i("Evento", event.toString());
+                        mEvent.setAdmin(user);
+                        Log.i("Evento", mEvent.toString());
                     }
                 });
 
@@ -272,7 +255,7 @@ public class GioTestActivity extends AppCompatActivity {
         /*
         LocalEventDao eventDao = new LocalSQLiteEventDao(this);
         //eventDao.wipe();
-        event = eventDao.save(event);
+        mEvent = eventDao.save(mEvent);
         List<Event> eventos = eventDao.loadNewEvents(20, 0);
 
         Log.i("Evento", String.valueOf(eventos.size()));
