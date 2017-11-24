@@ -188,18 +188,25 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     @Override
     public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
         //Icons for main Activity
+        logoButton.setVisibility(View.GONE);
+//
+
         leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
         leftTopBottom.setImageResource(IconLeft);
 
         middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
         middleTopBottom.setText(iconMiddle);
+        middleTopBottom.setVisibility(View.VISIBLE);
 
         rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
         rightTopButtom.setImageResource(iconRight);
+
     }
 
     @Override
     public void fillInIconWithLogo(int IconLeft, int logo, int iconRight) {
+
+
         leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
         leftTopBottom.setImageResource(IconLeft);
 
