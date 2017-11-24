@@ -1,6 +1,8 @@
 package wefit.com.wefit;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
@@ -65,21 +71,38 @@ public class EventAdapter extends BaseAdapter {
         }
 
         Event event = events.get(position);
-
-
-        holder.title.setText(event.getName());
-        holder.location.setText(event.getEventLocation().getName());
-//        holder.monthDay.setText(event.getEventDate().toString().substring(5));
-//        holder.time.setText(event.getEventDate().toString().substring(5));
-//        holder.organizer.setText(event.getAdmin().getFullName());
-//        holder.published.setText(event.getPublicationDate().toString().substring(5));
-
-
-
-        Picasso.with(context).load(event.getImage()).into(holder.mEvent);
-        Picasso.with(context).load(event.getImage()).into(holder.mUser);
-        Picasso.with(context).load(event.getImage()).into(holder.mGame);
+        holder.title.setText(event.getTitle());
+        holder.location.setText(event.getLocation().getName());
+        holder.monthDay.setText(getMonthDay(event.getExpire()));
+        holder.time.setText(getTime(event.getExpire()));
+        holder.organizer.setText(event.getCreator().getName());
+        holder.published.setText("Published on: " + getDate(event.getPublished()));
+        holder.mEvent.setImageBitmap(getBitmapFromString(event.getImage()));
+        holder.mUser.setImageBitmap(getBitmapFromString(event.getCreator().getPhoto()));
+        Picasso.with(context).load(event.getCategory().getImage()).into(holder.mGame);
         return convertView;
+    }
+
+    private Bitmap getBitmapFromString(String image) {
+        return BitmapFactory.decodeByteArray(image.getBytes(), 0, image.getBytes().length);
+    }
+
+    private String getMonthDay(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+        String month = new SimpleDateFormat("MMM").format(cal.getTime());
+        return month.concat(" ").concat(day);
+    }
+
+    private String getDate(Date date) {
+        Locale locale = Locale.ENGLISH;
+        return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
+    }
+
+    private String getTime(Date date) {
+        Locale locale = Locale.ITALIAN;
+        return DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
     }
 
     private static class EventViewHolder {
