@@ -3,9 +3,9 @@ package wefit.com.wefit;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
-import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
 
 import static wefit.com.wefit.mainscreen.fragments.MainFragment.EVENT;
@@ -13,6 +13,7 @@ import static wefit.com.wefit.mainscreen.fragments.MainFragment.EVENT;
 public class EventDescriptionActivity extends AppCompatActivity {
 
     ActionBar mActionBar;
+    Event mEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
 
-        Event event = (Event) getIntent().getExtras().get(EVENT);
+        // retrieve the event from the intent
+        String eventID = this.getIntent().getStringExtra(EVENT);
+
+        Log.i("evento", eventID);
 
     }
 

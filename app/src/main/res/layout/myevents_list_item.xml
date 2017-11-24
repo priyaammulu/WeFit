@@ -70,7 +70,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="10dp"
-            android:id="@+id/myevents_game_image"
+            android:id="@+id/myattendance_category_pic"
             android:src="@drawable/landmark_icon" />
 
         <ImageView

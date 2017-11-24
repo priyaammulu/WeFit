@@ -66,7 +66,7 @@ public class AttendancesEventAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.myevents_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.myevents_list_item, parent, false);
         }
 
         EventViewHolder holder = (EventViewHolder) convertView.getTag();
@@ -85,6 +85,7 @@ public class AttendancesEventAdapter extends BaseAdapter {
         holder.time.setText(getTime(new Date(event.getEventDate())));
         holder.mEventImage.setImageBitmap(decodeBase64BitmapString(event.getImage()));
 
+        // TODO aggiungi category pic
         Category category = CategoryFactory.getInstance().getCategoryByID(event.getCategoryID());
         Picasso.with(context).load(category.getImage()).into(holder.mCategoryPic);
 
@@ -131,7 +132,7 @@ public class AttendancesEventAdapter extends BaseAdapter {
             this.monthDay = (TextView) row.findViewById(R.id.myevents_expire_date);
             this.time = (TextView) row.findViewById(R.id.myevents_expire_time);
             this.mEventImage = (ImageView) row.findViewById(R.id.myevents_image);
-            this.mCategoryPic = (ImageView) row.findViewById(R.id.myevents_game_image);
+            this.mCategoryPic = (ImageView) row.findViewById(R.id.myattendance_category_pic);
             this.mImageOrganizer = (ImageView) row.findViewById(R.id.myevents_organizer_image);
         }
 

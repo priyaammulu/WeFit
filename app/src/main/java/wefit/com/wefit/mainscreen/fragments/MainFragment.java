@@ -46,7 +46,6 @@ public class MainFragment extends Fragment {
     private TextView middleTopBottom;
 
 
-
     public MainFragment() {
         // Required empty public constructor
     }
@@ -68,33 +67,30 @@ public class MainFragment extends Fragment {
     }
 
     private void fetchEvents() {
-        Log.i("PROMISE creation main", "creazione promessa");
-        Flowable<List<Event>> stream = mMainViewModel.getEvents();
-        stream.subscribe(new FlowableSubscriber<List<Event>>() {
-            @Override
-            public void onSubscribe(Subscription subscription) {
-                subscription.request(Long.MAX_VALUE);
-                mSubscription = subscription;
-            }
+        mMainViewModel
+                .getEvents()
+                .subscribe(new FlowableSubscriber<List<Event>>() {
+                    @Override
+                    public void onSubscribe(Subscription subscription) {
+                        subscription.request(Long.MAX_VALUE);
+                        mSubscription = subscription;
+                    }
 
-            @Override
-            public void onNext(List<Event> events) {
-                //handleAdapter(events);
-                Log.i("PROMISE GETEVENT main", events.toString());
-                Log.i("PROMISE RESPEcet main", "respected");
-                handleAdapter(events);
-            }
+                    @Override
+                    public void onNext(List<Event> events) {
+                        handleAdapter(events);
+                    }
 
-            @Override
-            public void onError(Throwable throwable) {
-                handleError(throwable);
-            }
+                    @Override
+                    public void onError(Throwable throwable) {
+                        handleError(throwable);
+                    }
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-        });
+                    }
+                });
     }
 
     private void bind(View view) {
@@ -102,9 +98,13 @@ public class MainFragment extends Fragment {
         mEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
+
+                // retrieve the event
                 Event selected = mAdapter.getItem(i);
-                intent.putExtra(EVENT, selected);
+
+                // send the event ID
+                Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
+                intent.putExtra(EVENT, selected.getId());
                 startActivity(intent);
             }
         });
@@ -119,7 +119,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
 
             // TODO I don't know what it's supposed to do
             //mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);

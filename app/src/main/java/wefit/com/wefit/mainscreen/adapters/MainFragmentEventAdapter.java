@@ -64,7 +64,7 @@ public class MainFragmentEventAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.mainview_list_item, parent, false);
         }
         EventViewHolder holder = (EventViewHolder) convertView.getTag();
         if (holder == null) {
