@@ -39,6 +39,8 @@ public class EventModelImpl implements EventModel {
         //event.setId("-Kz47m2Qmn623ifrqLJO");
         User creator = new User();
         creator.setUserId("zbLOEjOmbjWMJCNETOhXkvyTwhi2");
+        creator.setName("pasquale");
+        creator.setPhoto("https://media.mnn.com/assets/images/2016/08/Lion-Stalking-Kalahari-Desert.jpg.638x0_q80_crop-smart.jpg");
         event.setCreator(creator);
         event.setTitle("Bellolevento");
         event.setDescription("locamente innamorado");
@@ -52,8 +54,8 @@ public class EventModelImpl implements EventModel {
         location.setName("guantanamera city");
         event.setLocation(location);
         Category category = new Category("category", R.drawable.ic_gym_weightlifting);
-        event.setCategory(category);
         event.setCategoryName("category1");
+        event.setCategory(category);
 
         User part1 = new User();
         part1.setUserId("oMHgmaouzSPyxOVK0gcW3mPp7d42");

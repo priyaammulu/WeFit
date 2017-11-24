@@ -13,7 +13,8 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="lightBlue">#2ECCFA</color>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#5BABCC</color>
+    <color name="colorSecondary">#314665</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="panelColor">#d1e0e0</color>
 </resources>

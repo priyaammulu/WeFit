@@ -70,13 +70,13 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="10dp"
-            android:id="@+id/myevents_game_image"
+            android:id="@+id/myevents_creator_image"
             android:src="@drawable/landmark_icon" />
 
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/myevents_organizer_image"
+            android:id="@+id/myevents_own_image"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"

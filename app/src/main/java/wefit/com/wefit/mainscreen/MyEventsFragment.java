@@ -20,6 +20,7 @@ import wefit.com.wefit.MyEventsAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.UserViewModel;
 
 
 public class MyEventsFragment extends Fragment {
@@ -28,6 +29,7 @@ public class MyEventsFragment extends Fragment {
     private Subscription mSubscription;
     private ListView mListView;
     private MyEventsAdapter myEventsAdapter;
+    private UserViewModel mLoginViewModel;
 
 
     public MyEventsFragment() {
@@ -54,12 +56,12 @@ public class MyEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mActivity.getMainViewModel();
-
+        mLoginViewModel = mActivity.getLoginViewModel();
     }
 
     private void initilizeListView(List<Event> events) {
         Log.i("LIsta eventi", events.toString());
-        myEventsAdapter = new MyEventsAdapter(events, getActivity());
+        myEventsAdapter = new MyEventsAdapter(events, getActivity(), mLoginViewModel.retrieveCachedUser());
         mListView.setAdapter(myEventsAdapter);
     }
 
