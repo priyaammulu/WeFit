@@ -1,6 +1,9 @@
 package wefit.com.wefit.datamodel;
 
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.auth.Auth20Handler;
@@ -19,20 +22,22 @@ public class UserModelAsyncImpl implements UserModel {
 
     @Override
     public Flowable<User> retrieveLoggedUser() {
-
-        Flowable<User> flow =  loginHandler.retrieveUser();
-
-        // memorize locally the user to serve efficiently the future requests
-        flow.subscribe(new Consumer<User>() {
+        return Flowable.create(new FlowableOnSubscribe<User>() {
             @Override
-            public void accept(User user) throws Exception {
+            public void subscribe(final FlowableEmitter<User> flowableEmitter) throws Exception {
 
-                localUserDao.save(user);
+                loginHandler.retrieveUser().subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(User user) throws Exception {
+                        localUserDao.save(user);
+
+                        flowableEmitter.onNext(user);
+
+                    }
+                });
 
             }
-        });
-
-        return flow;
+        }, BackpressureStrategy.BUFFER);
     }
 
     @Override
