@@ -60,7 +60,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private TextView mEventPlace;
     private TextView mEventCity;
     private ImageView mWeatherForecast;
-    private ListView mAttendees;
+    //private ListView mAttendees;
+    private LinearLayout mAttendees;
     private LinearLayout mOpenMapButton;
     private LinearLayout mAddCalendarButton;
 
@@ -93,7 +94,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.bindViews();
 
         // retrieve the event from the intent
-        String eventID = this.getIntent().getStringExtra(PassingExtraEvent.IS_PRIVATE);
+        String eventID = this.getIntent().getStringExtra(PassingExtraEvent.EVENT);
 
         // check if the event is remote or local
         boolean isRemote = this.getIntent().getBooleanExtra(PassingExtraEvent.IS_PRIVATE, true);
@@ -127,7 +128,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventPlace = (TextView) findViewById(R.id.place_name_txt);
         this.mEventCity = (TextView) findViewById(R.id.city_name_txt);
         this.mWeatherForecast = (ImageView) findViewById(R.id.weather_shower_pic);
-        this.mAttendees = (ListView) findViewById(R.id.attendees_listview);
+
+        this.mAttendees = (LinearLayout) findViewById(R.id.attendees_list);
 
         this.mOpenMapButton = (LinearLayout) findViewById(R.id.open_map_btn);
         this.mAddCalendarButton = (LinearLayout) findViewById(R.id.calendar_add_btn);
@@ -242,13 +244,16 @@ public class EventDescriptionActivity extends AppCompatActivity {
                         );
                     }
 
+                    /*
                     EventAttendeeAdapter attendeeAdapter = new EventAttendeeAdapter(
                             getApplicationContext(),
                             coupleAttendances,
                             retrievedEvent.getAdminID()
                     );
 
+
                     mAttendees.setAdapter(attendeeAdapter);
+                    */
 
                 }
             });
