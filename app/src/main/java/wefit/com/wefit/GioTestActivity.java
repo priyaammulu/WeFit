@@ -64,12 +64,12 @@ public class GioTestActivity extends AppCompatActivity {
         //mEvent.setDisplayName("-Kz47m2Qmn623ifrqLJO");
         //mEvent.setId("hello"); // tODO remove
         mEvent.setAdmin(creator);
-        mEvent.setAdminID("1M5hEdlM4iQvMWXhA3eNTZ0Tjfg1");
-        mEvent.setName("Hello darkness, my old friend");
+        mEvent.setAdminID("IeCvyPwpL6aXbHMAQUdD4BFhcB43");
+        mEvent.setName("beatles are here");
         mEvent.setDescription("I come to say hello!");
         mEvent.setImage("iVBORw0KGgoAAAANSUhEUgAAAKAAAAB4CAIAAAD6wG44AAAAA3NCSVQICAjb4U/gAAAD5ElEQVR4\nnO2dzU4TURiG328oiJg0caFgu5UoS4WEsKHxDgjsuAfkWhDdaOI1iF6EIbEY124Bf7aEBdDO5wIw\nEXuaOWX++uZ9dmTOvGd6nk5Pydc5x6anpxFga2srdGggu7u7Ue0H5pvDLQF6AIAk9/ww6avXb8xh\nnrilBeQXff2D8xtRESXglgKJo2HAtea/ZBr30do7ppIUaQLz2F5qTcPdQ8fMbMjR2zQecoqj8XXu\nc/fBtzSB+T938J1396Ly3+J9zNWcYW0CH3opgGyvo5LxiW1sm5uboXP29/ezX427r6ysRL2Ggfkp\n/OzF6Wnn/OqvsnDDk+/z89+fAr0bU0OISsYnNr/RbrdD5xwdHWXvAECr1YpqPzDf3adOJhNMuMHi\n3vG3whzNZrPdfgQkGd9YlYxPbH6mt6oYXySYHAkmR4LJkWByJJgcCSZHgsmRYHIkmBwJJkeCyZFg\ncoKCY+uX7m5m2duPUB+tFXUbn1C+ra6uDukjeweXfUS1H5jv7r+Xfv149rPkciGAuYPZ2e5c9nJh\nJeMTm291+00WgIO57peH3fIF9z/1eh/72QWPxW+yNAeTI8HkSDA5EkyOBJMjweRIMDkSTI4EkyPB\n5EgwORJMjgSTExQcW7+MZUj+WNSJKxyfKIY9Pnp4eBiVNSQqKv9k5gSzUUn50Gw277ZnspcLqxqf\nqPzG+vp66IRK6pfuPrU2mTyeiIrKhYWFhef3F7MLrmR8YvM1B5MjweRIMDm1E+zX3xxvLLFTAing\nSP5bu2m8qZ1geAL0DGnG1chyw/oAYGmB//pUQe0WQkvML/aS872+4eLGoWK/hXpj6eWiOdwaZS7f\nVDS1u4Pt6g5G2aNs5wDc2Fa6q53gy6UMgbT0a0uuL6DcbgumdoJFvkgwORJMjgSTI8HkSDA5EkxO\nHZ8PVn6O+bqDyZFgciSYHAkmR4LJkWByJJgcCSZHgsmRYHIkmBwJJkeCyZFgciSYnNw2iAawvLwc\n1V75JeTntkG0u29sbEStvqD8EvJz+4gueg8G5Y+WrzmYHAkmR4LJkWByJJgcCSZHgsmRYHIkmBwJ\nJkeCyZFgciSYHOt0OqFjlWxorPx884MPgLv79vZ29j7MbGdnJ/trUH45+cGP6HHZo175w/M1B5Mj\nweRIMDkSTI4EkyPB5EgwORJMjgSTI8HkSDA5EkyOBJMTfHzU3Y+Pj6PKVa1WK6ocpvwS8oMbRF/W\nFzOmXzJC/VL5RecH9y4cYQ/5Quujyh8tX3MwORJMjgSTI8HkSDA5EkyOBJMjweRIMDkSTI4EkyPB\n5EgwOXq6kDxfzweT5+sOJs/XHEzOH/3BqRFWGcG3AAAAAElFTkSuQmCC\n");
         mEvent.setPublicationDate(1511527659215L);
-        mEvent.setEventDate(1511568005000L);
+        mEvent.setEventDate(151156353458005000L);
         mEvent.setMaxAttendee(20);
 
         Location location = new Location();
@@ -80,7 +80,7 @@ public class GioTestActivity extends AppCompatActivity {
         mEvent.setCategoryID("volleyball");
 
         Map<String, Boolean> attendances = new HashMap<>();
-        attendances.put("IeCvyPwpL6aXbHMAQUdD4BFhcB43", false);
+        attendances.put("1M5hEdlM4iQvMWXhA3eNTZ0Tjfg1", false);
 
         Log.i("base", mEvent.toString());
 
@@ -96,12 +96,12 @@ public class GioTestActivity extends AppCompatActivity {
         */
 
 
-        //RemoteEventDao remoteEventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store");
-        //remoteEventDao.save(mEvent);
+        RemoteEventDao remoteEventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store");
+        remoteEventDao.save(mEvent);
 
-        LocalEventDao localEventDao = new LocalSQLiteEventDao(this);
+        //LocalEventDao localEventDao = new LocalSQLiteEventDao(this);
         //localEventDao.wipe();
-        localEventDao.save(mEvent);
+        //localEventDao.save(mEvent);
 
         /*
         WeatherForecast forecaster = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");

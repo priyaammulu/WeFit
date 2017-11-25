@@ -2,6 +2,7 @@ package wefit.com.wefit.pojo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
@@ -15,7 +16,7 @@ import java.util.Map;
  * Created by lorenzo on 11/3/17.
  */
 
-public class Event {
+public class Event implements Comparable<Event>{
 
     private String id;
 
@@ -179,5 +180,10 @@ public class Event {
                 ", adminID='" + adminID + '\'' +
                 ", attendingUsers=" + attendingUsers +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NonNull Event o) {
+        return ((Long) this.eventDate).compareTo(o.eventDate);
     }
 }

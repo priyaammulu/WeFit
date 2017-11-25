@@ -3,6 +3,7 @@ package wefit.com.wefit.datamodel;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -131,13 +132,14 @@ public class EventModelImpl implements EventModel {
                                                 public void accept(List<Event> attendances) throws Exception {
 
                                                     retrievedEvents.addAll(attendances);
-
+                                                    Collections.reverse(retrievedEvents);
                                                     flowableEmitter.onNext(retrievedEvents);
 
                                                 }
                                             });
                                 }
                                 else {
+                                    Collections.reverse(retrievedEvents);
                                     flowableEmitter.onNext(retrievedEvents);
                                 }
 

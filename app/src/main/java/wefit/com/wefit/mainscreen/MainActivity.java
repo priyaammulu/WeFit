@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //startActivity(new Intent(this, GioTestActivity.class));
+        // startActivity(new Intent(this, GioTestActivity.class));
 
         super.onCreate(savedInstanceState);
         mUserViewModel = getUserViewModel();
