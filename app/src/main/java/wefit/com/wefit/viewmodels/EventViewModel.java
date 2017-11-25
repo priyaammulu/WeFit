@@ -55,4 +55,8 @@ public class EventViewModel {
     public void deleteAttendee(String eventID, String userID) {
         mEventModel.deleteAttendee(eventID, userID);
     }
+
+    public Event getPrivateEvent(String eventID) {
+        return mEventModel.getLocalEvent(eventID);
+    }
 }

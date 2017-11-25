@@ -26,7 +26,7 @@ import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 
-public class MyAttendancesFragment extends Fragment {
+public class ScheduledEventsFragment extends Fragment {
     private FragmentsInteractionListener mActivity;
     private EventViewModel mEventViewModel;
     private Subscription mSubscription; // TODO what to do with this?
@@ -34,7 +34,7 @@ public class MyAttendancesFragment extends Fragment {
     private AttendancesEventAdapter attendancesEventAdapter;
 
 
-    public MyAttendancesFragment() {
+    public ScheduledEventsFragment() {
         // Required empty public constructor
     }
 
@@ -82,6 +82,11 @@ public class MyAttendancesFragment extends Fragment {
                 // send the event ID
                 Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
                 intent.putExtra(PassingExtraEvent.EVENT, selected.getId());
+
+                if (selected.isPrivateEvent()) { // only private events do not need
+                    intent.putExtra(PassingExtraEvent.IS_PRIVATE, true);
+                }
+
                 startActivity(intent);
 
             }

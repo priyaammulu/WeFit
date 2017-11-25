@@ -113,7 +113,9 @@ public class LocalSQLiteEventDao implements LocalEventDao {
 
         while (cursor.moveToNext()) {
 
-            events.add(this.retrieveEvent(cursor));
+            Event retrieved = this.retrieveEvent(cursor);
+            retrieved.setPrivateEvent(true);
+            events.add(retrieved);
 
         }
 

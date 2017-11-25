@@ -22,11 +22,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.LinkedList;
 
+import wefit.com.wefit.GioTestActivity;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
-import wefit.com.wefit.mainscreen.fragments.MainFragment;
-import wefit.com.wefit.mainscreen.fragments.MyAttendancesFragment;
+import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
+import wefit.com.wefit.mainscreen.fragments.ScheduledEventsFragment;
 import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
 import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.EventViewModel;
@@ -35,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private static final int LOCATION_PERMISSION = 1;
     private UserViewModel mUserViewModel;
     private EventViewModel mEventViewModel;
-    private MainFragment mainFragment = new MainFragment();
+    private EventWallFragment mainFragment = new EventWallFragment();
 
-    private MyAttendancesFragment myAttendancesFragment = new MyAttendancesFragment();
+    private ScheduledEventsFragment myAttendancesFragment = new ScheduledEventsFragment();
     private UserProfileFragment profileFragment = new UserProfileFragment();
     private UserProfileFragment settingsFragment = new UserProfileFragment();
 
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     @Override
     public void onBackPressed() {
-        if (stack.isEmpty() || stack.pop() instanceof MainFragment)
+        if (stack.isEmpty() || stack.pop() instanceof EventWallFragment)
             super.onBackPressed();
         else
             fragmentTransaction(stack.pop());

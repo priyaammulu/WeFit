@@ -107,6 +107,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         // bind the views to the variables
         this.bindViews();
 
+
         // retrieve the event from the intent
         String eventID = this.getIntent().getStringExtra(PassingExtraEvent.EVENT);
 
@@ -114,6 +115,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.isPrivateEvent = this.getIntent().getBooleanExtra(PassingExtraEvent.IS_PRIVATE, false);
 
         if (!isPrivateEvent) {
+
             // download the update event from the server
             mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
                 @Override
@@ -126,19 +128,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 }
             });
         } else {
-            // TODO retrieve the event from the local store and show it
-            // TODO remove this
-            // download the update event from the server
-            mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
-                @Override
-                public void accept(Event event) throws Exception {
 
-                    mRetrievedEvent = event;
-                    // fill the activity with the new data
-                    fillActivity(event);
+            fillActivity(mEventViewModel.getPrivateEvent(eventID));
 
-                }
-            });
         }
 
     }
@@ -180,8 +172,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                 Location eventLocation = retrievedEvent.getEventLocation();
 
+                double latitude = eventLocation.getLatitude();
+                double longitude = eventLocation.getLongitude();
+
                 // Create a Uri from an intent string. Use the result to create an Intent.
-                Uri gmmIntentUri = Uri.parse("google.streetview:cbll=" + eventLocation.getLatitude() + "," + eventLocation.getLongitude());
+                Uri gmmIntentUri = Uri.parse("geo:" + longitude + "," + latitude + "?q=" + longitude + "," + latitude);
 
                 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -239,7 +234,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
         final List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
 
 
-        // tODO cosa si fa se l'evento è privato?
         if (!isPrivateEvent) {
             // public event
             // check if the user is the admin of the event
@@ -283,6 +277,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         } else { // private event
             mAttendees.setVisibility(View.INVISIBLE); // there are no attendees
+
         }
 
 

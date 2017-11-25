@@ -26,6 +26,8 @@ import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 public class EventModelImpl implements EventModel {
 
+    private static final int NUMBER_EVENT_REQUESTED = 20;
+
     private Location currentLocation;
 
     private RemoteEventDao remoteEventDao;
@@ -62,7 +64,7 @@ public class EventModelImpl implements EventModel {
             @Override
             public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
                 remoteEventDao
-                        .loadNewEvents(20, null)
+                        .loadNewEvents(NUMBER_EVENT_REQUESTED, null)
                         .subscribe(new Consumer<List<Event>>() {
                             @Override
                             public void accept(final List<Event> events) throws Exception {
@@ -108,12 +110,17 @@ public class EventModelImpl implements EventModel {
             @Override
             public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
 
+                // retrieve personal events
+                final List<Event> privateEvents = localEventDao.getEvents(NUMBER_EVENT_REQUESTED, 0);
+
                 // retrieve the events that belong to the user
                 remoteEventDao
                         .loadEventsByAdmin(userModel.getLocalUser().getId())
                         .subscribe(new Consumer<List<Event>>() {
                             @Override
                             public void accept(final List<Event> retrievedEvents) throws Exception {
+
+                                retrievedEvents.addAll(privateEvents);
 
                                 // if the user has some attendances, download them
                                 if (!userModel.getLocalUser().getAttendances().get(0).equals("")) {
@@ -175,5 +182,10 @@ public class EventModelImpl implements EventModel {
     @Override
     public void deleteAttendee(String eventID, String userID) {
         remoteEventDao.removeAttendee(eventID, userID);
+    }
+
+    @Override
+    public Event getLocalEvent(String eventID) {
+        return localEventDao.loadEventByID(eventID);
     }
 }

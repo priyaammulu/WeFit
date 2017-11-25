@@ -8,4 +8,7 @@ public class PassingExtraEvent {
 
     public static final String EVENT = "event";
     public static final String IS_PRIVATE = "isprivate";
+
+    private PassingExtraEvent() {
+    }
 }

@@ -33,7 +33,7 @@ import wefit.com.wefit.viewmodels.EventViewModel;
  * {@link FragmentsInteractionListener} interface
  * to handle interaction events.
  */
-public class MainFragment extends Fragment {
+public class EventWallFragment extends Fragment {
     private MainFragmentEventAdapter mAdapter;
     private ListView mEventList;
     private EventViewModel mMainViewModel;
@@ -44,7 +44,7 @@ public class MainFragment extends Fragment {
     private TextView middleTopBottom;
 
 
-    public MainFragment() {
+    public EventWallFragment() {
         // Required empty public constructor
     }
 
@@ -143,7 +143,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        return inflater.inflate(R.layout.fragment_event_wall, container, false);
     }
 
     @Override

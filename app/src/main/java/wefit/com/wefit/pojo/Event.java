@@ -20,6 +20,11 @@ public class Event {
     private String id;
 
     /**
+     * This flag indicates if the event is private. By default an event is public (on the remote store)
+     */
+    private boolean privateEvent = false;
+
+    /**
      * Event characterizing infos
      */
     private String name;
@@ -53,20 +58,13 @@ public class Event {
     public Event() {
     }
 
-
-    protected Event(Parcel in) {
-        id = in.readString();
-        name = in.readString();
-        description = in.readString();
-        categoryID = in.readString();
-        eventDate = in.readLong();
-        publicationDate = in.readLong();
-        maxAttendee = in.readInt();
-        image = in.readString();
-        adminID = in.readString();
-        // mData = in.readInt();
+    @Exclude public boolean isPrivateEvent() {
+        return privateEvent;
     }
 
+    @Exclude public void setPrivateEvent(boolean privateEvent) {
+        this.privateEvent = privateEvent;
+    }
 
     public String getId() {
         return id;
