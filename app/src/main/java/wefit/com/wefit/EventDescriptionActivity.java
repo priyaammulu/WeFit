@@ -7,21 +7,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.eventutils.wheater.Weather;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherIconFactory;
@@ -32,7 +38,10 @@ import static wefit.com.wefit.mainscreen.fragments.MainFragment.EVENT;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 
-    private ActionBar mActionBar;
+    /**
+     * We have weather forecast for just 5 days ahead
+     */
+    public static final double FIVE_DAYS_DISTANCE_MILLIS = 4.32e+8;
 
     private Event showedEvent;
 
@@ -46,6 +55,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private TextView mEventPlace;
     private TextView mEventCity;
     private ImageView mWeatherForecast;
+    private ListView mAttendees;
 
     // viewmodels
     private UserViewModel mUserViewModel;
@@ -68,7 +78,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_description);
 
-        mActionBar = this.getSupportActionBar();
+        ActionBar mActionBar = this.getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
 
@@ -107,10 +117,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventPlace = (TextView) findViewById(R.id.place_name_txt);
         this.mEventCity = (TextView) findViewById(R.id.city_name_txt);
         this.mWeatherForecast = (ImageView) findViewById(R.id.weather_shower_pic);
+        this.mAttendees = (ListView) findViewById(R.id.attendees_listview);
 
     }
 
-    private void fillActivity(Event retrievedEvent) {
+    private void fillActivity(final Event retrievedEvent) {
 
         this.mEventName.setText(retrievedEvent.getName());
         this.mEventImage.setImageBitmap(this.decodeBase64BitmapString(retrievedEvent.getImage()));
@@ -125,19 +136,58 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mWeatherForecast.setVisibility(View.INVISIBLE);
 
         // retrieve weather if the date is closer than 5 days
-        if ((retrievedEvent.getEventDate() - new Date().getTime()) < 4.32e+8) {
+        if ((retrievedEvent.getEventDate() - new Date().getTime()) < FIVE_DAYS_DISTANCE_MILLIS) {
             this.weatherForecast.getForecast(retrievedEvent).subscribe(new Consumer<Weather>() {
                 @Override
                 public void accept(Weather weather) throws Exception {
 
+                    // retrieve weather icon and set it
                     int weatherIcon = WeatherIconFactory.getInstance().getWeatherIconByID(weather);
                     mWeatherForecast.setImageResource(weatherIcon);
 
+                    // show the icon on screen
                     mWeatherForecast.setVisibility(View.VISIBLE);
                 }
             });
         }
 
+        // retrieve attendees and owner
+        final List<String> attendeeIDs = new ArrayList<>();
+        attendeeIDs.add(retrievedEvent.getAdminID());
+        attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
+
+        this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new Consumer<Map<String, User>>() {
+            @Override
+            public void accept(Map<String, User> attendees) throws Exception {
+
+                Log.i("attendees", attendees.toString());
+
+                // add users to the list of attendees
+                List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
+
+                // add the admin as firs element
+                coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+
+                // add the other attendees
+                for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
+                    coupleAttendances.add(
+                            new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
+                    );
+                }
+
+                EventAttendeeAdapter attendeeAdapter = new EventAttendeeAdapter(
+                        getApplicationContext(),
+                        coupleAttendances,
+                        retrievedEvent.getAdminID()
+                );
+
+                mAttendees.setAdapter(attendeeAdapter);
+
+
+
+
+            }
+        });
 
 
         // check if the user is the admin of the event

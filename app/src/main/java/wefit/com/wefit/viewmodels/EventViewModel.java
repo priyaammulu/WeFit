@@ -1,11 +1,13 @@
 package wefit.com.wefit.viewmodels;
 
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Flowable;
 import wefit.com.wefit.datamodel.EventModel;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.User;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -40,5 +42,9 @@ public class EventViewModel {
 
     public Location getUserLocation() {
         return mEventModel.getUserLocation();
+    }
+
+    public Flowable<Map<String, User>> getAttendees(List<String> attendeeIDs) {
+        return mEventModel.getAttendees(attendeeIDs);
     }
 }

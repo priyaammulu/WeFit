@@ -11,8 +11,6 @@ import wefit.com.wefit.pojo.User;
 
 public class UserViewModel {
 
-    //public static final String ACCESS_STORED_USER = "user_key";
-
     private UserModel mUserModel;
 
     public UserViewModel(UserModel LoginModel) {

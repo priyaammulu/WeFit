@@ -90,11 +90,6 @@ public class User {
     }
 
     public List<String> getAttendances() {
-
-        /*if (attendances.get(0).equals("")) {
-            this.attendances = null;
-        }*/
-
         return attendances;
     }
 

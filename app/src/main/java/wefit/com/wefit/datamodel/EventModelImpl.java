@@ -10,7 +10,6 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.Location;
@@ -159,5 +158,11 @@ public class EventModelImpl implements EventModel {
     @Override
     public Flowable<Event> getEvent(String eventID) {
         return remoteEventDao.loadEventByID(eventID);
+    }
+
+    @Override
+    public Flowable<Map<String, User>> getAttendees(List<String> attendeeIDs) {
+
+        return this.remoteUserDao.loadByIDs(attendeeIDs);
     }
 }
