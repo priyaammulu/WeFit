@@ -1,5 +1,8 @@
 package wefit.com.wefit;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,11 +14,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -49,6 +52,17 @@ public class EventDescriptionActivity extends AppCompatActivity {
      * One hour in millis
      */
     public static final double ONE_HOUR_MILLIS = 3.6e+6;
+
+    /**
+     * Showed event
+     */
+    private Event mRetrievedEvent;
+
+    /**
+     * True if the event is private
+     */
+    private boolean isPrivateEvent;
+
 
     // view components
     private ImageView mEventImage;
@@ -96,23 +110,35 @@ public class EventDescriptionActivity extends AppCompatActivity {
         // retrieve the event from the intent
         String eventID = this.getIntent().getStringExtra(PassingExtraEvent.EVENT);
 
-        // check if the event is remote or local
-        boolean isRemote = this.getIntent().getBooleanExtra(PassingExtraEvent.IS_PRIVATE, true);
+        // check if the event is public or local (default public)
+        this.isPrivateEvent = this.getIntent().getBooleanExtra(PassingExtraEvent.IS_PRIVATE, false);
 
-        if (isRemote) {
+        if (!isPrivateEvent) {
             // download the update event from the server
             mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
                 @Override
                 public void accept(Event event) throws Exception {
 
+                    mRetrievedEvent = event;
                     // fill the activity with the new data
                     fillActivity(event);
 
                 }
             });
-        }
-        else {
-            // TODO retrieve the event from the local store
+        } else {
+            // TODO retrieve the event from the local store and show it
+            // TODO remove this
+            // download the update event from the server
+            mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
+                @Override
+                public void accept(Event event) throws Exception {
+
+                    mRetrievedEvent = event;
+                    // fill the activity with the new data
+                    fillActivity(event);
+
+                }
+            });
         }
 
     }
@@ -212,62 +238,51 @@ public class EventDescriptionActivity extends AppCompatActivity {
         final List<String> attendeeIDs = new ArrayList<>();
         final List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
 
-        // check if the user is the admin of the event
-        if (retrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
-            Log.i("Admin", "si");
-            coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
-        }
-        else {
-            attendeeIDs.add(retrievedEvent.getAdminID());
 
-        }
+        // tODO cosa si fa se l'evento è privato?
+        if (!isPrivateEvent) {
+            // public event
+            // check if the user is the admin of the event
+            if (checkIsCurrentUserAdmin()) {
+                coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
+            } else {
+                attendeeIDs.add(retrievedEvent.getAdminID());
 
-        // if there are attendees, retrieve them
-        if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
-            attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
+            }
 
-            this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new Consumer<Map<String, User>>() {
-                @Override
-                public void accept(Map<String, User> attendees) throws Exception {
+            // if there are other attendees, retrieve them
+            if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
+                attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
 
-                    Log.i("attendees", attendees.toString());
+                this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new Consumer<Map<String, User>>() {
+                    @Override
+                    public void accept(Map<String, User> attendees) throws Exception {
 
-                    // add users to the list of attendees
+                        Log.i("attendees", attendees.toString());
 
-                    // add the admin as firs element
-                    coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+                        // add users to the list of attendees
 
-                    // add the other attendees
-                    for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
-                        coupleAttendances.add(
-                                new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
-                        );
+                        if (!checkIsCurrentUserAdmin()) {
+                            // add the admin as firs element
+                            coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+                        }
+
+                        // add the other attendees
+                        for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
+                            coupleAttendances.add(
+                                    new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
+                            );
+                        }
+
+                        showAttendaces(coupleAttendances);
                     }
+                });
+            } else {
+                showAttendaces(coupleAttendances);
+            }
 
-                    /*
-                    EventAttendeeAdapter attendeeAdapter = new EventAttendeeAdapter(
-                            getApplicationContext(),
-                            coupleAttendances,
-                            retrievedEvent.getAdminID()
-                    );
-
-
-                    mAttendees.setAdapter(attendeeAdapter);
-                    */
-
-                }
-            });
-        }
-        else {
-            // TODO gestire quando l'utente accede ad un evento privato
-        }
-
-
-
-        // check if the user is the admin of the event
-        //TODO remove
-        if (retrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
-            Log.i("Admin", "si");
+        } else { // private event
+            mAttendees.setVisibility(View.INVISIBLE); // there are no attendees
         }
 
 
@@ -306,6 +321,113 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private String getTime(Date date) {
         Locale locale = Locale.ITALIAN;
         return DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
+    }
+
+    private void showAttendaces(List<Pair<User, Boolean>> attendances) {
+
+        // TODO spostare
+        final String ADMIN_LABEL = "admin";
+        final String CONFIRMED_LABEL = "confirmed";
+        final String NOT_CONFIRMED_LABEL = "NOT confirmed";
+
+        // this will add rows the list of attendees
+        final LayoutInflater inflater = LayoutInflater.from(this);
+
+        // check if the current logged user is the admin of the event
+        boolean isUserAdmin = this.checkIsCurrentUserAdmin();
+
+        for (final Pair<User, Boolean> attendance : attendances) {
+
+            LinearLayout view = (LinearLayout) inflater.inflate(R.layout.attendee_list_item, mAttendees, false);
+            // set item content in view
+
+            ImageView userPic = (ImageView) view.findViewById(R.id.attendee_user_pic);
+            TextView userName = (TextView) view.findViewById(R.id.attendee_username_txt);
+            TextView userStatus = (TextView) view.findViewById(R.id.attendee_status_txt);
+
+            userPic.setImageBitmap(decodeBase64BitmapString(attendance.first.getPhoto()));
+            userName.setText(attendance.first.getFullName());
+
+
+            // assign status labels
+            if (attendance.first.getId().equals(mRetrievedEvent.getAdminID())) {
+                // the owner
+                userStatus.setText(ADMIN_LABEL);
+            } else {
+                if (attendance.second) {
+                    userStatus.setText(CONFIRMED_LABEL);
+                } else {
+
+                    userStatus.setText(NOT_CONFIRMED_LABEL);
+
+                    // give the possibility to confirm or delete the user
+                    if (isUserAdmin) {
+
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                showAttendeeConfirmationDialog(view, attendance.first.getFullName(), attendance.first.getId());
+                            }
+                        });
+
+                    }
+                }
+
+            }
+
+            // add to the list
+            mAttendees.addView(view);
+
+        }
+
+    }
+
+    private boolean checkIsCurrentUserAdmin() {
+
+        boolean isAdmin = false;
+
+        if (mRetrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
+            isAdmin = true;
+        }
+
+        return isAdmin;
+    }
+
+    public void showAttendeeConfirmationDialog(final View attendeeRow, final String userName, final String attendeeID) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // TODO take the texts from the resources
+
+        String title = "Action on attendee";
+        String message = "What do you want to do?";
+        String positive = "Confirm";
+        String negative = "Reject";
+
+
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Log.i("confermato", userName);
+                mEventViewModel.confirmAttendee(mRetrievedEvent.getId(), attendeeID);
+
+                // show confirmed TODO stessa cosa del testo
+                ((TextView) attendeeRow.findViewById(R.id.attendee_status_txt)).setText("confirmed");
+                // remove on click listener for the row
+                attendeeRow.setOnClickListener(null);
+            }
+        });
+        builder.setNegativeButton(negative, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mEventViewModel.deleteAttendee(mRetrievedEvent.getId(), attendeeID);
+                attendeeRow.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        builder.show();
     }
 
 

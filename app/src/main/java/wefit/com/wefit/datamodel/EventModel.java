@@ -26,4 +26,8 @@ public interface EventModel {
     Flowable<Event> getEvent(String eventID);
 
     Flowable<Map<String, User>> getAttendees(List<String> attendeeIDs);
+
+    void confirmAttendee(String eventID, String userID);
+
+    void deleteAttendee(String eventID, String userID);
 }

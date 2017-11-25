@@ -47,4 +47,12 @@ public class EventViewModel {
     public Flowable<Map<String, User>> getAttendees(List<String> attendeeIDs) {
         return mEventModel.getAttendees(attendeeIDs);
     }
+
+    public void confirmAttendee(String eventID, String userID) {
+        mEventModel.confirmAttendee(eventID, userID);
+    }
+
+    public void deleteAttendee(String eventID, String userID) {
+        mEventModel.deleteAttendee(eventID, userID);
+    }
 }

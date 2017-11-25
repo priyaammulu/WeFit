@@ -165,4 +165,16 @@ public class EventModelImpl implements EventModel {
 
         return this.remoteUserDao.loadByIDs(attendeeIDs);
     }
+
+    @Override
+    public void confirmAttendee(String eventID, String userID) {
+
+        remoteEventDao.setAttendanceState(eventID, userID, true);
+
+    }
+
+    @Override
+    public void deleteAttendee(String eventID, String userID) {
+        remoteEventDao.removeAttendee(eventID, userID);
+    }
 }
