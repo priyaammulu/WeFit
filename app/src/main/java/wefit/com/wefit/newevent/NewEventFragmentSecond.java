@@ -68,6 +68,8 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
         mButtonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Event newEvent = mListener.getNewEvent();
                 newEvent.setDescription(mDescription.getText().toString());
                 Bitmap bitmap = ((BitmapDrawable) mImage.getDrawable()).getBitmap();
@@ -76,6 +78,7 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
                 byte[] imageInByte = baos.toByteArray();
                 newEvent.setImage(imageInByte.toString()); // todo delete toString
                 newEvent.setCategoryID(mCategory.getDisplayName());
+
                 mListener.finish(newEvent);
             }
         });

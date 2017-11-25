@@ -22,7 +22,7 @@
             android:layout_height="wrap_content">
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/profilePicture"
+                android:id="@+id/profile_user_pic"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_centerHorizontal="true"
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
-                android:layout_below="@+id/profilePicture"
+                android:layout_below="@+id/profile_user_pic"
                 android:layout_marginTop="18dp"
                 android:text="Kerry O'Connel"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
@@ -85,7 +85,7 @@
                 />
 
             <View
-                android:id="@+id/vertical_line"
+                android:id="@+id/orizontal_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_below="@+id/bio"
@@ -93,10 +93,10 @@
                 />
 
             <TextView
-                android:id="@+id/discription"
+                android:id="@+id/user_bio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/vertical_line"
+                android:layout_below="@+id/orizontal_line"
                 android:layout_marginLeft="20dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:text="Your introduction and credits are two of the most important elements of your StarNow profile. Make the most of your introduction by writing a short, snappy paragraph about yourself. Be professional and include elements of your personality in the text. Remember to include a link to your personal website if you have one. Your credits should outline your relevant experience in the industry and be simple to read.our introduction and credits are two of the most important elements of your StarNow profile. Make the most of your introduction by writing a short, snappy paragraph aboutYour introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. Your introduction and credits are two of the most important elements of your StarNow profile. "

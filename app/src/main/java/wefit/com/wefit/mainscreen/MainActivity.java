@@ -22,13 +22,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.LinkedList;
 
-import wefit.com.wefit.GioTestActivity;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.mainscreen.fragments.MainFragment;
 import wefit.com.wefit.mainscreen.fragments.MyAttendancesFragment;
-import wefit.com.wefit.mainscreen.fragments.ProfileFragment;
+import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
 import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.EventViewModel;
 
@@ -39,8 +38,8 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private MainFragment mainFragment = new MainFragment();
 
     private MyAttendancesFragment myAttendancesFragment = new MyAttendancesFragment();
-    private ProfileFragment profileFragment = new ProfileFragment();
-    private ProfileFragment settingsFragment = new ProfileFragment();
+    private UserProfileFragment profileFragment = new UserProfileFragment();
+    private UserProfileFragment settingsFragment = new UserProfileFragment();
 
     private LinkedList<Fragment> stack = new LinkedList<>();
 

@@ -58,7 +58,9 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     @Override
     public void finish(Event newEvent) {
         this.newEvent = newEvent;
+
         mainViewModel.createNewEvent(newEvent);
+
         finish();
     }
 
