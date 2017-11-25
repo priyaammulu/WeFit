@@ -92,25 +92,26 @@
 
             <!-- date and hour -->
             <LinearLayout
+                android:id="@+id/calendar_add_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="20dp"
                 android:background="#E5E5E5"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
 
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/calendar_ico"/>
+                    android:src="@drawable/calendar_ico" />
 
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="20dp">
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/event_date"
@@ -132,15 +133,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="20dp"
-                    android:gravity="right">
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="add to calendar"
                         android:layout_gravity="center"
+                        android:text="add to calendar"
                         android:textSize="10sp" />
 
                     <ImageView
@@ -154,35 +155,31 @@
                 </LinearLayout>
 
 
-
-
-
-
-
             </LinearLayout>
 
             <!-- event location -->
             <LinearLayout
+                android:id="@+id/open_map_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="20dp"
+                android:layout_marginTop="5dp"
                 android:background="#E5E5E5"
                 android:gravity="center"
-                android:layout_marginTop="5dp">
+                android:orientation="horizontal"
+                android:padding="20dp">
 
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/maps_icon"/>
+                    android:src="@drawable/maps_icon" />
 
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="20dp">
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/place_name_txt"
@@ -204,15 +201,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="20dp"
-                    android:gravity="right">
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="view on map"
                         android:layout_gravity="center"
+                        android:text="view on map"
                         android:textSize="10sp" />
 
                     <ImageView

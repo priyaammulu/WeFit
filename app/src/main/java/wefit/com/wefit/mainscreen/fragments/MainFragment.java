@@ -19,6 +19,7 @@ import java.util.List;
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
+import wefit.com.wefit.mainscreen.PassingExtraEvent;
 import wefit.com.wefit.mainscreen.adapters.MainFragmentEventAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
@@ -33,7 +34,6 @@ import wefit.com.wefit.viewmodels.EventViewModel;
  * to handle interaction events.
  */
 public class MainFragment extends Fragment {
-    public static final String EVENT = "selected";
     private MainFragmentEventAdapter mAdapter;
     private ListView mEventList;
     private EventViewModel mMainViewModel;
@@ -102,7 +102,7 @@ public class MainFragment extends Fragment {
 
                 // send the event ID
                 Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
-                intent.putExtra(EVENT, selected.getId());
+                intent.putExtra(PassingExtraEvent.EVENT, selected.getId());
                 startActivity(intent);
             }
         });

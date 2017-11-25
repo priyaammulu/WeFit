@@ -1,20 +1,22 @@
 package wefit.com.wefit;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,15 +28,15 @@ import java.util.Locale;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
+import wefit.com.wefit.mainscreen.PassingExtraEvent;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.Location;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.eventutils.wheater.Weather;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherIconFactory;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
-
-import static wefit.com.wefit.mainscreen.fragments.MainFragment.EVENT;
 
 public class EventDescriptionActivity extends AppCompatActivity {
 
@@ -43,7 +45,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
      */
     public static final double FIVE_DAYS_DISTANCE_MILLIS = 4.32e+8;
 
-    private Event showedEvent;
+    /**
+     * One hour in millis
+     */
+    public static final double ONE_HOUR_MILLIS = 3.6e+6;
 
     // view components
     private ImageView mEventImage;
@@ -56,6 +61,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private TextView mEventCity;
     private ImageView mWeatherForecast;
     private ListView mAttendees;
+    private LinearLayout mOpenMapButton;
+    private LinearLayout mAddCalendarButton;
 
     // viewmodels
     private UserViewModel mUserViewModel;
@@ -86,23 +93,26 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.bindViews();
 
         // retrieve the event from the intent
-        String eventID = this.getIntent().getStringExtra(EVENT);
+        String eventID = this.getIntent().getStringExtra(PassingExtraEvent.IS_PRIVATE);
 
-        Log.i("evento", eventID);
+        // check if the event is remote or local
+        boolean isRemote = this.getIntent().getBooleanExtra(PassingExtraEvent.IS_PRIVATE, true);
 
-        // download the update event from the server
-        mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
-            @Override
-            public void accept(Event event) throws Exception {
+        if (isRemote) {
+            // download the update event from the server
+            mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
+                @Override
+                public void accept(Event event) throws Exception {
 
-                // store the retrieved infos
-                showedEvent = event;
+                    // fill the activity with the new data
+                    fillActivity(event);
 
-                // fill the activity with the new data
-                fillActivity(event);
-
-            }
-        });
+                }
+            });
+        }
+        else {
+            // TODO retrieve the event from the local store
+        }
 
     }
 
@@ -119,6 +129,8 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mWeatherForecast = (ImageView) findViewById(R.id.weather_shower_pic);
         this.mAttendees = (ListView) findViewById(R.id.attendees_listview);
 
+        this.mOpenMapButton = (LinearLayout) findViewById(R.id.open_map_btn);
+        this.mAddCalendarButton = (LinearLayout) findViewById(R.id.calendar_add_btn);
     }
 
     private void fillActivity(final Event retrievedEvent) {
@@ -131,6 +143,49 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventTime.setText(getTime(new Date(retrievedEvent.getEventDate())));
         this.mEventPlace.setText(retrievedEvent.getEventLocation().getName().split(",")[0].trim());
         this.mEventCity.setText(retrievedEvent.getEventLocation().getName().split(",")[1].trim());
+
+
+        // open maps to the location
+        this.mOpenMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Location eventLocation = retrievedEvent.getEventLocation();
+
+                // Create a Uri from an intent string. Use the result to create an Intent.
+                Uri gmmIntentUri = Uri.parse("google.streetview:cbll=" + eventLocation.getLatitude() + "," + eventLocation.getLongitude());
+
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+                // Attempt to start an activity that can handle the Intent
+                startActivity(mapIntent);
+
+            }
+        });
+
+        // add to calendar button
+        this.mAddCalendarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+
+                intent.putExtra(CalendarContract.Events.TITLE, retrievedEvent.getName());
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, retrievedEvent.getEventLocation().getName());
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, retrievedEvent.getDescription());
+
+                intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                        retrievedEvent.getEventDate());
+                intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
+                        retrievedEvent.getEventDate() + ONE_HOUR_MILLIS); // set for one hour
+
+                startActivity(intent);
+            }
+        });
 
         // hide weather forecast
         this.mWeatherForecast.setVisibility(View.INVISIBLE);
@@ -153,41 +208,55 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         // retrieve attendees and owner
         final List<String> attendeeIDs = new ArrayList<>();
-        attendeeIDs.add(retrievedEvent.getAdminID());
-        attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
+        final List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
 
-        this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new Consumer<Map<String, User>>() {
-            @Override
-            public void accept(Map<String, User> attendees) throws Exception {
+        // check if the user is the admin of the event
+        if (retrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
+            Log.i("Admin", "si");
+            coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
+        }
+        else {
+            attendeeIDs.add(retrievedEvent.getAdminID());
 
-                Log.i("attendees", attendees.toString());
+        }
 
-                // add users to the list of attendees
-                List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
+        // if there are attendees, retrieve them
+        if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
+            attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
 
-                // add the admin as firs element
-                coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+            this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new Consumer<Map<String, User>>() {
+                @Override
+                public void accept(Map<String, User> attendees) throws Exception {
 
-                // add the other attendees
-                for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
-                    coupleAttendances.add(
-                            new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
+                    Log.i("attendees", attendees.toString());
+
+                    // add users to the list of attendees
+
+                    // add the admin as firs element
+                    coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+
+                    // add the other attendees
+                    for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
+                        coupleAttendances.add(
+                                new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
+                        );
+                    }
+
+                    EventAttendeeAdapter attendeeAdapter = new EventAttendeeAdapter(
+                            getApplicationContext(),
+                            coupleAttendances,
+                            retrievedEvent.getAdminID()
                     );
+
+                    mAttendees.setAdapter(attendeeAdapter);
+
                 }
+            });
+        }
+        else {
+            // TODO gestire quando l'utente accede ad un evento privato
+        }
 
-                EventAttendeeAdapter attendeeAdapter = new EventAttendeeAdapter(
-                        getApplicationContext(),
-                        coupleAttendances,
-                        retrievedEvent.getAdminID()
-                );
-
-                mAttendees.setAdapter(attendeeAdapter);
-
-
-
-
-            }
-        });
 
 
         // check if the user is the admin of the event
