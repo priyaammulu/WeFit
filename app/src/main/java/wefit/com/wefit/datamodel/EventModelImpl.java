@@ -133,6 +133,8 @@ public class EventModelImpl implements EventModel {
 
                                                     retrievedEvents.addAll(attendances);
                                                     Collections.reverse(retrievedEvents);
+
+
                                                     flowableEmitter.onNext(retrievedEvents);
 
                                                 }
