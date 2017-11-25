@@ -115,7 +115,6 @@ public class EventModelImpl implements EventModel {
                             @Override
                             public void accept(final List<Event> retrievedEvents) throws Exception {
 
-                                // TODO check what happens if the user joins an event
                                 // if the user has some attendances, download them
                                 if (!userModel.getLocalUser().getAttendances().get(0).equals("")) {
                                     remoteEventDao

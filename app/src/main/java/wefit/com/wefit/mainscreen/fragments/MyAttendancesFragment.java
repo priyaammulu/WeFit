@@ -1,12 +1,14 @@
 package wefit.com.wefit.mainscreen.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.reactivestreams.Subscription;
@@ -14,6 +16,8 @@ import org.reactivestreams.Subscription;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
+import wefit.com.wefit.EventDescriptionActivity;
+import wefit.com.wefit.mainscreen.PassingExtraEvent;
 import wefit.com.wefit.mainscreen.adapters.AttendancesEventAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
@@ -64,9 +68,24 @@ public class MyAttendancesFragment extends Fragment {
 
     }
 
-    private void initializeListView(List<Event> events) {
+    private void initializeListView(final List<Event> events) {
         attendancesEventAdapter = new AttendancesEventAdapter(events, getActivity());
         mListView.setAdapter(attendancesEventAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                // retrieve the event
+                Event selected = events.get(position);
+
+                // send the event ID
+                Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
+                intent.putExtra(PassingExtraEvent.EVENT, selected.getId());
+                startActivity(intent);
+
+            }
+        });
     }
 
     private void bind(View view) {
