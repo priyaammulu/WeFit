@@ -1,29 +1,31 @@
 package wefit.com.wefit.pojo;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Created by lorenzo on 11/3/17.
  */
 
-public class Event implements Parcelable {
+public class Event implements Comparable<Event>{
 
     private String id;
+
+    /**
+     * This flag indicates if the event is private. By default an event is public (on the remote store)
+     */
+    private boolean privateEvent = false;
 
     /**
      * Event characterizing infos
      */
     private String name;
     private String description;
-    private Location eventLocation;
+    private EventLocation eventLocation;
     private String categoryID;
     private long eventDate;
     private long publicationDate;
@@ -49,14 +51,16 @@ public class Event implements Parcelable {
      */
     private Map<String, Boolean> attendingUsers = new HashMap<>();
 
-    /**
-     * Required for Parcelable interface
-     */
-    private int mData;
-
     public Event() {
     }
 
+    @Exclude public boolean isPrivateEvent() {
+        return privateEvent;
+    }
+
+    @Exclude public void setPrivateEvent(boolean privateEvent) {
+        this.privateEvent = privateEvent;
+    }
 
     public String getId() {
         return id;
@@ -82,11 +86,11 @@ public class Event implements Parcelable {
         this.description = description;
     }
 
-    public Location getEventLocation() {
+    public EventLocation getEventLocation() {
         return eventLocation;
     }
 
-    public void setEventLocation(Location eventLocation) {
+    public void setEventLocation(EventLocation eventLocation) {
         this.eventLocation = eventLocation;
     }
 
@@ -154,29 +158,6 @@ public class Event implements Parcelable {
         this.attendingUsers = attendingUsers;
     }
 
-    public int describeContents() {
-        return 0;
-    }
-
-    public void writeToParcel(Parcel out, int flags) {
-        //todo, we have to make parcelable even objects that are fields of this object!
-        out.writeInt(mData);
-    }
-
-    public static final Parcelable.Creator<Event> CREATOR
-            = new Parcelable.Creator<Event>() {
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
-
-    private Event(Parcel in) {
-        mData = in.readInt();
-    }
 
     @Override
     public String toString() {
@@ -194,5 +175,10 @@ public class Event implements Parcelable {
                 ", adminID='" + adminID + '\'' +
                 ", attendingUsers=" + attendingUsers +
                 '}';
+    }
+
+    @Override
+    public int compareTo(@NonNull Event o) {
+        return ((Long) this.eventDate).compareTo(o.eventDate);
     }
 }

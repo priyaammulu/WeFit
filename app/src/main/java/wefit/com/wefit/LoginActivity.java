@@ -116,8 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         });*/
 
 
-   // }
-
+        // }
 
 
         // bind the services to the buttons
@@ -163,7 +162,6 @@ public class LoginActivity extends AppCompatActivity {
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        // TODO handle graphically this retieve error
                         Toast.makeText(LoginActivity.this,
                                 LoginActivity.this.getString(R.string.connection_failure_msg),
                                 Toast.LENGTH_LONG)
@@ -186,7 +184,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
-                showWaitSpinner();
 
             }
         });
@@ -213,7 +210,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                showWaitSpinner();
+
                 LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, requestedPermissions);
 
             }
@@ -222,6 +219,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        showWaitSpinner();
+
         super.onActivityResult(requestCode, resultCode, data);
         // if the request has the specified code GOOGLE_REQ_LOGIN_CODE, it is related to google
 
@@ -241,25 +241,22 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(final LoginResult loginResult) {
+            showWaitSpinner();
             handleFacebookAccessTokenForFirebase(loginResult.getAccessToken());
         }
 
         @Override
         public void onCancel() {
             // TODO mettere in inglese!
-            stopSpinner();
+            showWaitSpinner();
             Toast.makeText(getApplicationContext(), "Hey, non ti vergognare", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onError(FacebookException error) {
-            // TODO gestire meglio graficamente
-
-            Log.i("LOGIN FB ERROR", "sorry the user is shy");
+            // TODO english
             stopSpinner();
             Toast.makeText(getApplicationContext(), "Ops, facebook è impazzito", Toast.LENGTH_LONG).show();
-            Log.i("ERRORE FB", error.toString());
-
         }
 
     }
@@ -270,17 +267,14 @@ public class LoginActivity extends AppCompatActivity {
      * @param result Result of the call
      */
     private void googleLoginResultHandling(GoogleSignInResult result) {
-        Log.d("GOOGLE succes", "googleLoginResultHandling:" + result.isSuccess());
 
         // if the request was successfull
         if (result.isSuccess()) {
-
             handleGoogleAccessTokenForFirebase(result.getSignInAccount());
 
-
         } else { // error handling
-            stopSpinner();
             // TODO mettere in inglese!
+            stopSpinner();
             Toast.makeText(this, "Ops, qualcosa è andato storto", Toast.LENGTH_LONG).show();
         }
     }
@@ -323,7 +317,6 @@ public class LoginActivity extends AppCompatActivity {
                             loginViewModel.retrieveUserFromRemoteStore().subscribe(new Consumer<User>() {
                                 @Override
                                 public void accept(User user) throws Exception {
-                                    Log.i("USER", user.toString());
 
                                     // now the user is retrieved and you can go to the main activity
                                     startMainActivity();
@@ -334,7 +327,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             stopSpinner();
-                            // TODO gestire meglio graficamente
+                            // TODO english
                             Toast.makeText(getApplicationContext(), "Ops, abbiamo problemi al server", Toast.LENGTH_LONG).show();
                         }
 
@@ -362,13 +355,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void showWaitSpinner() {
-//        // tODO english
-//        popupDialogProgress = ProgressDialog.show(this, "",
-//                "Loading. Please wait...", true);
+        // tODO text from repo
+        popupDialogProgress = ProgressDialog.show(this, "",
+                "Loading. Please wait...", true);
     }
 
     private void stopSpinner() {
-//        popupDialogProgress.dismiss();
+        if (popupDialogProgress != null)
+            popupDialogProgress.dismiss();
+        popupDialogProgress = null;
     }
 
 

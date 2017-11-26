@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <!-- use of the camera -->
     <uses-feature
@@ -39,7 +41,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
-
         <!-- facebook login -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -47,19 +48,20 @@
 
         <activity
             android:name=".EventDescriptionActivity"
+            android:label="@string/event_description_top_label"
             android:screenOrientation="portrait"
-            android:label="@string/event_description_top_label"></activity>
+            />
         <activity
             android:name=".newevent.NewEventActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
-        <activity android:name=".GioTestActivity"></activity>
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".GioTestActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAniSobsz_scZ5nYwcxFpDgBmS89NvpwAA"/>
+            android:value="AIzaSyAniSobsz_scZ5nYwcxFpDgBmS89NvpwAA" />
 
+        <activity android:name=".UserDetailsActivity"></activity>
     </application>
-
 
 </manifest>

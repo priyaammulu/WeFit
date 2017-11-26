@@ -16,11 +16,17 @@ public class SplashActivity extends AppCompatActivity {
         UserViewModel mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
 
         if (mLoginViewModel.isAuth()) {
+
+            // refresh user data
+            mLoginViewModel.retrieveUserFromRemoteStore();
+
             intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         }
-        else
+        else {
             intent = new Intent(this, LoginActivity.class);
+        }
+
         startActivity(intent);
         finish();
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Insert the description of the event"
+            android:textColor="@color/darkerGrey"
+            android:textSize="18sp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:id="@+id/new_event_third_description"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@null"
+            android:hint="Description"
+            android:maxHeight="400dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/new_event_button_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimary"
+        android:padding="20dp"
+        android:text="Publish"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+</RelativeLayout>

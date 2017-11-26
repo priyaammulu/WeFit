@@ -18,4 +18,6 @@ public interface UserModel {
     User getLocalUser();
 
     void updateUser(User userToStore);
+
+    Flowable<User> retrieveUserByID(String userID);
 }

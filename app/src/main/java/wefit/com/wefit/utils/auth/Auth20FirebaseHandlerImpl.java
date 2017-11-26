@@ -12,6 +12,7 @@ import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
+import wefit.com.wefit.utils.userhandling.DefaultUserFiller;
 
 /**
  * Created by gioacchino on 14/11/2017.
@@ -46,28 +47,28 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
         return Flowable.create(new FlowableOnSubscribe<User>() {
             @Override
             public void subscribe(final FlowableEmitter<User> flowableEmitter) throws Exception {
+
                 final FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
 
-                Log.i("PROVA", "sono qui");
                 // retrieve the user id
                 final String userId = firebaseUser.getUid();
 
-                Log.i("PROVA", "user id e: " + userId);
-
-                // todo check if user exists in the system, if not create it
-
+                //  check if user exists in the system, if not create it
                 mUserDao.loadByID(userId).subscribe(new Consumer<User>() {
                     @Override
                     public void accept(User loggedUser) throws Exception {
 
+                        // if the user is new
                         if (loggedUser.getId() == null) {
 
-
+                            // TODO assign it default values
                             firebaseUser.sendEmailVerification();
 
                             loggedUser.setId(firebaseUser.getUid());
                             loggedUser.setFullName(firebaseUser.getDisplayName());
                             loggedUser.setEmail(getContact());
+
+                            loggedUser = DefaultUserFiller.getInstance().fillNewUserWithDefaultValues(loggedUser);
 
                             mUserDao.save(loggedUser);
 

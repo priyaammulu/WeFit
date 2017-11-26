@@ -7,23 +7,24 @@ import android.support.v7.app.AppCompatActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class NewEventActivity extends AppCompatActivity implements NewFragmentListener {
-    private NewEventFragmentFirst fragmentFirst = new NewEventFragmentFirst();
-    private NewEventFragmentSecond fragmentSecond = new NewEventFragmentSecond();
+    private NewEventFragmentFirstPage fragmentFirst = new NewEventFragmentFirstPage();
+    private NewEventFragmentSecondPage fragmentSecond = new NewEventFragmentSecondPage();
+    private NewEventFragmentThirdPage fragmentThird = new NewEventFragmentThirdPage();
     private Event newEvent;
-    private MainViewModel mainViewModel;
+    private EventViewModel mainViewModel;
     private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
-        mainViewModel = ((WefitApplication) getApplication()).getMainViewModel();
+        mainViewModel = ((WefitApplication) getApplication()).getEventViewModel();
         userViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         bind();
         getSupportFragmentManager()
@@ -51,14 +52,16 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     }
 
     @Override
-    public Event getNewEvent() {
+    public Event getEvent() {
         return newEvent;
     }
 
     @Override
     public void finish(Event newEvent) {
         this.newEvent = newEvent;
+
         mainViewModel.createNewEvent(newEvent);
+
         finish();
     }
 
@@ -68,7 +71,13 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     }
 
     @Override
-    public Location getUserLocation() {
+    public EventLocation getUserLocation() {
         return mainViewModel.getUserLocation();
+    }
+
+    @Override
+    public void thirdFragment(Event event) {
+        this.newEvent = event;
+        attachFragment(fragmentThird);
     }
 }

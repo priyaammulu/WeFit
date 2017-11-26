@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,6 +12,7 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/event_main_img"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:scaleType="centerCrop"
@@ -33,12 +33,13 @@
 
                 <!-- nameitle and posted on -->
                 <LinearLayout
-                    android:layout_weight="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/event_title_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Runnig away from here"
@@ -48,14 +49,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="posted on"
+                            android:layout_marginEnd="4dp"
                             android:layout_marginRight="4dp"
-                            android:layout_marginEnd="4dp" />
+                            android:text="posted on" />
 
                         <TextView
+                            android:id="@+id/event_date_posted"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="OCT 13, 1980"
@@ -66,48 +69,96 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_weight="2"
+                    android:id="@+id/weather_shower_pic"
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/rain_ico"/>
+                    android:layout_weight="2"
+                    android:src="@drawable/rain_ico" />
 
             </LinearLayout>
 
             <!-- main description -->
             <TextView
+                android:id="@+id/event_description_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="0dp"
-                android:paddingStart="20dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:paddingBottom="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="0dp"
+                android:text="Lorem ipsum si dolor amet" />
 
-                android:text="Lorem ipsum si dolor amet"/>
-
-            <!-- date hour -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="20dp"
+                android:padding="10dp">
+
+                <Button
+                    android:id="@+id/join_event_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_primary"
+                    android:text="Join" />
+
+                <Button
+                    android:id="@+id/abandon_event_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_primary"
+                    android:text="Abandon" />
+
+                <Button
+                    android:id="@+id/modify_event_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_primary"
+                    android:text="Modify" />
+
+            </LinearLayout>
+            <!-- TODO fa un poco schifo così
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#388dce"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/action_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Join" />
+
+            </LinearLayout>
+            -->
+
+            <!-- date and hour -->
+            <LinearLayout
+                android:id="@+id/calendar_add_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="#E5E5E5"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
 
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/calendar_ico"/>
+                    android:src="@drawable/calendar_ico" />
 
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="20dp">
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/event_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="November 17th, 1900"
@@ -115,6 +166,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/event_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="17:30"
@@ -125,15 +177,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginLeft="20dp"
-                    android:gravity="right">
+                    android:gravity="right"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="add to calendar"
                         android:layout_gravity="center"
+                        android:text="add to calendar"
                         android:textSize="10sp" />
 
                     <ImageView
@@ -147,12 +199,94 @@
                 </LinearLayout>
 
 
+            </LinearLayout>
+
+            <!-- event location -->
+            <LinearLayout
+                android:id="@+id/open_map_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="#E5E5E5"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/maps_icon" />
 
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/place_name_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Stillogarn Road, 1200"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/city_name_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dublin"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="view on map"
+                        android:textSize="10sp" />
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/forward_icon" />
 
 
+                </LinearLayout>
 
             </LinearLayout>
+
+            <!-- attendees -->
+            <LinearLayout
+                android:id="@+id/attendees_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <!-- title -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="Attendees"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

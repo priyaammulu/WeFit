@@ -22,26 +22,27 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.LinkedList;
 
-import wefit.com.wefit.GioTestActivity;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
+import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
+import wefit.com.wefit.mainscreen.fragments.ScheduledEventsFragment;
+import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.viewmodels.UserViewModel;
-import wefit.com.wefit.viewmodels.MainViewModel;
+import wefit.com.wefit.viewmodels.EventViewModel;
 
 import static android.view.View.GONE;
 
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
     private static final int LOCATION_PERMISSION = 1;
-    private UserViewModel mLoginViewModel;
-    private MainViewModel mMainViewModel;
-    private MainFragment mainFragment = new MainFragment();
+    private UserViewModel mUserViewModel;
+    private EventViewModel mEventViewModel;
+    private EventWallFragment mainFragment = new EventWallFragment();
 
-    private MyEventsFragment myeventsFragment = new MyEventsFragment();
-    private ProfileFragment profileFragment = new ProfileFragment();
-
-    private MyEventsFragment myEventsFragment = new MyEventsFragment();
-    private ProfileFragment settingsFragment = new ProfileFragment();
+    private ScheduledEventsFragment myAttendancesFragment = new ScheduledEventsFragment();
+    private UserProfileFragment profileFragment = new UserProfileFragment();
+    private UserProfileFragment settingsFragment = new UserProfileFragment();
 
     private LinkedList<Fragment> stack = new LinkedList<>();
 
@@ -62,20 +63,26 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        //startActivity(new Intent(this, GioTestActivity.class));
-
         super.onCreate(savedInstanceState);
-        mLoginViewModel = ((WefitApplication) getApplication()).getUserViewModel();
-        mMainViewModel = getMainViewModel();
-        if (!mLoginViewModel.isAuth())
+
+        // startActivity(new Intent(this, GioTestActivity.class));
+
+        mUserViewModel = getUserViewModel();
+        mEventViewModel = getEventViewModel();
+
+
+        if (!mUserViewModel.isAuth())
             signOut();
+
+
         setContentView(R.layout.activity_main);
-        bind();
+
+        bindLayoutComponents();
+
         setFragments();
     }
 
-    private void bind() {
+    private void bindLayoutComponents() {
         Button mSignOut = (Button) findViewById(R.id.sign_out);
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         myEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragmentTransaction(myEventsFragment);
+
 
                 myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
                 myEvents_icon.setImageResource(R.drawable.ic_caledar_pressed);
@@ -100,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
                 rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
                 rightTopButtom.setImageResource(R.drawable.ic_search);
+
+                fragmentTransaction(myAttendancesFragment);
+
             }
         });
         final LinearLayout settings = (LinearLayout) findViewById(R.id.button_settings);
@@ -157,9 +167,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.main_fragment, mainFragment)
-                .add(R.id.main_fragment, myeventsFragment)
+                .add(R.id.main_fragment, myAttendancesFragment)
                 .add(R.id.main_fragment, profileFragment)
-                .hide(myeventsFragment)
+                .hide(myAttendancesFragment)
                 .hide(profileFragment)
 
                 .commit();
@@ -171,38 +181,39 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         getSupportFragmentManager()
                 .beginTransaction()
                 .hide(mainFragment)
-
-                .hide(myeventsFragment)
+                .hide(myAttendancesFragment)
                 .hide(profileFragment)
-
-                .hide(myEventsFragment)
-                .hide(settingsFragment)
-
                 .show(fragment)
-               // .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-            stack.push(fragment);
+        stack.push(fragment);
     }
 
     @Override
     public void onBackPressed() {
-        if (stack.isEmpty() || stack.pop() instanceof MainFragment)
+        if (stack.isEmpty() || stack.pop() instanceof EventWallFragment)
             super.onBackPressed();
         else
             fragmentTransaction(stack.pop());
     }
 
     private void signOut() {
-        mLoginViewModel.signOut();
+        mUserViewModel.signOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
         finish();
     }
 
     @Override
-    public MainViewModel getMainViewModel() {
-        if (mMainViewModel == null)
-            mMainViewModel = ((WefitApplication) getApplication()).getMainViewModel();
-        return mMainViewModel;
+    public EventViewModel getEventViewModel() {
+        if (mEventViewModel == null)
+            mEventViewModel = ((WefitApplication) getApplication()).getEventViewModel();
+        return mEventViewModel;
+    }
+
+    @Override
+    public UserViewModel getUserViewModel() {
+        if (this.mUserViewModel == null)
+            mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
+        return mUserViewModel;
     }
 
     @Override
@@ -217,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     }
 
     @Override
-    public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
+    public void fillInIcons(int IconLeft, String iconMiddle, int iconRight) {
         //Icons for main Activity
         topBarlogo = (ImageView) findViewById(R.id.topBarLogo);
         topBarlogo.setVisibility(GONE);
@@ -341,10 +352,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            wefit.com.wefit.pojo.Location loc = new wefit.com.wefit.pojo.Location();
+                            EventLocation loc = new EventLocation();
                             loc.setLatitude(location.getLatitude());
                             loc.setLongitude(location.getLongitude());
-                            mMainViewModel.setLocation(loc);
+                            mEventViewModel.setLocation(loc);
                         }
                     }
                 });

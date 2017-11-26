@@ -11,8 +11,6 @@ import wefit.com.wefit.pojo.User;
 
 public class UserViewModel {
 
-    //public static final String ACCESS_STORED_USER = "user_key";
-
     private UserModel mUserModel;
 
     public UserViewModel(UserModel LoginModel) {
@@ -37,6 +35,10 @@ public class UserViewModel {
 
     public void updateUser(User userToSave) {
         mUserModel.updateUser(userToSave);
+    }
+
+    public Flowable<User> retrieveUserByID(String userID) {
+        return mUserModel.retrieveUserByID(userID);
     }
 
 }
