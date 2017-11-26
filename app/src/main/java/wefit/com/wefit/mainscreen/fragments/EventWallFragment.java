@@ -19,7 +19,7 @@ import java.util.List;
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
-import wefit.com.wefit.mainscreen.PassingExtraEvent;
+import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.mainscreen.adapters.EventWallAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
@@ -102,7 +102,7 @@ public class EventWallFragment extends Fragment {
 
                 // send the event ID
                 Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
-                intent.putExtra(PassingExtraEvent.EVENT, selected.getId());
+                intent.putExtra(ExtrasLabels.EVENT, selected.getId());
                 startActivity(intent);
             }
         });

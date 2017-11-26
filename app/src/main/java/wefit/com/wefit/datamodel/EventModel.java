@@ -32,4 +32,6 @@ public interface EventModel {
     void deleteAttendee(String eventID, String userID);
 
     Event getLocalEvent(String eventID);
+
+    void addAttendee(String eventID, String userID);
 }

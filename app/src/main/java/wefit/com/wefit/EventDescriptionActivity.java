@@ -3,19 +3,17 @@ package wefit.com.wefit;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,7 +28,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import io.reactivex.functions.Consumer;
-import wefit.com.wefit.mainscreen.PassingExtraEvent;
+import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
@@ -64,7 +62,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private boolean isPrivateEvent;
 
 
-    // view components
+    /**
+     * view components
+     */
     private ImageView mEventImage;
     private TextView mEventName;
     private TextView mEventDescription;
@@ -74,16 +74,16 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private TextView mEventPlace;
     private TextView mEventCity;
     private ImageView mWeatherForecast;
-    //private ListView mAttendees;
     private LinearLayout mAttendees;
     private LinearLayout mOpenMapButton;
     private LinearLayout mAddCalendarButton;
+    private Button mJoinEvent;
+    private Button mAbandonEvent;
+    private Button mModifyEvent;
 
-    // viewmodels
     private UserViewModel mUserViewModel;
     private EventViewModel mEventViewModel;
 
-    // utils
     private WeatherForecast weatherForecast;
 
     @Override
@@ -95,7 +95,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         // retrieve utils
         weatherForecast = ((WefitApplication) getApplication()).getWeatherForecast();
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_description);
@@ -109,10 +108,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
 
         // retrieve the event from the intent
-        String eventID = this.getIntent().getStringExtra(PassingExtraEvent.EVENT);
+        String eventID = this.getIntent().getStringExtra(ExtrasLabels.EVENT);
 
         // check if the event is public or local (default public)
-        this.isPrivateEvent = this.getIntent().getBooleanExtra(PassingExtraEvent.IS_PRIVATE, false);
+        this.isPrivateEvent = this.getIntent().getBooleanExtra(ExtrasLabels.IS_PRIVATE, false);
 
         if (!isPrivateEvent) {
 
@@ -151,18 +150,43 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         this.mOpenMapButton = (LinearLayout) findViewById(R.id.open_map_btn);
         this.mAddCalendarButton = (LinearLayout) findViewById(R.id.calendar_add_btn);
+
+        // buttons
+        this.mJoinEvent = (Button) findViewById(R.id.join_event_btn);
+        this.mAbandonEvent = (Button) findViewById(R.id.abandon_event_btn);
+        this.mModifyEvent = (Button) findViewById(R.id.modify_event_btn);
+
     }
 
     private void fillActivity(final Event retrievedEvent) {
 
         this.mEventName.setText(retrievedEvent.getName());
-        this.mEventImage.setImageBitmap(this.decodeBase64BitmapString(retrievedEvent.getImage()));
+        this.mEventImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(retrievedEvent.getImage()));
         this.mEventDescription.setText(retrievedEvent.getDescription());
         this.mEventPublishDate.setText(getDate(new Date(retrievedEvent.getPublicationDate())));
         this.mEventDate.setText(getDate(new Date(retrievedEvent.getEventDate())));
         this.mEventTime.setText(getTime(new Date(retrievedEvent.getEventDate())));
         this.mEventPlace.setText(retrievedEvent.getEventLocation().getName().split(",")[0].trim());
         this.mEventCity.setText(retrievedEvent.getEventLocation().getName().split(",")[1].trim());
+
+
+        if (retrievedEvent.getAdminID().equals(mUserViewModel.retrieveCachedUser().getId())) {
+            // user cannot join or abandon his own event
+            mAbandonEvent.setVisibility(View.INVISIBLE);
+            mJoinEvent.setVisibility(View.INVISIBLE);
+        } else {
+            // common attendees cannot modify an event
+            mModifyEvent.setVisibility(View.INVISIBLE);
+
+            // check if the user has already joined the event
+            if (isLoggedUserJoint()) {
+                mJoinEvent.setVisibility(View.INVISIBLE);
+                mAbandonEvent.setVisibility(View.VISIBLE);
+            } else {
+                mJoinEvent.setVisibility(View.VISIBLE);
+                mAbandonEvent.setVisibility(View.INVISIBLE);
+            }
+        }
 
 
         // open maps to the location
@@ -281,11 +305,45 @@ public class EventDescriptionActivity extends AppCompatActivity {
         }
 
 
+        // cannot join a private event
+        if (!mRetrievedEvent.isPrivateEvent()) {
+
+            // join event
+            mJoinEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mEventViewModel.addAttendeeToEvent(mRetrievedEvent.getId(), mUserViewModel.retrieveCachedUser().getId());
+                    refresh();
+                }
+            });
+
+            // abandon event
+            mAbandonEvent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showEventAbandonDialog();
+                }
+            });
+
+        } else {
+            // just security check
+            mAbandonEvent.setVisibility(View.INVISIBLE);
+            mJoinEvent.setVisibility(View.INVISIBLE);
+        }
+
+
     }
 
-    private Bitmap decodeBase64BitmapString(String encodedImage) {
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+    /**
+     * Check if the user has already joint the event
+     * @return true if joint
+     */
+    private boolean isLoggedUserJoint() {
+
+        String loggedUserID = mUserViewModel.retrieveCachedUser().getId();
+
+        return mRetrievedEvent.getAttendingUsers().keySet().contains(loggedUserID);
+
     }
 
     @Override
@@ -320,7 +378,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     private void showAttendaces(List<Pair<User, Boolean>> attendances) {
 
-        // TODO spostare
+        // TODO spostare definizione stringhe
         final String ADMIN_LABEL = "admin";
         final String CONFIRMED_LABEL = "confirmed";
         final String NOT_CONFIRMED_LABEL = "NOT confirmed";
@@ -334,14 +392,29 @@ public class EventDescriptionActivity extends AppCompatActivity {
         for (final Pair<User, Boolean> attendance : attendances) {
 
             LinearLayout view = (LinearLayout) inflater.inflate(R.layout.attendee_list_item, mAttendees, false);
-            // set item content in view
 
+            // set item content in view
             ImageView userPic = (ImageView) view.findViewById(R.id.attendee_user_pic);
             TextView userName = (TextView) view.findViewById(R.id.attendee_username_txt);
             TextView userStatus = (TextView) view.findViewById(R.id.attendee_status_txt);
 
             userPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(attendance.first.getPhoto()));
             userName.setText(attendance.first.getFullName());
+
+            // go to the user description if click on user pic or on the name
+            View.OnClickListener showUserClicked = new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent showUserDetails = new Intent(v.getContext(), UserDetailActivity.class);
+                    showUserDetails.putExtra(ExtrasLabels.USER_ID, attendance.first.getId());
+
+                    v.getContext().startActivity(showUserDetails);
+                }
+            };
+
+            userPic.setOnClickListener(showUserClicked);
+            userName.setOnClickListener(showUserClicked);
 
 
             // assign status labels
@@ -392,7 +465,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // TODO take the texts from the resources
-
         String title = "Action on attendee";
         String message = "What do you want to do?";
         String positive = "Confirm";
@@ -423,6 +495,44 @@ public class EventDescriptionActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    public void showEventAbandonDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // TODO take the texts from the resources
+        String title = "Abandon the event";
+        String message = "Are you sure you want to abandon this event?";
+        String positive = "Yes";
+        String negative = "No";
+
+
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        builder.setPositiveButton(positive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                mEventViewModel.deleteAttendee(mRetrievedEvent.getId(), mUserViewModel.retrieveCachedUser().getId());
+                refresh();
+
+            }
+        });
+
+        // negative button does nothing
+        builder.setNegativeButton(negative, null);
+
+        builder.show();
+    }
+
+    private void refresh() {
+
+        Intent refresh = new Intent(this, EventDescriptionActivity.class);
+
+        refresh.putExtras(getIntent().getExtras());
+
+        startActivity(refresh);
+
     }
 
 

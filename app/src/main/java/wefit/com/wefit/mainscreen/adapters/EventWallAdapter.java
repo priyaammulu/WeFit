@@ -1,6 +1,7 @@
 package wefit.com.wefit.mainscreen.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
@@ -21,8 +22,10 @@ import java.util.List;
 import java.util.Locale;
 
 import wefit.com.wefit.R;
+import wefit.com.wefit.UserDetailActivity;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.utils.eventutils.category.CategoryIconFactory;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 
@@ -72,16 +75,35 @@ public class EventWallAdapter extends BaseAdapter {
             holder = new EventViewHolder(convertView);
             convertView.setTag(holder);
         }
-        Event event = events.get(position);
+
+        final Event event = events.get(position);
+
         holder.title.setText(event.getName());
         holder.location.setText(event.getEventLocation().getName());
         holder.monthDay.setText(getMonthDay(new Date(event.getEventDate())));
         holder.time.setText(getTime(new Date(event.getEventDate())));
-        holder.organizer.setText(event.getAdmin().getFullName());
         holder.published.setText("Published on: " + getDate(new Date(event.getPublicationDate())));
 
         holder.mEventImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(event.getImage()));
         holder.mUserImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(event.getAdmin().getPhoto()));
+        holder.organizer.setText(event.getAdmin().getFullName());
+
+        // if click on pic, show the user
+        // TODO control if it's too small
+
+        View.OnClickListener showUserClicked = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent showUserDetails = new Intent(context, UserDetailActivity.class);
+                showUserDetails.putExtra(ExtrasLabels.USER_ID, event.getAdminID());
+
+                context.startActivity(showUserDetails);
+            }
+        };
+
+        holder.mUserImage.setOnClickListener(showUserClicked);
+        holder.organizer.setOnClickListener(showUserClicked);
 
         Category category = CategoryIconFactory.getInstance().getCategoryByID(event.getCategoryID());
         holder.mCategoryPic.setImageResource(category.getImage());

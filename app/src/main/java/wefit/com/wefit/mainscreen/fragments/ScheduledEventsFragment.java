@@ -17,7 +17,7 @@ import java.util.List;
 
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.EventDescriptionActivity;
-import wefit.com.wefit.mainscreen.PassingExtraEvent;
+import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.mainscreen.adapters.AttendancesEventAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
@@ -84,10 +84,10 @@ public class ScheduledEventsFragment extends Fragment {
 
                 // send the event ID
                 Intent intent = new Intent(getActivity(), EventDescriptionActivity.class);
-                intent.putExtra(PassingExtraEvent.EVENT, selected.getId());
+                intent.putExtra(ExtrasLabels.EVENT, selected.getId());
 
                 if (selected.isPrivateEvent()) { // only private events do not need
-                    intent.putExtra(PassingExtraEvent.IS_PRIVATE, true);
+                    intent.putExtra(ExtrasLabels.IS_PRIVATE, true);
                 }
 
                 startActivity(intent);

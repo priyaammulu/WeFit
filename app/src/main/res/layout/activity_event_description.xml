@@ -86,10 +86,35 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingStart="20dp"
-                android:paddingBottom="20dp"
                 android:paddingTop="0dp"
                 android:text="Lorem ipsum si dolor amet" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/join_event_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Join"/>
+
+                <Button
+                    android:id="@+id/abandon_event_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Abandon"/>
+
+                <Button
+                    android:id="@+id/modify_event_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Modify"/>
+
+            </LinearLayout>
             <!-- TODO fa un poco schifo così
             <LinearLayout
                 android:layout_width="match_parent"

@@ -37,4 +37,8 @@ public class UserViewModel {
         mUserModel.updateUser(userToSave);
     }
 
+    public Flowable<User> retrieveUserByID(String userID) {
+        return mUserModel.retrieveUserByID(userID);
+    }
+
 }

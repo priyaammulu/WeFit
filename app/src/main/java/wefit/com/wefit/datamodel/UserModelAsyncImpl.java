@@ -66,6 +66,14 @@ public class UserModelAsyncImpl implements UserModel {
 
     }
 
+    @Override
+    public Flowable<User> retrieveUserByID(String userID) {
+
+        return remoteUserStore.loadByID(userID);
+
+
+    }
+
     public UserModelAsyncImpl(Auth20Handler loginHandler, LocalUserDao localUserDao, RemoteUserDao remoteUserDao) {
         this.loginHandler = loginHandler;
         this.localUserDao = localUserDao;

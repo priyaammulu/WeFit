@@ -59,4 +59,10 @@ public class EventViewModel {
     public Event getPrivateEvent(String eventID) {
         return mEventModel.getLocalEvent(eventID);
     }
+
+    public void addAttendeeToEvent(String eventID, String userID) {
+
+        mEventModel.addAttendee(eventID, userID);
+
+    }
 }

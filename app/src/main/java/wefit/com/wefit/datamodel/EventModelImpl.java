@@ -67,7 +67,11 @@ public class EventModelImpl implements EventModel {
                         .loadNewEvents(NUMBER_EVENT_REQUESTED, null)
                         .subscribe(new Consumer<List<Event>>() {
                             @Override
-                            public void accept(final List<Event> events) throws Exception {
+                            public void accept(List<Event> events) throws Exception {
+
+                                // filter events created by the user
+                                // it makes no sens to show these events on the wall
+                                events = filterUserEvents(events);
 
                                 // TODO this location CANNOT be always dublin
                                 // sort the events from the current location
@@ -197,6 +201,11 @@ public class EventModelImpl implements EventModel {
         return localEventDao.loadEventByID(eventID);
     }
 
+    @Override
+    public void addAttendee(String eventID, String userID) {
+        remoteEventDao.addAttendee(eventID, userID);
+    }
+
     /**
      * Filter all the events that are still not confirmed for the currently logged user
      *
@@ -252,6 +261,30 @@ public class EventModelImpl implements EventModel {
                 availableEvents.add(singleAttendance);
             }
 
+
+        }
+
+        return availableEvents;
+
+    }
+
+    /**
+     * Filter all the events that belong to the current logged user
+     *
+     * @param events events to filter
+     * @return filtered list
+     */
+    private List<Event> filterUserEvents(List<Event> events) {
+
+        List<Event> availableEvents = new ArrayList<>();
+
+        String currentUserID = userModel.getLocalUser().getId();
+
+        for (Event singleAttendance : events) {
+
+            if (!currentUserID.equals(singleAttendance.getAdminID())) {
+                availableEvents.add(singleAttendance);
+            }
 
         }
 
