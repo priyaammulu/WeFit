@@ -15,6 +15,7 @@ import wefit.com.wefit.viewmodels.UserViewModel;
 public class NewEventActivity extends AppCompatActivity implements NewFragmentListener {
     private NewEventFragmentFirstPage fragmentFirst = new NewEventFragmentFirstPage();
     private NewEventFragmentSecondPage fragmentSecond = new NewEventFragmentSecondPage();
+    private NewEventFragmentThirdPage fragmentThird = new NewEventFragmentThirdPage();
     private Event newEvent;
     private EventViewModel mainViewModel;
     private UserViewModel userViewModel;
@@ -51,7 +52,7 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     }
 
     @Override
-    public Event getNewEvent() {
+    public Event getEvent() {
         return newEvent;
     }
 
@@ -72,5 +73,11 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     @Override
     public EventLocation getUserLocation() {
         return mainViewModel.getUserLocation();
+    }
+
+    @Override
+    public void thirdFragment(Event event) {
+        this.newEvent = event;
+        attachFragment(fragmentThird);
     }
 }

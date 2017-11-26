@@ -24,9 +24,9 @@ public class CategoryIconFactory {
     private CategoryIconFactory() {
 
         // TODO si può caricare meglio sta cosa
-        this.availableCategories.put("volleyball", new Category("Volleyball", R.drawable.ic_volleyball));
-        this.availableCategories.put("cardio", new Category("Cardio", R.drawable.ic_gym_cardio));
-        this.availableCategories.put("wlift", new Category("Weightlifting", R.drawable.ic_gym_weightlifting));
+        this.availableCategories.put("volleyball", new Category("Volleyball", R.drawable.ic_volleyball, "volleyball"));
+        this.availableCategories.put("cardio", new Category("Cardio", R.drawable.ic_gym_cardio, "cardio"));
+        this.availableCategories.put("wlift", new Category("Weightlifting", R.drawable.ic_gym_weightlifting, "wlift"));
 
     }
 

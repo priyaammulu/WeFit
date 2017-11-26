@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="10dp">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:id="@+id/new_event_scrollview"
@@ -18,27 +17,9 @@
             <ImageView
                 android:id="@+id/new_event_image"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@drawable/placeholder" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:text="Description"
-                android:textSize="20sp" />
-
-            <EditText
-                android:id="@+id/new_event_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/border_black"
-                android:minHeight="70dp"
-                android:padding="5dp" />
+                android:layout_height="140dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/runner_placeholder" />
 
             <!-- A RecyclerView with some commonly used attributes -->
             <android.support.v7.widget.RecyclerView
@@ -48,6 +29,7 @@
                 android:layout_marginTop="20dp"
                 android:paddingBottom="15dp"
                 android:scrollbars="horizontal" />
+
         </LinearLayout>
 
 
@@ -57,9 +39,9 @@
         android:id="@+id/new_event_finish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
+        android:padding="20dp"
         android:text="Save" />
 
 </RelativeLayout>

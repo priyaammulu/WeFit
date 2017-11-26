@@ -185,19 +185,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         if (retrievedEvent.getAdminID().equals(mUserViewModel.retrieveCachedUser().getId())) {
             // user cannot join or abandon his own event
-            mAbandonEvent.setVisibility(View.INVISIBLE);
-            mJoinEvent.setVisibility(View.INVISIBLE);
+            mAbandonEvent.setVisibility(View.GONE);
+            mJoinEvent.setVisibility(View.GONE);
         } else {
             // common attendees cannot modify an event
-            mModifyEvent.setVisibility(View.INVISIBLE);
+            mModifyEvent.setVisibility(View.GONE);
 
             // check if the user has already joined the event
             if (isLoggedUserJoint()) {
-                mJoinEvent.setVisibility(View.INVISIBLE);
+                mJoinEvent.setVisibility(View.GONE);
                 mAbandonEvent.setVisibility(View.VISIBLE);
             } else {
                 mJoinEvent.setVisibility(View.VISIBLE);
-                mAbandonEvent.setVisibility(View.INVISIBLE);
+                mAbandonEvent.setVisibility(View.GONE);
             }
         }
 

@@ -17,9 +17,15 @@ public class Category {
      */
     private int image;
 
-    public Category(String name, int imageRef) {
-        this.displayName = name;
-        this.image = imageRef;
+    /**
+     *
+     */
+    private String id;
+
+    public Category(String displayName, int image, String id) {
+        this.displayName = displayName;
+        this.image = image;
+        this.id = id;
     }
 
     public String getDisplayName() {
@@ -36,5 +42,9 @@ public class Category {
                 "displayName='" + displayName + '\'' +
                 ", image=" + image +
                 '}';
+    }
+
+    public String getId() {
+        return this.id;
     }
 }

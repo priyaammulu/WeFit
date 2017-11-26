@@ -29,6 +29,7 @@ public class UserModelAsyncImpl implements UserModel {
                 loginHandler.retrieveUser().subscribe(new Consumer<User>() {
                     @Override
                     public void accept(User user) throws Exception {
+
                         localUserDao.save(user);
 
                         flowableEmitter.onNext(user);

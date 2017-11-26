@@ -19,10 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
@@ -98,7 +95,7 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
             @Override
             public void onClick(View view) {
 
-                Event newEvent = mListener.getNewEvent();
+                Event newEvent = mListener.getEvent();
                 newEvent.setDescription(mDescription.getText().toString());
 
                 // set creator ID
@@ -109,9 +106,9 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
                 newEvent.setImage(ImageBase64Marshaller.encodeBase64BitmapString(bitmap));
 
                 // TODO LORENZO dove trovo questa categoria?
-                newEvent.setCategoryID(mCategory.getDisplayName());
+                newEvent.setCategoryID(mCategory.getId());
 
-                mListener.finish(newEvent);
+                mListener.thirdFragment(newEvent);
             }
         });
     }

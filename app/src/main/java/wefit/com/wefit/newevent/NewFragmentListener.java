@@ -17,11 +17,13 @@ import wefit.com.wefit.pojo.User;
  */
 public interface NewFragmentListener {
     void secondFragment(Event event);
-    Event getNewEvent();
+    Event getEvent();
 
     void finish(Event newEvent);
 
     User getEventCreator();
 
     EventLocation getUserLocation();
+
+    void thirdFragment(Event event);
 }

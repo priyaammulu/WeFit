@@ -49,8 +49,6 @@ public class UserProfileFragment extends Fragment {
 
         fillFragment(view);
 
-
-
         super.onViewCreated(view, savedInstanceState);
     }
 
