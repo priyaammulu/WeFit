@@ -83,8 +83,7 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
             }
         });
 
-        // TODO devi fare controlli sulla lunghezza oppure ci sta in XML?
-        mDescription = (EditText) view.findViewById(R.id.new_event_description);
+        // TODO devi fare controlli sulla lunghezza oppure ci sta in XML mDescription = (EditText) view.findViewById(R.id.new_event_description);
 
         // category picker
         scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview) ;
