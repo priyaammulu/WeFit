@@ -1,10 +1,12 @@
 package wefit.com.wefit.newevent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,22 +20,26 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import wefit.com.wefit.R;
+import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.eventutils.category.CategoryIconFactory;
+import wefit.com.wefit.utils.image.ImageBase64Marshaller;
+import wefit.com.wefit.viewmodels.UserViewModel;
 
-public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
+public class NewEventFragmentSecondPage extends Fragment implements AdapterHandler {
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int RESULT_OK = -1;
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    List<Category> staticCategories = Arrays.asList(
-            new Category("Volleyball", R.drawable.ic_volleyball),
-            new Category("Cardio", R.drawable.ic_gym_cardio),
-            new Category("Cardio", R.drawable.ic_gym_cardio),
-            new Category("Weightlifting", R.drawable.ic_gym_weightlifting));
 
     private NewFragmentListener mListener;
     private Button mButtonFinish;
@@ -41,14 +47,18 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
     private ImageView mImage;
     private Category mCategory;
     private ScrollView scrollView;
+    private UserViewModel mUserViewModel;
 
-    public NewEventFragmentSecond() {
+    public NewEventFragmentSecondPage() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.mUserViewModel = ((WefitApplication) getActivity().getApplication()).getUserViewModel();
+
     }
 
     @Override
@@ -61,22 +71,44 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.category_event_recycler_view);
         initRecyclerView();
         mButtonFinish = (Button) view.findViewById(R.id.new_event_finish);
+
+
         mImage = (ImageView) view.findViewById(R.id.new_event_image);
+
+        // listener, take picture
+        mImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
+
+        // TODO devi fare controlli sulla lunghezza oppure ci sta in XML?
         mDescription = (EditText) view.findViewById(R.id.new_event_description);
+
+        // category picker
         scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview) ;
         scrollView.scrollTo((int) mDescription.getX(), (int) mDescription.getY());
+
+        // button finish
         mButtonFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-
                 Event newEvent = mListener.getNewEvent();
                 newEvent.setDescription(mDescription.getText().toString());
+
+                // set creator ID
+                newEvent.setAdminID(mUserViewModel.retrieveCachedUser().getId());
+
+                // take encode image
                 Bitmap bitmap = ((BitmapDrawable) mImage.getDrawable()).getBitmap();
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageInByte = baos.toByteArray();
-                newEvent.setImage(imageInByte.toString()); // todo delete toString
+                newEvent.setImage(ImageBase64Marshaller.encodeBase64BitmapString(bitmap));
+
+                // TODO LORENZO dove trovo questa categoria?
                 newEvent.setCategoryID(mCategory.getDisplayName());
 
                 mListener.finish(newEvent);
@@ -94,7 +126,7 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new CategoryAdapter(staticCategories, this);
+        mAdapter = new CategoryAdapter(new ArrayList<>(CategoryIconFactory.getInstance().getAvailableCategories().values()), this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -129,5 +161,16 @@ public class NewEventFragmentSecond extends Fragment implements AdapterHandler {
 
     public Drawable getDrawable(int drawable) {
         return getResources().getDrawable(drawable);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // result for the image capture
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImage.setImageBitmap(imageBitmap);
+        }
     }
 }

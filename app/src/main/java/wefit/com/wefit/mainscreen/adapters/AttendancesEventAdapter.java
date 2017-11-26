@@ -23,7 +23,9 @@ import java.util.Locale;
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.eventutils.category.CategoryIconFactory;
+import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 
 /**
  * Created by lorenzo on 11/3/17.
@@ -33,11 +35,13 @@ public class AttendancesEventAdapter extends BaseAdapter {
 
     private List<Event> events;
     private Context context;
+    private User mCurrentUser;
 
-    public AttendancesEventAdapter(List<Event> events, Context context) {
+    public AttendancesEventAdapter(List<Event> events, Context context, User currentUser) {
 
         this.events = events;
         this.context = context;
+        this.mCurrentUser = currentUser;
     }
 
     public void setEvents(List<Event> events) {
@@ -83,20 +87,41 @@ public class AttendancesEventAdapter extends BaseAdapter {
         holder.location.setText(event.getEventLocation().getName());
         holder.monthDay.setText(this.getMonthDay(new Date(event.getEventDate())));
         holder.time.setText(getTime(new Date(event.getEventDate())));
-        holder.mEventImage.setImageBitmap(decodeBase64BitmapString(event.getImage()));
+        holder.mEventImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(event.getImage()));
 
-        // TODO aggiungi category pic
         Category category = CategoryIconFactory.getInstance().getCategoryByID(event.getCategoryID());
-        Picasso.with(context).load(category.getImage()).into(holder.mCategoryPic);
+        holder.mCategoryPic.setImageResource(category.getImage());
 
-        Picasso.with(context).load(event.getImage()).into(holder.mImageOrganizer);
+        boolean belongs = false;
+        String ownershipTypeLabel = null;
+
+        // TODO retrieve from strings
+
+        if (event.isPrivateEvent()) {
+            ownershipTypeLabel = "private";
+            belongs = true;
+        }
+        else {
+
+            if (mCurrentUser.getId().equals(event.getAdminID())) {
+                ownershipTypeLabel = "admin";
+                belongs = true;
+            }
+
+        }
+
+        if (!belongs) {
+            holder.ownershipLabel.setVisibility(View.INVISIBLE);
+        }
+        else {
+            holder.ownershipLabel.setText(ownershipTypeLabel);
+        }
+
+
+
+        //Picasso.with(context).load(event.getImage()).into(holder.mImageOrganizer);
 
         return convertView;
-    }
-
-    private Bitmap decodeBase64BitmapString(String encodedImage) {
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     private String getMonthDay(Date date) {
@@ -120,11 +145,11 @@ public class AttendancesEventAdapter extends BaseAdapter {
     private static class EventViewHolder {
         private ImageView mEventImage;
         private ImageView mCategoryPic;
-        private ImageView mImageOrganizer;
         private TextView title;
         private TextView location;
         private TextView monthDay;
         private TextView time;
+        private TextView ownershipLabel;
 
         EventViewHolder(View row) {
             this.title = (TextView) row.findViewById(R.id.myevents_title);
@@ -133,7 +158,8 @@ public class AttendancesEventAdapter extends BaseAdapter {
             this.time = (TextView) row.findViewById(R.id.myevents_expire_time);
             this.mEventImage = (ImageView) row.findViewById(R.id.myevents_image);
             this.mCategoryPic = (ImageView) row.findViewById(R.id.myattendance_category_pic);
-            this.mImageOrganizer = (ImageView) row.findViewById(R.id.myevents_organizer_image);
+            this.ownershipLabel = (TextView) row.findViewById(R.id.ownership_label);
+
         }
 
     }

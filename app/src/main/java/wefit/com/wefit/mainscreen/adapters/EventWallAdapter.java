@@ -24,17 +24,18 @@ import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.utils.eventutils.category.CategoryIconFactory;
+import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 
 /**
  * Created by lorenzo on 11/3/17.
  */
 
-public class MainFragmentEventAdapter extends BaseAdapter {
+public class EventWallAdapter extends BaseAdapter {
 
     private List<Event> events;
     private Context context;
 
-    public MainFragmentEventAdapter(List<Event> events, Context context) {
+    public EventWallAdapter(List<Event> events, Context context) {
         this.events = events;
         this.context = context;
     }
@@ -79,18 +80,13 @@ public class MainFragmentEventAdapter extends BaseAdapter {
         holder.organizer.setText(event.getAdmin().getFullName());
         holder.published.setText("Published on: " + getDate(new Date(event.getPublicationDate())));
 
-        holder.mEventImage.setImageBitmap(decodeBase64BitmapString(event.getImage()));
-        holder.mUserImage.setImageBitmap(decodeBase64BitmapString(event.getAdmin().getPhoto()));
+        holder.mEventImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(event.getImage()));
+        holder.mUserImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(event.getAdmin().getPhoto()));
 
         Category category = CategoryIconFactory.getInstance().getCategoryByID(event.getCategoryID());
-        Picasso.with(context).load(category.getImage()).into(holder.mCategoryPic);
+        holder.mCategoryPic.setImageResource(category.getImage());
 
         return convertView;
-    }
-
-    private Bitmap decodeBase64BitmapString(String encodedImage) {
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
     }
 
     private String getMonthDay(Date date) {

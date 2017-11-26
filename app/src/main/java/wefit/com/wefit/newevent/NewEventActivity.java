@@ -13,8 +13,8 @@ import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class NewEventActivity extends AppCompatActivity implements NewFragmentListener {
-    private NewEventFragmentFirst fragmentFirst = new NewEventFragmentFirst();
-    private NewEventFragmentSecond fragmentSecond = new NewEventFragmentSecond();
+    private NewEventFragmentFirstPage fragmentFirst = new NewEventFragmentFirstPage();
+    private NewEventFragmentSecondPage fragmentSecond = new NewEventFragmentSecondPage();
     private Event newEvent;
     private EventViewModel mainViewModel;
     private UserViewModel userViewModel;

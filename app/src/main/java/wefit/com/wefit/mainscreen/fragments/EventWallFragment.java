@@ -20,7 +20,7 @@ import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.PassingExtraEvent;
-import wefit.com.wefit.mainscreen.adapters.MainFragmentEventAdapter;
+import wefit.com.wefit.mainscreen.adapters.EventWallAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.Event;
@@ -34,7 +34,7 @@ import wefit.com.wefit.viewmodels.EventViewModel;
  * to handle interaction events.
  */
 public class EventWallFragment extends Fragment {
-    private MainFragmentEventAdapter mAdapter;
+    private EventWallAdapter mAdapter;
     private ListView mEventList;
     private EventViewModel mMainViewModel;
     private FragmentsInteractionListener mListener;
@@ -132,7 +132,7 @@ public class EventWallFragment extends Fragment {
 
     private void handleAdapter(List<Event> events) {
         if (mAdapter == null) {
-            mAdapter = new MainFragmentEventAdapter(events, getActivity());
+            mAdapter = new EventWallAdapter(events, getActivity());
             mEventList.setAdapter(mAdapter);
         } else
             mAdapter.setEvents(events);

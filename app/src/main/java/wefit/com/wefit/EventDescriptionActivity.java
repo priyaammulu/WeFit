@@ -38,6 +38,7 @@ import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.eventutils.wheater.Weather;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherIconFactory;
+import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
@@ -340,7 +341,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             TextView userName = (TextView) view.findViewById(R.id.attendee_username_txt);
             TextView userStatus = (TextView) view.findViewById(R.id.attendee_status_txt);
 
-            userPic.setImageBitmap(decodeBase64BitmapString(attendance.first.getPhoto()));
+            userPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(attendance.first.getPhoto()));
             userName.setText(attendance.first.getFullName());
 
 

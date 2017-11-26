@@ -73,15 +73,15 @@
             android:id="@+id/myattendance_category_pic"
             android:src="@drawable/landmark_icon" />
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/myevents_organizer_image"
+        <TextView
+            android:id="@+id/ownership_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/myattendance_category_pic"
             android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:src="@drawable/landmark_icon" />
+            android:layout_alignRight="@+id/myattendance_category_pic"
+            android:layout_marginBottom="11dp"
+            android:text="TextView" />
 
     </RelativeLayout>
 

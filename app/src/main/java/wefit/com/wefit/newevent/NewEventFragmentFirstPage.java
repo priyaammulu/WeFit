@@ -13,7 +13,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
-import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -23,7 +22,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
@@ -32,24 +30,25 @@ import wefit.com.wefit.pojo.Location;
 import static android.app.Activity.RESULT_OK;
 
 
-public class NewEventFragmentFirst extends Fragment {
+public class NewEventFragmentFirstPage extends Fragment {
     private static final int PLACE_PICKER_REQUEST = 1;
     private NewFragmentListener mListener;
-    private EditText mName;
-    private NumberPicker mParticipants;
+    private EditText mEventName;
+    private NumberPicker mNumberAttendees;
     private Button mButtonAhead;
-    private DatePicker mDatePicker;
+    private DatePicker mEventDatePicker;
     private ImageButton mImageButton;
-    private Location location;
+    private Location mUserLocation;
+    private Location mRetrievedLocation;
 
-    public NewEventFragmentFirst() {
+    public NewEventFragmentFirstPage() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        location = mListener.getUserLocation();
+        mUserLocation = mListener.getUserLocation();
     }
 
     @Override
@@ -59,18 +58,19 @@ public class NewEventFragmentFirst extends Fragment {
     }
 
     private void bind(View view) {
-        mName = (EditText) view.findViewById(R.id.new_event_name);
-        mParticipants = (NumberPicker) view.findViewById(R.id.new_event_participants);
-        mParticipants.setMinValue(1);
-        mParticipants.setMaxValue(15);
-        mDatePicker = (DatePicker) view.findViewById(R.id.new_event_datepicker);
+        mEventName = (EditText) view.findViewById(R.id.new_event_name);
+        mNumberAttendees = (NumberPicker) view.findViewById(R.id.new_event_participants);
+        mNumberAttendees.setMinValue(1);
+        mNumberAttendees.setMaxValue(15);
+        mEventDatePicker = (DatePicker) view.findViewById(R.id.new_event_datepicker);
         mImageButton = (ImageButton) view.findViewById(R.id.new_event_map);
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // TODO rivedere, comportamento strano qui
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                LatLng southest = new LatLng(location.getLatitude() - 0.000001, location.getLongitude() - 0.000001);
-                LatLng northest = new LatLng(location.getLatitude() + 0.000001, location.getLongitude() + 0.000001);
+                LatLng southest = new LatLng(mUserLocation.getLatitude() - 0.000001, mUserLocation.getLongitude() - 0.000001);
+                LatLng northest = new LatLng(mUserLocation.getLatitude() + 0.000001, mUserLocation.getLongitude() + 0.000001);
                 LatLngBounds bounds = new LatLngBounds(southest, northest);
                 builder.setLatLngBounds(bounds);
                 try {
@@ -86,10 +86,13 @@ public class NewEventFragmentFirst extends Fragment {
         mButtonAhead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Event event = new Event();
-                event.setName(mName.getText().toString());
-                //event.setMaxAttendee(mParticipants.getValue());
-                //event.setEventDate(getDateFromDatePicker(mDatePicker));
+                event.setName(mEventName.getText().toString());
+                event.setMaxAttendee(mNumberAttendees.getValue());
+                event.setEventDate(getDateFromDatePicker(mEventDatePicker));
+                event.setEventLocation(mRetrievedLocation);
+
                 mListener.secondFragment(event);
             }
         });
@@ -98,14 +101,18 @@ public class NewEventFragmentFirst extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
+
+                // TODO rivedere perché deprecato
                 Place place = PlacePicker.getPlace(data, getActivity());
-                String toastMsg = String.format("Place: %s", place.getName());
-                Toast.makeText(getActivity(), toastMsg, Toast.LENGTH_LONG).show();
+
+                mRetrievedLocation = new Location(place.getLatLng().latitude, place.getLatLng().longitude);
+                mRetrievedLocation.setName(place.getAddress().toString());
+
             }
         }
     }
 
-    private Date getDateFromDatePicker(DatePicker datePicker) {
+    private long getDateFromDatePicker(DatePicker datePicker) {
         int day = datePicker.getDayOfMonth();
         int month = datePicker.getMonth();
         int year = datePicker.getYear();
@@ -113,7 +120,7 @@ public class NewEventFragmentFirst extends Fragment {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
 
-        return calendar.getTime();
+        return calendar.getTime().getTime();
     }
 
     @Override

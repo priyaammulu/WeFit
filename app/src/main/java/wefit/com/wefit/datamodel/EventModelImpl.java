@@ -3,6 +3,7 @@ package wefit.com.wefit.datamodel;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -70,8 +71,6 @@ public class EventModelImpl implements EventModel {
                             @Override
                             public void accept(final List<Event> events) throws Exception {
 
-                                Log.i("event_not_s", events.toString());
-
                                 // TODO this location CANNOT be always dublin
                                 // sort the events from the current location
                                 distanceSorter.sortByDistanceFromLocation(dublin, events);
@@ -81,15 +80,21 @@ public class EventModelImpl implements EventModel {
                                 for (Event retrievedEvent : events) {
                                     creatorIDs.add(retrievedEvent.getAdminID());
                                 }
+
+                                // filter full events
+                                final List<Event> filterFullEvents = filterFullEvents(events);
+
                                 remoteUserDao.loadByIDs(creatorIDs).subscribe(new Consumer<Map<String, User>>() {
                                     @Override
                                     public void accept(Map<String, User> stringUserMap) throws Exception {
-                                        for (Event retrieved : events) {
+
+                                        // assign the correct admin to each event
+                                        for (Event retrieved : filterFullEvents) {
                                             retrieved.setAdmin(stringUserMap.get(retrieved.getAdminID()));
                                         }
 
                                         // send the notification of ended loading
-                                        flowableEmitter.onNext(events);
+                                        flowableEmitter.onNext(filterFullEvents);
 
                                     }
                                 });
@@ -131,20 +136,21 @@ public class EventModelImpl implements EventModel {
                                                 @Override
                                                 public void accept(List<Event> attendances) throws Exception {
 
+                                                    // check if the user has been confirmed
+                                                    // if not, do not return the event
+                                                    attendances = filterUnconfirmedAttendances(attendances);
+
                                                     retrievedEvents.addAll(attendances);
                                                     Collections.reverse(retrievedEvents);
-
 
                                                     flowableEmitter.onNext(retrievedEvents);
 
                                                 }
                                             });
-                                }
-                                else {
+                                } else {
                                     Collections.reverse(retrievedEvents);
                                     flowableEmitter.onNext(retrievedEvents);
                                 }
-
 
 
                             }
@@ -192,4 +198,68 @@ public class EventModelImpl implements EventModel {
     public Event getLocalEvent(String eventID) {
         return localEventDao.loadEventByID(eventID);
     }
+
+    /**
+     * Filter all the events that are still not confirmed for the currently logged user
+     *
+     * @param attendances events to filter
+     * @return filtered events
+     */
+    private List<Event> filterUnconfirmedAttendances(List<Event> attendances) {
+
+        List<Event> confirmedAttandances = new ArrayList<>();
+
+        String currentUserID = userModel.getLocalUser().getId();
+
+        for (Event singleAttendance : attendances) {
+
+            Map<String, Boolean> attendanceStates = singleAttendance.getAttendingUsers();
+
+            // if the user is confirmed
+            if (attendanceStates.get(currentUserID)) {
+                confirmedAttandances.add(singleAttendance);
+            }
+
+        }
+
+        return confirmedAttandances;
+
+    }
+
+    /**
+     * Filter all the events that are "full"
+     *
+     * @param events events to filter
+     * @return filtered events
+     */
+    private List<Event> filterFullEvents(List<Event> events) {
+
+        List<Event> availableEvents = new ArrayList<>();
+
+        for (Event singleAttendance : events) {
+
+            int confirmedUsers = 0;
+
+            Collection<Boolean> attendanceStates = singleAttendance.getAttendingUsers().values();
+
+            for (Boolean attendance : attendanceStates) {
+
+                if (attendance) {
+                    confirmedUsers++;
+                }
+
+            }
+
+            if (confirmedUsers < singleAttendance.getMaxAttendee()) {
+                availableEvents.add(singleAttendance);
+            }
+
+
+        }
+
+        return availableEvents;
+
+    }
+
+
 }

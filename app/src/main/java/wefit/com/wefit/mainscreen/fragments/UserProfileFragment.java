@@ -20,6 +20,7 @@ import java.util.Locale;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 
@@ -74,7 +75,7 @@ public class UserProfileFragment extends Fragment {
         mBirthDate = (TextView) view.findViewById(R.id.birth_date);
         mUserBio = (TextView) view.findViewById(R.id.user_bio);
 
-        mUserPic.setImageBitmap(decodeBase64BitmapString(mShowedUser.getPhoto()));
+        mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mShowedUser.getPhoto()));
         mUserName.setText(mShowedUser.getFullName());
         mBirthDate.setText(getDate(new Date(mShowedUser.getBirthDate())));
         mUserBio.setText(mShowedUser.getBiography());
@@ -115,8 +116,4 @@ public class UserProfileFragment extends Fragment {
         return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
     }
 
-    private Bitmap decodeBase64BitmapString(String encodedImage) {
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-    }
 }

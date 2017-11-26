@@ -1,6 +1,7 @@
 package wefit.com.wefit.utils.eventutils.category;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import wefit.com.wefit.R;
@@ -34,5 +35,9 @@ public class CategoryIconFactory {
      */
     public Category getCategoryByID(String categoryID) {
         return this.availableCategories.get(categoryID);
+    }
+
+    public Map<String, Category> getAvailableCategories() {
+        return availableCategories;
     }
 }

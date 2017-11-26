@@ -32,6 +32,7 @@ public class ScheduledEventsFragment extends Fragment {
     private Subscription mSubscription; // TODO what to do with this?
     private ListView mListView;
     private AttendancesEventAdapter attendancesEventAdapter;
+    private UserViewModel mUserViewModel;
 
 
     public ScheduledEventsFragment() {
@@ -40,6 +41,7 @@ public class ScheduledEventsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
         bind(view);
 
         // download the user events and show them
@@ -65,11 +67,12 @@ public class ScheduledEventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mEventViewModel = mActivity.getEventViewModel();
+        mUserViewModel = mActivity.getUserViewModel();
 
     }
 
     private void initializeListView(final List<Event> events) {
-        attendancesEventAdapter = new AttendancesEventAdapter(events, getActivity());
+        attendancesEventAdapter = new AttendancesEventAdapter(events, getActivity(), mUserViewModel.retrieveCachedUser());
         mListView.setAdapter(attendancesEventAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
