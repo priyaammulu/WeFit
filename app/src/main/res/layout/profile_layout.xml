@@ -63,7 +63,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:text="Lorem ipsum"
-                android:id="@+id/new_event_third_description"
+                android:id="@+id/user_bio"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp" />
 

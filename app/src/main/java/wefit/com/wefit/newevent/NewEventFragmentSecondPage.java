@@ -40,7 +40,6 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
 
     private NewFragmentListener mListener;
     private Button mButtonFinish;
-    private EditText mDescription;
     private ImageView mImage;
     private Category mCategory;
     private ScrollView scrollView;
@@ -83,12 +82,8 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
             }
         });
 
-        // TODO devi fare controlli sulla lunghezza oppure ci sta in XML?
-        mDescription = (EditText) view.findViewById(R.id.new_event_description);
-
         // category picker
         scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview) ;
-        scrollView.scrollTo((int) mDescription.getX(), (int) mDescription.getY());
 
         // button finish
         mButtonFinish.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +91,6 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
             public void onClick(View view) {
 
                 Event newEvent = mListener.getEvent();
-                newEvent.setDescription(mDescription.getText().toString());
 
                 // set creator ID
                 newEvent.setAdminID(mUserViewModel.retrieveCachedUser().getId());
@@ -105,7 +99,6 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
                 Bitmap bitmap = ((BitmapDrawable) mImage.getDrawable()).getBitmap();
                 newEvent.setImage(ImageBase64Marshaller.encodeBase64BitmapString(bitmap));
 
-                // TODO LORENZO dove trovo questa categoria?
                 newEvent.setCategoryID(mCategory.getId());
 
                 mListener.thirdFragment(newEvent);

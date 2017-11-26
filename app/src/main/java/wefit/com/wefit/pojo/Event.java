@@ -122,7 +122,7 @@ public class Event implements Comparable<Event>{
         return maxAttendee;
     }
 
-    public void setMaxAttendee(int maxAttendee) {
+    public void setMaxAttendees(int maxAttendee) {
         this.maxAttendee = maxAttendee;
     }
 

@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     @Override
     public void provideLocation() {
+
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION);
@@ -207,14 +208,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
                 } else {
 
+                    // TODO vedere cosa fare
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
-            }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
+                break;
+            }
         }
     }
 }
