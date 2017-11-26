@@ -4,17 +4,17 @@ package wefit.com.wefit.pojo;
  * Created by lorenzo on 11/4/17.
  */
 
-public class Location {
+public class EventLocation {
     private String name;
     private double longitude;
     private double latitude;
 
-    public Location(double latitude, double longitude) {
+    public EventLocation(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public Location() { }
+    public EventLocation() { }
 
     public String getName() {
         return name;
@@ -42,7 +42,7 @@ public class Location {
 
     @Override
     public String toString() {
-        return "Location{" +
+        return "EventLocation{" +
                 "name='" + name + '\'' +
                 ", longitude=" + longitude +
                 ", latitude=" + latitude +

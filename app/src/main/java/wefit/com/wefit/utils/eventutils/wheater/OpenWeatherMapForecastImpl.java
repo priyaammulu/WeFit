@@ -17,7 +17,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,7 @@ import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 
 /**
  * Created by gioacchino on 23/11/2017.
@@ -65,7 +64,7 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
     }
 
     @Override
-    public Flowable<Weather> getForecast(final Location location, final long date) {
+    public Flowable<Weather> getForecast(final EventLocation location, final long date) {
 
 
         URL associateURL = null;

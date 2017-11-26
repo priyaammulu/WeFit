@@ -25,12 +25,10 @@ import java.util.List;
 import java.util.Map;
 
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.utils.persistence.LocalEventDao;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
-import wefit.com.wefit.utils.persistence.sqlitelocalpersistence.LocalSQLiteEventDao;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 public class GioTestActivity extends AppCompatActivity {
@@ -72,7 +70,7 @@ public class GioTestActivity extends AppCompatActivity {
         mEvent.setEventDate(151156353458005000L);
         mEvent.setMaxAttendee(20);
 
-        Location location = new Location();
+        EventLocation location = new EventLocation();
         location.setLatitude(53.35014);
         location.setLongitude(6.266155);
         location.setName("Stillogarn Road 15, Dublin");
@@ -199,13 +197,13 @@ public class GioTestActivity extends AppCompatActivity {
 
 
         /*
-        Location center = new Location();
+        EventLocation center = new EventLocation();
         location.setLatitude(0);
         location.setLongitude(0);
 
-        Location event1Loc = new Location(300, 0);
+        EventLocation event1Loc = new EventLocation(300, 0);
 
-        Location event2Loc = new Location(200, 0);
+        EventLocation event2Loc = new EventLocation(200, 0);
 
         Event event1 = new Event();
         event1.setName("evento 1");

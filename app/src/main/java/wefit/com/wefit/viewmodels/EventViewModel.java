@@ -6,7 +6,7 @@ import java.util.Map;
 import io.reactivex.Flowable;
 import wefit.com.wefit.datamodel.EventModel;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
 
 /**
@@ -28,7 +28,7 @@ public class EventViewModel {
         return mEventModel.getEvent(eventID);
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(EventLocation location) {
         mEventModel.setLocation(location);
     }
 
@@ -40,7 +40,7 @@ public class EventViewModel {
         mEventModel.createEvent(newEvent);
     }
 
-    public Location getUserLocation() {
+    public EventLocation getUserLocation() {
         return mEventModel.getUserLocation();
     }
 

@@ -8,10 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.utils.persistence.LocalEventDao;
 
@@ -230,7 +229,7 @@ public class LocalSQLiteEventDao implements LocalEventDao {
         retrievedEvent.setCategoryID(cursor.getString(categoryC));
 
         // set location
-        Location location = new Location();
+        EventLocation location = new EventLocation();
         location.setLatitude(cursor.getDouble(latC));
         location.setLatitude(cursor.getDouble(lonC));
         location.setName(cursor.getString(placeNameC));

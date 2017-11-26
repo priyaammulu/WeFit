@@ -22,7 +22,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 
 /**
@@ -38,7 +38,7 @@ public class FirebaseEventDao implements RemoteEventDao {
     private DatabaseReference mEventStorage;
 
     @Override
-    public Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable Location centralPosition) {
+    public Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable EventLocation centralPosition) {
         // tODO deprecated remove
         return null;
     }

@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import io.reactivex.Flowable;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 
 /**
  * Created by gioacchino on 13/11/2017.
@@ -15,7 +15,7 @@ import wefit.com.wefit.pojo.Location;
 public interface RemoteEventDao {
 
     @Deprecated
-    Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable Location centralPosition);
+    Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable EventLocation centralPosition);
 
     Flowable<List<Event>> loadNewEvents(int numResults, @Nullable String anchorID);
 

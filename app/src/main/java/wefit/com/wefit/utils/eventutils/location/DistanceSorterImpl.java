@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 
 /**
  * Created by gioacchino on 21/11/2017.
@@ -15,7 +15,7 @@ import wefit.com.wefit.pojo.Location;
 
 public class DistanceSorterImpl implements DistanceSorter {
     @Override
-    public List<Event> sortByDistanceFromLocation(Location center, List<Event> eventToSort) {
+    public List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventToSort) {
 
         List<Event> orderedList = new ArrayList<>();
         List<DistanceHolder> wrapped = this.getSortableList(center, eventToSort);
@@ -28,7 +28,7 @@ public class DistanceSorterImpl implements DistanceSorter {
         return orderedList;
     }
 
-    private List<DistanceHolder> getSortableList(Location center, List<Event> eventToSort) {
+    private List<DistanceHolder> getSortableList(EventLocation center, List<Event> eventToSort) {
 
         List<DistanceHolder> listWrappers = new ArrayList<>();
         for (Event event : eventToSort) {
@@ -38,7 +38,7 @@ public class DistanceSorterImpl implements DistanceSorter {
         return listWrappers;
     }
 
-    private DistanceHolder wrap(Location center, Event eventToWrap) {
+    private DistanceHolder wrap(EventLocation center, Event eventToWrap) {
 
         double distance = this.computeDistance(center, eventToWrap.getEventLocation());
         return new DistanceHolder(eventToWrap, distance);
@@ -52,7 +52,7 @@ public class DistanceSorterImpl implements DistanceSorter {
      * lat1, center.getLongitude() Start point lat2, eventPosition.getLongitude() End point el1 Start altitude in meters
      * @return Distance in Meters
      */
-    private double computeDistance(Location center, Location eventPosition) {
+    private double computeDistance(EventLocation center, EventLocation eventPosition) {
 
         final int R = 6371; // Radius of the earth
 

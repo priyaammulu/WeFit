@@ -1,6 +1,5 @@
 package wefit.com.wefit;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,7 +32,7 @@ import java.util.Map;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.mainscreen.PassingExtraEvent;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.eventutils.wheater.Weather;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
@@ -171,7 +170,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Location eventLocation = retrievedEvent.getEventLocation();
+                EventLocation eventLocation = retrievedEvent.getEventLocation();
 
                 double latitude = eventLocation.getLatitude();
                 double longitude = eventLocation.getLongitude();

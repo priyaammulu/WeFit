@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
@@ -70,7 +70,7 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     }
 
     @Override
-    public Location getUserLocation() {
+    public EventLocation getUserLocation() {
         return mainViewModel.getUserLocation();
     }
 }

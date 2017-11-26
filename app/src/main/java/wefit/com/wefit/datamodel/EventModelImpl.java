@@ -1,7 +1,5 @@
 package wefit.com.wefit.datamodel;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +12,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.eventutils.location.DistanceSorter;
 import wefit.com.wefit.utils.persistence.LocalEventDao;
@@ -30,7 +28,7 @@ public class EventModelImpl implements EventModel {
 
     private static final int NUMBER_EVENT_REQUESTED = 20;
 
-    private Location currentLocation;
+    private EventLocation currentLocation;
 
     private RemoteEventDao remoteEventDao;
     private RemoteUserDao remoteUserDao;
@@ -42,7 +40,7 @@ public class EventModelImpl implements EventModel {
     private DistanceSorter distanceSorter;
 
     //private Event event;
-    private Location dublin = new Location(53.3498, 6.2603);
+    private EventLocation dublin = new EventLocation(53.3498, 6.2603);
 
 
     public EventModelImpl(RemoteEventDao eventPersistence,
@@ -105,7 +103,7 @@ public class EventModelImpl implements EventModel {
     }
 
     @Override
-    public void setLocation(Location location) {
+    public void setLocation(EventLocation location) {
         this.currentLocation = location;
     }
 
@@ -165,7 +163,7 @@ public class EventModelImpl implements EventModel {
     }
 
     @Override
-    public Location getUserLocation() {
+    public EventLocation getUserLocation() {
         if (currentLocation != null)
             return currentLocation;
         return dublin;

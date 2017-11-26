@@ -22,13 +22,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.LinkedList;
 
-import wefit.com.wefit.GioTestActivity;
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
 import wefit.com.wefit.mainscreen.fragments.ScheduledEventsFragment;
 import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
+import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.EventViewModel;
 
@@ -50,20 +50,26 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         // startActivity(new Intent(this, GioTestActivity.class));
 
-        super.onCreate(savedInstanceState);
         mUserViewModel = getUserViewModel();
         mEventViewModel = getEventViewModel();
+
+
         if (!mUserViewModel.isAuth())
             signOut();
+
+
         setContentView(R.layout.activity_main);
-        bind();
+
+        bindLayoutComponents();
+
         setFragments();
     }
 
-    private void bind() {
+    private void bindLayoutComponents() {
         Button mSignOut = (Button) findViewById(R.id.sign_out);
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            wefit.com.wefit.pojo.Location loc = new wefit.com.wefit.pojo.Location();
+                            EventLocation loc = new EventLocation();
                             loc.setLatitude(location.getLatitude());
                             loc.setLongitude(location.getLongitude());
                             mEventViewModel.setLocation(loc);

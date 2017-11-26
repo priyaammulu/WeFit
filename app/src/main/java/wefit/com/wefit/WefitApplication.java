@@ -55,12 +55,12 @@ public class WefitApplication extends Application {
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 
         // utils
-        DistanceSorter sorter = new DistanceSorterImpl();
+        DistanceSorter distanceSorter = new DistanceSorterImpl();
         forecastManager = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
 
         // initialise models
         mUserModel = new UserModelAsyncImpl(loginHandler, localUserDao, remoteUserDao);
-        mEventModel = new EventModelImpl(remoteEventDao, remoteUserDao, localEventDao, mUserModel, sorter);
+        mEventModel = new EventModelImpl(remoteEventDao, remoteUserDao, localEventDao, mUserModel, distanceSorter);
     }
 
     public UserViewModel getUserViewModel() {

@@ -25,7 +25,7 @@ import java.util.Calendar;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.Location;
+import wefit.com.wefit.pojo.EventLocation;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -38,8 +38,8 @@ public class NewEventFragmentFirstPage extends Fragment {
     private Button mButtonAhead;
     private DatePicker mEventDatePicker;
     private ImageButton mImageButton;
-    private Location mUserLocation;
-    private Location mRetrievedLocation;
+    private EventLocation mUserLocation;
+    private EventLocation mRetrievedLocation;
 
     public NewEventFragmentFirstPage() {
         // Required empty public constructor
@@ -105,7 +105,7 @@ public class NewEventFragmentFirstPage extends Fragment {
                 // TODO rivedere perché deprecato
                 Place place = PlacePicker.getPlace(data, getActivity());
 
-                mRetrievedLocation = new Location(place.getLatLng().latitude, place.getLatLng().longitude);
+                mRetrievedLocation = new EventLocation(place.getLatLng().latitude, place.getLatLng().longitude);
                 mRetrievedLocation.setName(place.getAddress().toString());
 
             }

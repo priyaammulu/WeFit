@@ -1,15 +1,10 @@
 package wefit.com.wefit.pojo;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.firebase.database.Exclude;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,7 +25,7 @@ public class Event implements Comparable<Event>{
      */
     private String name;
     private String description;
-    private Location eventLocation;
+    private EventLocation eventLocation;
     private String categoryID;
     private long eventDate;
     private long publicationDate;
@@ -91,11 +86,11 @@ public class Event implements Comparable<Event>{
         this.description = description;
     }
 
-    public Location getEventLocation() {
+    public EventLocation getEventLocation() {
         return eventLocation;
     }
 
-    public void setEventLocation(Location eventLocation) {
+    public void setEventLocation(EventLocation eventLocation) {
         this.eventLocation = eventLocation;
     }
 
