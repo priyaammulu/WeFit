@@ -61,7 +61,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAniSobsz_scZ5nYwcxFpDgBmS89NvpwAA" />
 
-        <activity android:name=".UserDetailActivity"></activity>
+        <activity android:name=".UserDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -20,7 +20,7 @@ import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
-public class UserDetailActivity extends AppCompatActivity {
+public class UserDetailsActivity extends AppCompatActivity {
 
     private UserViewModel mUserViewModel;
 
@@ -39,7 +39,9 @@ public class UserDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_user_detail);
+
 
         this.mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
 
@@ -47,7 +49,7 @@ public class UserDetailActivity extends AppCompatActivity {
 
         String userID = receivedIntent.getStringExtra(ExtrasLabels.USER_ID);
 
-        bindActivityComponents();
+
 
 
         this.mUserViewModel.retrieveUserByID(userID).subscribe(new Consumer<User>() {
@@ -56,12 +58,17 @@ public class UserDetailActivity extends AppCompatActivity {
 
                 mRetrievedUser = user;
 
-                fillActivity();
+                setupLayout();
 
             }
         });
 
 
+    }
+
+    private void setupLayout() {
+        bindActivityComponents();
+        fillActivity(); // add user infos
     }
 
     private void bindActivityComponents() {

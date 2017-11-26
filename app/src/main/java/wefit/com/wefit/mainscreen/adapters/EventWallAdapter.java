@@ -2,17 +2,12 @@ package wefit.com.wefit.mainscreen.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 import wefit.com.wefit.R;
-import wefit.com.wefit.UserDetailActivity;
+import wefit.com.wefit.UserDetailsActivity;
 import wefit.com.wefit.pojo.Category;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.utils.ExtrasLabels;
@@ -95,7 +90,7 @@ public class EventWallAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                Intent showUserDetails = new Intent(context, UserDetailActivity.class);
+                Intent showUserDetails = new Intent(context, UserDetailsActivity.class);
                 showUserDetails.putExtra(ExtrasLabels.USER_ID, event.getAdminID());
 
                 context.startActivity(showUserDetails);

@@ -1,6 +1,7 @@
 package wefit.com.wefit;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -86,8 +87,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     private WeatherForecast weatherForecast;
 
+    private ProgressDialog popupDialogProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // tODO extract text
+        popupDialogProgress = ProgressDialog.show(this, "", "Loading. Please wait...", true);
 
         // retrieve the view-models
         mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
@@ -118,7 +124,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                     mRetrievedEvent = event;
 
-                    setupLayout();
+                    showLayout();
 
                     // fill the activity with the new data
                     fillActivity(event);
@@ -127,17 +133,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
             });
         } else {
 
-            setupLayout();
             fillActivity(mEventViewModel.getPrivateEvent(eventID));
+            showLayout();
 
         }
 
     }
 
-    private void setupLayout() {
+    private void showLayout() {
+        popupDialogProgress.dismiss();
         setContentView(R.layout.activity_event_description);
         this.bindViews();
     }
+
 
     private void bindViews() {
 
@@ -411,7 +419,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    Intent showUserDetails = new Intent(v.getContext(), UserDetailActivity.class);
+                    Intent showUserDetails = new Intent(v.getContext(), UserDetailsActivity.class);
                     showUserDetails.putExtra(ExtrasLabels.USER_ID, attendance.first.getId());
 
                     v.getContext().startActivity(showUserDetails);
