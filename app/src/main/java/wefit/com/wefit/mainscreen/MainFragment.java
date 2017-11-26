@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,7 +43,7 @@ public class MainFragment extends Fragment {
     // this should be handled by another class
     private Subscription mSubscription;
 
-    private TextView middleTopBottom;
+    private ImageView search_icon;
 
 
 
@@ -62,9 +63,12 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getMainViewModel();
         mListener.provideLocation();
-        mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
+        mListener.fillInIconsWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
+        mListener.changeStatusPressedInMain();
 
     }
+
+
 
     private void fetchEvents() {
         Log.i("PROMISE creation main", "creazione promessa");
@@ -113,6 +117,9 @@ public class MainFragment extends Fragment {
                 getActivity().startActivity(new Intent(getActivity(), NewEventActivity.class));
             }
         });
+
+
+
     }
 
     @Override
@@ -120,8 +127,8 @@ public class MainFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden){
 
-            mListener.fillInIconWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
-
+            mListener.fillInIconsWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
+            mListener.changeStatusPressedInMain();
         }
     }
 

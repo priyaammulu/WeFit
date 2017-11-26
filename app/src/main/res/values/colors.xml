@@ -16,4 +16,5 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="panelColor">#d1e0e0</color>
+    <color name="logoBlue">#314864</color>
 </resources>

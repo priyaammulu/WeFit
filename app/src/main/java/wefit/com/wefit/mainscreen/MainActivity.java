@@ -29,6 +29,8 @@ import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.MainViewModel;
 
+import static android.view.View.GONE;
+
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
     private static final int LOCATION_PERMISSION = 1;
     private UserViewModel mLoginViewModel;
@@ -45,7 +47,18 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     private ImageView leftTopBottom;
     private TextView middleTopBottom;
+    private ImageView topBarlogo;
     private ImageView rightTopButtom;
+
+    private ImageView home_icon;
+    private TextView home_text;
+
+    private ImageView myEvents_icon;
+    private TextView myEvents_text;
+
+    private ImageView settings_icon;
+    private TextView settings_text;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +88,18 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(myEventsFragment);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_caledar_pressed);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home);
+
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_search);
             }
         });
         final LinearLayout settings = (LinearLayout) findViewById(R.id.button_settings);
@@ -82,6 +107,24 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(profileFragment);
+                settings_text =(TextView) findViewById(R.id.settings_text);
+                settings_text.setVisibility(GONE);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user_pressed3);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_calendar);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home);
+
+                settings_text = (TextView) findViewById(R.id.settings_text);
+                //settings_text.setTextColor(314864);
+                settings_text.setHint("4dp");
+
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_search);
             }
         });
         LinearLayout main = (LinearLayout) findViewById(R.id.button_main);
@@ -89,9 +132,26 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(mainFragment);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home_pressed);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_calendar);
+
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_search);
+
             }
         });
+
+
     }
+
+
 
     private void setFragments() {
         getSupportFragmentManager()
@@ -159,11 +219,115 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     @Override
     public void fillInIcons(int IconLeft, String iconMiddle, int iconRight){
         //Icons for main Activity
+        topBarlogo = (ImageView) findViewById(R.id.topBarLogo);
+        topBarlogo.setVisibility(GONE);
+
         leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
         leftTopBottom.setImageResource(IconLeft);
 
         middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
         middleTopBottom.setText(iconMiddle);
+        middleTopBottom.setVisibility(View.VISIBLE);
+
+        rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+        rightTopButtom.setImageResource(iconRight);
+
+        LinearLayout search = (LinearLayout) findViewById(R.id.search_layout);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_search_pressed);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_calendar);
+            }
+        });
+
+    }
+
+    @Override
+    public void changeStatusPressedInMain() {
+        LinearLayout search = (LinearLayout) findViewById(R.id.search_layout);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_search_pressed);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_calendar);
+            }
+        });
+    }
+
+
+    @Override
+    public void changeStatusPressedInProfile() {
+        LinearLayout warning =(LinearLayout) findViewById(R.id.search_layout);
+        warning.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_warning);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_calendar);
+            }
+        });
+
+
+        LinearLayout arrow =(LinearLayout) findViewById(R.id.firstTopIcon_layout);
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+                leftTopBottom.setImageResource(R.drawable.ic_arrow_pressed);
+
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_warning);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_calendar);
+            }
+        });
+    }
+
+    @Override
+    public void fillInIconsWithLogo(int iconLeft, int logo, int iconRight) {
+        middleTopBottom = (TextView) findViewById(R.id.middleTopButton);
+        middleTopBottom.setVisibility(GONE);
+
+        leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+        leftTopBottom.setImageResource(iconLeft);
+
+        topBarlogo = (ImageView) findViewById(R.id.topBarLogo);
+        topBarlogo.setImageResource(logo);
+        topBarlogo.setVisibility(View.VISIBLE);
 
         rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
         rightTopButtom.setImageResource(iconRight);
@@ -209,4 +373,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             // permissions this app might request
         }
     }
+
+
 }

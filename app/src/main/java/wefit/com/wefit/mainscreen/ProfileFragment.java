@@ -25,6 +25,16 @@ public class ProfileFragment extends Fragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+            mListener.fillInIcons(R.drawable.ic_arrow, "Profiles", R.drawable.ic_warning);
+            mListener.changeStatusPressedInProfile();
+
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
