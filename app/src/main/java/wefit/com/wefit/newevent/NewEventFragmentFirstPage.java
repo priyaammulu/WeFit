@@ -1,7 +1,6 @@
 package wefit.com.wefit.newevent;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +15,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -137,7 +134,10 @@ public class NewEventFragmentFirstPage extends Fragment {
 
                 Event event = new Event();
                 event.setName(mEventName.getText().toString());
-                event.setMaxAttendee(mNumberAttendees.getValue());
+
+                //TODO rivedere il numberpicker !!!
+                event.setMaxAttendees(3);
+
                 event.setEventDate(calSelected.getTime().getTime());
                 event.setEventLocation(mRetrievedLocation);
 

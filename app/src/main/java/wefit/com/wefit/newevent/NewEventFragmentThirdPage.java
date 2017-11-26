@@ -1,7 +1,6 @@
 package wefit.com.wefit.newevent;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,7 +19,7 @@ public class NewEventFragmentThirdPage extends Fragment {
     private NewFragmentListener mListener;
     private UserViewModel mUserViewModel;
     private Button finishButton;
-    private EditText description;
+    private EditText mEventDescription;
 
     public NewEventFragmentThirdPage() {
         // Required empty public constructor
@@ -41,13 +40,15 @@ public class NewEventFragmentThirdPage extends Fragment {
     }
 
     private void bind(View view) {
+
         finishButton = (Button) view.findViewById(R.id.new_event_button_finish);
-        description = (EditText) view.findViewById(R.id.new_event_third_description);
+        mEventDescription = (EditText) view.findViewById(R.id.new_event_third_description);
+
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Event event = mListener.getEvent();
-                event.setDescription(description.getText().toString());
+                event.setDescription(mEventDescription.getText().toString());
                 mListener.finish(event);
             }
         });

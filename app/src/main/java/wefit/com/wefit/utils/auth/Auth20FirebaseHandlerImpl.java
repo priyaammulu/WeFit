@@ -68,12 +68,12 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
                             loggedUser.setFullName(firebaseUser.getDisplayName());
                             loggedUser.setEmail(getContact());
 
+                            // give default info to the new user
                             loggedUser = DefaultUserFiller.getInstance().fillNewUserWithDefaultValues(loggedUser);
 
                             mUserDao.save(loggedUser);
 
                         }
-                        Log.i("PROVA2", "sono qui");
 
                         flowableEmitter.onNext(loggedUser);
 

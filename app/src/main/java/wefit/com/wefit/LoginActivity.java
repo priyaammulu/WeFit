@@ -323,7 +323,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 }
                             });
-                            // go to the main activity
 
                         } else {
                             stopSpinner();
