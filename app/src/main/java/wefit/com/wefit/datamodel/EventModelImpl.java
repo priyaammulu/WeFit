@@ -131,7 +131,7 @@ public class EventModelImpl implements EventModel {
                                 retrievedEvents.addAll(privateEvents);
 
                                 // if the user has some attendances, download them
-                                if (!userModel.getLocalUser().getAttendances().get(0).equals("")) {
+                                if (userModel.getLocalUser().getAttendances().size() != 0 && !userModel.getLocalUser().getAttendances().get(0).equals("")) {
                                     remoteEventDao
                                             .loadEventsByIDs(userModel.getLocalUser().getAttendances())
                                             .subscribe(new Consumer<List<Event>>() {
