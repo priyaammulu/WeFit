@@ -97,14 +97,10 @@ public class EventDescriptionActivity extends AppCompatActivity {
         weatherForecast = ((WefitApplication) getApplication()).getWeatherForecast();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_description);
 
         ActionBar mActionBar = this.getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
-
-        // bind the views to the variables
-        this.bindViews();
 
 
         // retrieve the event from the intent
@@ -121,6 +117,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 public void accept(Event event) throws Exception {
 
                     mRetrievedEvent = event;
+
+                    setupLayout();
+
                     // fill the activity with the new data
                     fillActivity(event);
 
@@ -128,10 +127,16 @@ public class EventDescriptionActivity extends AppCompatActivity {
             });
         } else {
 
+            setupLayout();
             fillActivity(mEventViewModel.getPrivateEvent(eventID));
 
         }
 
+    }
+
+    private void setupLayout() {
+        setContentView(R.layout.activity_event_description);
+        this.bindViews();
     }
 
     private void bindViews() {
