@@ -96,10 +96,12 @@
         android:layout_below="@+id/topPanel" />
 
 
+    <!-- bottombar -->
     <LinearLayout
         android:id="@+id/bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
+        android:padding="5dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@color/panelColor"
@@ -108,7 +110,7 @@
         <LinearLayout
             android:id="@+id/button_settings"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
@@ -124,7 +126,7 @@
                 android:id="@+id/settings_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"
+                android:text="Profile"
                 android:textStyle="normal" />
 
         </LinearLayout>
@@ -133,7 +135,7 @@
         <LinearLayout
             android:id="@+id/button_main"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
@@ -159,7 +161,7 @@
         <LinearLayout
             android:id="@+id/myEvents"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">

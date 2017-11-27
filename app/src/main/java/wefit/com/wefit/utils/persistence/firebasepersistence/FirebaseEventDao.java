@@ -32,6 +32,7 @@ import wefit.com.wefit.utils.persistence.RemoteEventDao;
 public class FirebaseEventDao implements RemoteEventDao {
 
 
+    public static final String DESCRIPTION_FIELD = "description";
     /**
      * Holds the ref to the data store
      */
@@ -61,13 +62,25 @@ public class FirebaseEventDao implements RemoteEventDao {
             eventID = this.mEventStorage.push().getKey();
             eventToStore.setId(eventID);
 
+            // save in firebase
+            this.mEventStorage.child(eventID).setValue(eventToStore);
+
+        }
+        else {
+            this.updateEvent(eventToStore);
         }
 
-        // save in firebase
-        this.mEventStorage.child(eventID).setValue(eventToStore);
+
 
 
         return eventToStore;
+    }
+
+    private void updateEvent(Event eventToUpdate) {
+
+        // you can just edit the description of an event
+        this.mEventStorage.child(eventToUpdate.getId()).child(DESCRIPTION_FIELD).setValue(eventToUpdate.getDescription());
+
     }
 
     @Override

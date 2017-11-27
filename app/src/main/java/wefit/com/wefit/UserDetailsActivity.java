@@ -32,9 +32,9 @@ public class UserDetailsActivity extends AppCompatActivity {
     private ImageView mUserPic;
     private TextView mUserName;
     private TextView mBirthDate;
-    private TextView mUserSex;
+    //private TextView mUserSex;
     private TextView mUserBio;
-    private Button mReportButton;
+    //private Button mReportButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +77,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         mUserName = (TextView) findViewById(R.id.retrieved_user_name);
         mBirthDate = (TextView) findViewById(R.id.retrieved_birth_date);
         mUserBio = (TextView) findViewById(R.id.retrieved_user_bio);
-        mReportButton = (Button) findViewById(R.id.user_report_btn);
+        //mReportButton = (Button) findViewById(R.id.user_report_btn);
 
     }
 
@@ -85,39 +85,9 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mRetrievedUser.getPhoto()));
         mUserName.setText(mRetrievedUser.getFullName());
-        mBirthDate.setText("Birthdate: " + getDate(new Date(mRetrievedUser.getBirthDate()))); // TODO mve to external string
+        mBirthDate.setText(getDate(new Date(mRetrievedUser.getBirthDate())));
         mUserBio.setText(mRetrievedUser.getBiography());
 
-        this.setReportButton();
-
-
-    }
-
-    private void setReportButton() {
-
-        mReportButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // TODO vedere dove mettere queste stringhe
-                Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-                emailIntent.setData(Uri.parse("mailto:"));
-                emailIntent.setType("text/plain");
-
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"gioacchino.castorio@gmail.com"});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "User report" + mUserViewModel.retrieveCachedUser().getId());
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "Report user " + mRetrievedUser.getId());
-
-                try {
-                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-                    finish();
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(getApplicationContext(), "There is no email client installed.", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
     }
 
 
