@@ -92,22 +92,25 @@
                     android:id="@+id/join_event_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_primary"
-                    android:text="Join event" />
+                    android:background="@drawable/border_join_event_button"
+                    android:text="Join event"
+                    android:textColor="@color/join_event_green"/>
 
                 <Button
                     android:id="@+id/abandon_event_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/border_primary"
-                    android:text="Abandon event" />
+                    android:background="@drawable/border_abandon_event_button"
+                    android:text="Abandon event"
+                    android:textColor="@color/alert_red"/>
 
                 <Button
                     android:id="@+id/modify_event_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/border_primary"
-                    android:text="Edit description" />
+                    android:text="Edit description"
+                    android:textColor="@color/colorPrimary"/>
 
             </LinearLayout>
 
