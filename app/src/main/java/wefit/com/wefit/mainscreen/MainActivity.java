@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 rightTopButtom.setImageResource(R.drawable.ic_search);
             }
         });
+
         LinearLayout main = (LinearLayout) findViewById(R.id.button_main);
         main.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,6 +309,30 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
                 rightTopButtom.setImageResource(R.drawable.ic_search_pressed);
 
+                leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+                leftTopBottom.setImageResource(R.drawable.ic_edit);
+
+                home_icon = (ImageView) findViewById(R.id.home_icon);
+                home_icon.setImageResource(R.drawable.ic_home);
+
+                settings_icon = (ImageView) findViewById(R.id.settings_icon);
+                settings_icon.setImageResource(R.drawable.ic_user);
+
+                myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
+                myEvents_icon.setImageResource(R.drawable.ic_calendar);
+            }
+        });
+
+        final LinearLayout leftTopButtons = (LinearLayout) findViewById(R.id.firstTopIcon_layout);
+        leftTopButtons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leftTopBottom = (ImageView) findViewById(R.id.leftTopButton);
+                leftTopBottom.setImageResource(R.drawable.ic_edit_pressed);
+
+                rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
+                rightTopButtom.setImageResource(R.drawable.ic_search);
+
                 home_icon = (ImageView) findViewById(R.id.home_icon);
                 home_icon.setImageResource(R.drawable.ic_home);
 
@@ -328,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View v) {
                 rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
-                rightTopButtom.setImageResource(R.drawable.ic_warning);
+                rightTopButtom.setImageResource(R.drawable.ic_warning_pressed);
 
                 home_icon = (ImageView) findViewById(R.id.home_icon);
                 home_icon.setImageResource(R.drawable.ic_home);

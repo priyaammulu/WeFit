@@ -8,8 +8,6 @@
     android:theme="@style/AppTheme.NoActionBar">
 
 
-
-
     <Button
         android:id="@+id/sign_out"
         android:layout_width="wrap_content"
@@ -150,7 +148,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_home"
+                android:src="@drawable/ic_home_pressed"
                 />
 
             <TextView
@@ -158,7 +156,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Main"
-                android:textStyle="normal"
+                android:textStyle="bold"
+                android:textColor="@color/logoBlue"
                 />
         </LinearLayout>
 
