@@ -13,5 +13,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="event_description_label">Event Description</string>
+    <string name="no_events_around_label">Sorry, it seems that there are no events around!</string>
+    <string name="add_event_suggestion_label">Press + to add one</string>
+    <string name="add_to_calendar_label">add to calendar</string>
+    <string name="view_on_map_label">view on map</string>
+    <string name="posted_on_label">posted on</string>
+    <string name="join_event_label_btn">Join event</string>
+    <string name="abandon_event_label_btn">Abandon event</string>
+    <string name="edit_description_label_btn">Edit description</string>
+    <string name="weather">Weather</string>
+    <string name="event_image">Event image</string>
+    <string name="calendar_icon">Calendar icon</string>
+    <string name="right_button">Right button</string>
+    <string name="landmark_icon_descr">Landmark icon</string>
 
 </resources>

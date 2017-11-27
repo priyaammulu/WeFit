@@ -6,4 +6,6 @@
     <dimen name="mainview_bold_headline">13sp</dimen>
     <dimen name="main_view_regular_headline">11sp</dimen>
     <dimen name="mainview_bold_title">19sp</dimen>
+    <dimen name="text_label_font_size">25sp</dimen>
+    <dimen name="backbutton_margin_left">20dp</dimen>
 </resources>

@@ -50,7 +50,7 @@
             android:name=".EventDescriptionActivity"
             android:label="@string/event_description_top_label"
             android:screenOrientation="portrait"
-            />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".newevent.NewEventActivity"
             android:screenOrientation="portrait"
@@ -61,7 +61,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAniSobsz_scZ5nYwcxFpDgBmS89NvpwAA" />
 
-        <activity android:name=".UserDetailsActivity"></activity>
+        <activity
+            android:name=".UserDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

@@ -104,9 +104,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        /*
         ActionBar mActionBar = this.getSupportActionBar();
         mActionBar.setDisplayHomeAsUpEnabled(true);
         mActionBar.setHomeButtonEnabled(true);
+        */
 
 
         // retrieve the event from the intent

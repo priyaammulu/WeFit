@@ -129,9 +129,6 @@ public class EventWallFragment extends Fragment {
             mListener.fillInIconsWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
             mListener.changeStatusPressedInMain();
 
-            // TODO I don't know what it's supposed to do
-
-
         }
     }
 

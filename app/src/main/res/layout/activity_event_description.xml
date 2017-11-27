@@ -1,281 +1,324 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="wefit.com.wefit.EventDescriptionActivity"
-    tools:layout_editor_absoluteY="81dp">
-
-    <LinearLayout
+    android:layout_height="match_parent">
+    <!--TopBar-->
+    <RelativeLayout
+        android:id="@+id/topPanel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/event_main_img"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/running_placeholder" />
+            android:layout_gravity="center"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/backbutton_margin_left"
+            android:src="@drawable/ic_arrow"
+            android:layout_marginStart="@dimen/backbutton_margin_left" />
 
-        <!-- main body -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/event_description_label"
+            android:textSize="@dimen/text_label_font_size"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/topPanel">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- nameitle -->
+            <ImageView
+                android:id="@+id/event_main_img"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/running_placeholder"
+                android:contentDescription="@string/event_image" />
+
+            <!-- main body -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp">
+                android:orientation="vertical">
 
-
-                <!-- nameitle and posted on -->
+                <!-- nameitle -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/event_title_txt"
-                        android:layout_width="wrap_content"
+
+                    <!-- nameitle and posted on -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Runnig away from here"
-                        android:textSize="24sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <!-- event operations buttons -->
+                        <TextView
+                            android:id="@+id/event_title_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="24sp" />
+
+                        <!-- event operations buttons -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="4dp"
+                                android:layout_marginRight="4dp"
+                                android:text="@string/posted_on_label" />
+
+                            <TextView
+                                android:id="@+id/event_date_posted"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/weather_shower_pic"
+                        android:layout_width="120dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="2"
+                        android:src="@drawable/rain_ico"
+                        android:contentDescription="@string/weather" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="15dp">
+
+                    <Button
+                        android:id="@+id/join_event_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_join_event_button"
+                        android:text="@string/join_event_label_btn"
+                        android:textColor="@color/join_event_green"
+                        tools:ignore="ButtonStyle" />
+
+                    <Button
+                        android:id="@+id/abandon_event_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_abandon_event_button"
+                        android:text="@string/abandon_event_label_btn"
+                        android:textColor="@color/alert_red"
+                        tools:ignore="ButtonStyle" />
+
+                    <Button
+                        android:id="@+id/modify_event_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_primary"
+                        android:text="@string/edit_description_label_btn"
+                        android:textColor="@color/colorPrimary"
+                        tools:ignore="ButtonStyle" />
+
+                </LinearLayout>
+
+                <!-- main description -->
+                <TextView
+                    android:id="@+id/event_description_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingStart="20dp"
+                    android:paddingTop="0dp" />
+
+                <!-- date and hour -->
+                <LinearLayout
+                    android:id="@+id/calendar_add_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#E5E5E5"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
+
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/calendar_ico"
+                        android:contentDescription="@string/calendar_icon" />
+
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_marginLeft="20dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="20dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/event_date"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="4dp"
-                            android:layout_marginRight="4dp"
-                            android:text="posted on" />
-
-                        <TextView
-                            android:id="@+id/event_date_posted"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="OCT 13, 1980"
+                            android:textSize="15sp"
                             android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/event_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:gravity="right"
+                        android:orientation="horizontal"
+                        android:layout_marginStart="20dp"
+                        tools:ignore="RtlHardcoded,UseCompoundDrawables">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/add_to_calendar_label"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/forward_icon"
+                            android:layout_marginStart="5dp"
+                            android:contentDescription="@string/right_button" />
+
+
                     </LinearLayout>
 
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/weather_shower_pic"
-                    android:layout_width="120dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="2"
-                    android:src="@drawable/rain_ico" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="15dp">
-
-                <Button
-                    android:id="@+id/join_event_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_join_event_button"
-                    android:text="Join event"
-                    android:textColor="@color/join_event_green"/>
-
-                <Button
-                    android:id="@+id/abandon_event_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_abandon_event_button"
-                    android:text="Abandon event"
-                    android:textColor="@color/alert_red"/>
-
-                <Button
-                    android:id="@+id/modify_event_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_primary"
-                    android:text="Edit description"
-                    android:textColor="@color/colorPrimary"/>
-
-            </LinearLayout>
-
-            <!-- main description -->
-            <TextView
-                android:id="@+id/event_description_txt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingStart="20dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="20dp"
-                android:text="Lorem ipsum si dolor amet" />
-
-            <!-- date and hour -->
-            <LinearLayout
-                android:id="@+id/calendar_add_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#E5E5E5"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="20dp">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/calendar_ico" />
-
-
+                <!-- event location -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/event_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="November 17th, 1900"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/event_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="17:30"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
+                    android:id="@+id/open_map_btn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="right"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="add to calendar"
-                        android:textSize="10sp" />
+                    android:layout_marginTop="5dp"
+                    android:background="#E5E5E5"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="15dp"
+                        android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:src="@drawable/forward_icon" />
+                        android:src="@drawable/ic_landmark"
+                        android:contentDescription="@string/landmark_icon_descr" />
 
 
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <!-- event location -->
-            <LinearLayout
-                android:id="@+id/open_map_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:background="#E5E5E5"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="20dp">
-
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/maps_icon" />
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/place_name_txt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Stillogarn Road, 1200"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/city_name_txt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Dublin"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="right"
-                    android:orientation="horizontal">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="view on map"
-                        android:textSize="10sp" />
+                        android:layout_marginLeft="20dp"
+                        android:orientation="vertical"
+                        android:layout_marginStart="20dp">
 
-                    <ImageView
-                        android:layout_width="15dp"
-                        android:layout_height="25dp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="5dp"
-                        android:src="@drawable/forward_icon" />
+                        <TextView
+                            android:id="@+id/place_name_txt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
+                        <TextView
+                            android:id="@+id/city_name_txt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:gravity="right"
+                        android:orientation="horizontal"
+                        android:layout_marginStart="20dp"
+                        tools:ignore="RtlHardcoded,UseCompoundDrawables">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/view_on_map_label"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="25dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:src="@drawable/forward_icon"
+                            android:contentDescription="@string/right_button" />
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <!-- attendees -->
-            <LinearLayout
-                android:id="@+id/attendees_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <!-- title -->
-                <TextView
+                <!-- attendees -->
+                <LinearLayout
+                    android:id="@+id/attendees_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="Attendees"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <!-- title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:textSize="15sp"
+                        android:layout_marginStart="10dp" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -283,7 +326,7 @@
         </LinearLayout>
 
 
-    </LinearLayout>
+    </ScrollView>
 
+</RelativeLayout>
 
-</ScrollView>
