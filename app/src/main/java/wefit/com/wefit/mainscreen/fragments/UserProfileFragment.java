@@ -6,10 +6,14 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,8 +41,8 @@ public class UserProfileFragment extends Fragment {
     private ImageView mUserPic;
     private TextView mUserName;
     private TextView mBirthDate;
-    private TextView mUserSex;
-    private TextView mUserBio;
+    private EditText mUserBio;
+    private Button mButton;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -46,29 +50,45 @@ public class UserProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
-        fillFragment(view);
-
+        bind(view);
+        fillFragment();
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void bind(View view) {
+        mUserPic = (ImageView) view.findViewById(R.id.profile_user_pic);
+        mUserName = (TextView) view.findViewById(R.id.user_name);
+        mBirthDate = (TextView) view.findViewById(R.id.birth_date);
+        mUserBio = (EditText) view.findViewById(R.id.user_bio);
+        mButton = (Button) view.findViewById(R.id.profile_edit);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mUserBio.setEnabled(!mUserBio.isEnabled());
+                mListener.toggleBottomBar();
+                if (mUserBio.isEnabled()) {
+                    mUserBio.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.showSoftInput(mUserBio, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.mUserViewModel = mListener.getUserViewModel();
-
         // retrieve the user from the local store
         mShowedUser = mUserViewModel.retrieveCachedUser();
-
-
-
     }
 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
             mListener.fillInIcons(R.drawable.ic_arrow, "Profile", R.drawable.ic_warning);
             mListener.changeStatusPressedInProfile();
 
@@ -76,17 +96,13 @@ public class UserProfileFragment extends Fragment {
     }
 
 
-    private void fillFragment(View view) {
-
-        mUserPic = (ImageView) view.findViewById(R.id.profile_user_pic);
-        mUserName = (TextView) view.findViewById(R.id.user_name);
-        mBirthDate = (TextView) view.findViewById(R.id.birth_date);
-       // mUserBio = (TextView) view.findViewById(R.id.user_bio);
-
-        mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mShowedUser.getPhoto()));
-        mUserName.setText(mShowedUser.getFullName());
-        mBirthDate.setText(getDate(new Date(mShowedUser.getBirthDate())));
-//        mUserBio.setText(mShowedUser.getBiography());
+    private void fillFragment() {
+        if (mShowedUser != null) {
+            mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mShowedUser.getPhoto()));
+            mUserName.setText(mShowedUser.getFullName());
+            mBirthDate.setText(getDate(new Date(mShowedUser.getBirthDate())));
+            mUserBio.setText(mShowedUser.getBiography());
+        }
 
     }
 

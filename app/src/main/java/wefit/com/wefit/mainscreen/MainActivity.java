@@ -40,46 +40,34 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     private UserViewModel mUserViewModel;
     private EventViewModel mEventViewModel;
     private EventWallFragment mainFragment = new EventWallFragment();
-
     private ScheduledEventsFragment myAttendancesFragment = new ScheduledEventsFragment();
     private UserProfileFragment profileFragment = new UserProfileFragment();
-    private UserProfileFragment settingsFragment = new UserProfileFragment();
-
     private LinkedList<Fragment> stack = new LinkedList<>();
-
+    //views
     private ImageView leftTopBottom;
     private TextView middleTopBottom;
     private ImageView topBarlogo;
     private ImageView rightTopButtom;
-
     private ImageView home_icon;
     private TextView home_text;
-
     private ImageView myEvents_icon;
     private TextView myEvents_text;
-
     private ImageView settings_icon;
     private TextView settings_text;
+    private LinearLayout mBottomBar;
+    private LinearLayout myEvents;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // startActivity(new Intent(this, GioTestActivity.class));
-
         mUserViewModel = getUserViewModel();
         mEventViewModel = getEventViewModel();
-
-
         if (!mUserViewModel.isAuth())
             signOut();
-
-
         setContentView(R.layout.activity_main);
-
         bindLayoutComponents();
-
         setFragments();
     }
 
@@ -91,12 +79,11 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 signOut();
             }
         });
-        LinearLayout myEvents = (LinearLayout) findViewById(R.id.button_myevents);
+        mBottomBar = (LinearLayout) findViewById(R.id.bottom_bar);
+        myEvents = (LinearLayout) findViewById(R.id.myEvents);
         myEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
                 myEvents_icon.setImageResource(R.drawable.ic_caledar_pressed);
 
@@ -196,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
 
     }
-
 
 
     private void setFragments() {
@@ -345,10 +331,18 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         });
     }
 
+    @Override
+    public void toggleBottomBar() {
+        if (mBottomBar.getVisibility() == View.VISIBLE)
+            mBottomBar.setVisibility(View.INVISIBLE);
+        else
+            mBottomBar.setVisibility(View.VISIBLE);
+    }
+
 
     @Override
     public void changeStatusPressedInProfile() {
-        LinearLayout warning =(LinearLayout) findViewById(R.id.search_layout);
+        LinearLayout warning = (LinearLayout) findViewById(R.id.search_layout);
         warning.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -367,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         });
 
 
-        LinearLayout arrow =(LinearLayout) findViewById(R.id.firstTopIcon_layout);
+        LinearLayout arrow = (LinearLayout) findViewById(R.id.firstTopIcon_layout);
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

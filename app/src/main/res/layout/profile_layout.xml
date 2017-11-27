@@ -22,7 +22,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="30dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/calendar_ico"
                 app:civ_border_width="0dp"
@@ -37,8 +37,8 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:text="Kerry O'Connel"
-                android:textSize="26sp"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="26sp" />
 
 
             <TextView
@@ -46,26 +46,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="15sp"
                 android:layout_marginTop="5dp"
                 android:text="Birth date: 15 OCT 1996"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/grey" />
+                android:textColor="@color/grey"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Biography"
                 android:layout_marginTop="20dp"
+                android:text="Biography"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="18sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:text="Lorem ipsum"
+            <EditText
                 android:id="@+id/user_bio"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@null"
+                android:enabled="false"
+                android:focusable="true"
+                android:text="Lorem ipsum"
+                android:windowSoftInputMode="adjustResize" />
 
         </LinearLayout>
 
@@ -73,12 +78,13 @@
 
     <!-- edit Profile -->
     <Button
+        android:id="@+id/profile_edit"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="18dp"
         android:layout_marginRight="18dp"
         android:background="@drawable/my_edit_button"

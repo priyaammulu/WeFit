@@ -21,4 +21,6 @@ public interface FragmentsInteractionListener {
     void fillInIconsWithLogo(int iconLeft, int logo, int iconRight);
     void changeStatusPressedInProfile();
     void changeStatusPressedInMain();
+
+    void toggleBottomBar();
 }
