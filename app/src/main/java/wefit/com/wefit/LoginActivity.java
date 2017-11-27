@@ -248,15 +248,15 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onCancel() {
             // TODO mettere in inglese!
-            showWaitSpinner();
-            Toast.makeText(getApplicationContext(), "Hey, non ti vergognare", Toast.LENGTH_LONG).show();
+            stopSpinner();
+            Toast.makeText(getApplicationContext(), "User, don't be shy", Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onError(FacebookException error) {
             // TODO english
             stopSpinner();
-            Toast.makeText(getApplicationContext(), "Ops, facebook è impazzito", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Ops, facebook is nuts", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -327,7 +327,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             stopSpinner();
                             // TODO english
-                            Toast.makeText(getApplicationContext(), "Ops, abbiamo problemi al server", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Ops, server problems", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -348,7 +348,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
         } else {
             // TODO mettere in inglese!
-            Toast.makeText(this, "Hey, non hai ancora confermato la tua mail!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Hey, email not confirmed!", Toast.LENGTH_LONG).show();
         }
 
     }
