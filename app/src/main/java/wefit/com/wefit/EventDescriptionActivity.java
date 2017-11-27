@@ -85,6 +85,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private Button mAbandonEvent;
     private Button mModifyEvent;
     private Button mAcceptModifyEvent;
+    private ImageView mBackButton;
 
     private UserViewModel mUserViewModel;
     private EventViewModel mEventViewModel;
@@ -203,6 +204,16 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mAbandonEvent = (Button) findViewById(R.id.abandon_event_btn);
         this.mModifyEvent = (Button) findViewById(R.id.modify_event_btn);
         this.mAcceptModifyEvent = (Button) findViewById(R.id.accept_modification_btn);
+        this.mBackButton = (ImageView) findViewById(R.id.event_description_backbutton);
+
+        // set backbutton
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // go to main class
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
 
     }
 
@@ -700,6 +711,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
     }
 
     private void showRetrieveErrorPopupDialog() {
+
+        this.popupDialogProgress.dismiss();
+
         // there was an error, show a popup message
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
         builder.setMessage(R.string.error_message_download_resources)

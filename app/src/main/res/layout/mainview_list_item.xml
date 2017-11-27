@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -19,14 +20,18 @@
             android:gravity="left"
             android:orientation="vertical"
             android:paddingLeft="@dimen/main_default_margin"
-            android:paddingStart="@dimen/main_default_margin">
+            android:paddingRight="15dp"
+            android:paddingStart="@dimen/main_default_margin"
+            android:paddingEnd="15dp"
+            tools:ignore="RtlHardcoded">
 
             <TextView
                 android:id="@+id/event_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/mainview_bold_title"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
 
             <TextView
                 android:id="@+id/event_location"
@@ -49,7 +54,8 @@
                 android:layout_marginEnd="@dimen/main_default_margin"
                 android:layout_marginRight="@dimen/main_default_margin"
                 android:textSize="@dimen/mainview_bold_title"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
 
             <TextView
                 android:id="@+id/event_time"

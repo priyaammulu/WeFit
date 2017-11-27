@@ -27,11 +27,17 @@
     <string name="calendar_icon">Calendar icon</string>
     <string name="right_button">Right button</string>
     <string name="landmark_icon_descr">Landmark icon</string>
-    <string name="loading_popup_message_spinner">Loading. Please wait...</string>
+    <string name="loading_popup_message_spinner">Loading. Please wait…</string>
     <string name="error_message_download_resources">Something went wrong!</string>
     <string name="ok_button">Ok</string>
     <string name="weather_error_toast_label">Ouch, no weather infos available</string>
     <string name="accept_edit_label_btn">Accept edit</string>
     <string name="description_type_modify_hint">Type a description here!</string>
+    <string name="user_description_top_label">WeFit User</string>
+    <string name="report_email_address">gioacchino.castorio@ucdconnect.ie</string>
+    <string name="email_report_object">User report</string>
+    <string name="send_email_picker_title">Send mail…</string>
+    <string name="toat_email_user_agent_not_installed">There is no email client installed!</string>
+    <string name="email_body_report_separator">would like to report the user</string>
 
 </resources>

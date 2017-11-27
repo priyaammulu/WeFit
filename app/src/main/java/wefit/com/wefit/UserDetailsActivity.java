@@ -1,22 +1,27 @@
 package wefit.com.wefit;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import org.reactivestreams.Subscription;
+
 import java.util.Locale;
 
-import io.reactivex.functions.Consumer;
+import io.reactivex.FlowableSubscriber;
+import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.ExtrasLabels;
+import wefit.com.wefit.utils.calendar.CalendarFormatter;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
@@ -27,38 +32,59 @@ public class UserDetailsActivity extends AppCompatActivity {
     private User mRetrievedUser;
 
     /**
+     * RxJava observer substrictions
+     */
+    private Subscription retrieveUserSubscription;
+
+    /**
      * Layout components
      */
     private ImageView mUserPic;
     private TextView mUserName;
     private TextView mBirthDate;
-    //private TextView mUserSex;
     private TextView mUserBio;
-    //private Button mReportButton;
+
+    private ProgressDialog popupDialogProgress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_user_detail);
-
+        // creation of the popup spinner
+        // it will be shown until the event is fully loaded
+        this.popupDialogProgress = ProgressDialog.show(this, null, getString(R.string.loading_popup_message_spinner), true);
 
         this.mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
 
         Intent receivedIntent = this.getIntent();
-
         String userID = receivedIntent.getStringExtra(ExtrasLabels.USER_ID);
 
-
-
-
-        this.mUserViewModel.retrieveUserByID(userID).subscribe(new Consumer<User>() {
+        mUserViewModel.retrieveUserByID(userID).subscribe(new FlowableSubscriber<User>() {
             @Override
-            public void accept(User user) throws Exception {
+            public void onSubscribe(Subscription subscription) {
+                subscription.request(1L);
+                retrieveUserSubscription = subscription;
+            }
 
+            @Override
+            public void onNext(User user) {
+
+                // memorize the retrieved user
                 mRetrievedUser = user;
 
                 setupLayout();
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+
+                showRetrieveErrorPopupDialog();
+
+            }
+
+            @Override
+            public void onComplete() {
 
             }
         });
@@ -67,6 +93,8 @@ public class UserDetailsActivity extends AppCompatActivity {
     }
 
     private void setupLayout() {
+        this.popupDialogProgress.dismiss();
+        setContentView(R.layout.activity_user_detail);
         bindActivityComponents();
         fillActivity(); // add user infos
     }
@@ -77,7 +105,51 @@ public class UserDetailsActivity extends AppCompatActivity {
         mUserName = (TextView) findViewById(R.id.retrieved_user_name);
         mBirthDate = (TextView) findViewById(R.id.retrieved_birth_date);
         mUserBio = (TextView) findViewById(R.id.retrieved_user_bio);
-        //mReportButton = (Button) findViewById(R.id.user_report_btn);
+
+        ImageView mReportButton = (ImageView) findViewById(R.id.user_report_button);
+        ImageView mBackbutton = (ImageView) findViewById(R.id.user_details_backbutton);
+
+        mBackbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        mReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // send an email to report the user
+
+                //Log.i("Send email", "");
+                String[] TO = {getString(R.string.report_email_address)};
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+                emailIntent.setData(Uri.parse("mailto:"));
+                emailIntent.setType("text/plain");
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_report_object) );
+
+                // TOO not possible to extract
+                String reportBody = "%s (%s)" + getString(R.string.email_body_report_separator) +"%s (%s)";
+
+                String report = String.format(Locale.ENGLISH, reportBody,
+                        mUserViewModel.retrieveCachedUser().getFullName(),
+                        mUserViewModel.retrieveCachedUser().getId(),
+                        mRetrievedUser.getFullName(),
+                        mRetrievedUser.getId());
+
+                emailIntent.putExtra(Intent.EXTRA_TEXT, report);
+
+                try {
+                    startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email_picker_title)));
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(getApplicationContext(), R.string.toat_email_user_agent_not_installed, Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
 
     }
 
@@ -85,15 +157,35 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mRetrievedUser.getPhoto()));
         mUserName.setText(mRetrievedUser.getFullName());
-        mBirthDate.setText(getDate(new Date(mRetrievedUser.getBirthDate())));
+        mBirthDate.setText(CalendarFormatter.getDate(mRetrievedUser.getBirthDate()));
         mUserBio.setText(mRetrievedUser.getBiography());
 
     }
 
+    private void showRetrieveErrorPopupDialog() {
 
-    // TODO spostare altrove, troppo codice ripetuto
-    private String getDate(Date date) {
-        Locale locale = Locale.ENGLISH;
-        return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
+        this.popupDialogProgress.dismiss();
+
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage(R.string.error_message_download_resources)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // , go to the main activity
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (retrieveUserSubscription != null) {
+            retrieveUserSubscription.cancel();
+        }
     }
 }

@@ -8,4 +8,5 @@
     <dimen name="mainview_bold_title">19sp</dimen>
     <dimen name="text_label_font_size">25sp</dimen>
     <dimen name="backbutton_margin_left">20dp</dimen>
+    <dimen name="topbar_button_margin_right">20dp</dimen>
 </resources>

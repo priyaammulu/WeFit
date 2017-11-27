@@ -163,7 +163,12 @@ public class EventModelImpl implements EventModel {
 
     @Override
     public void storeEvent(Event event) {
-        remoteEventDao.save(event);
+        if (event.isPrivateEvent()) {
+            localEventDao.save(event);
+        } else {
+            remoteEventDao.save(event);
+        }
+
     }
 
     @Override
