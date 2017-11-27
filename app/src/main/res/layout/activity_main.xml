@@ -61,8 +61,8 @@
 
             <ImageView
                 android:id="@+id/topBarLogo"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_height="70dp"
+                android:layout_width="70dp"
                 android:layout_gravity="center" />
 
         </LinearLayout>
@@ -130,9 +130,12 @@
                 android:id="@+id/settings_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Settings"/>
+                android:text="Settings"
+                android:textStyle="normal" />
+
         </LinearLayout>
         <!--Second icon -->
+
         <LinearLayout
             android:id="@+id/button_main"
             android:layout_width="0dp"
@@ -147,14 +150,19 @@
                 android:layout_marginTop="5dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_home" />
+                android:src="@drawable/ic_home"
+                />
 
             <TextView
                 android:id="@+id/home_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Main" />
+                android:text="Main"
+                android:textStyle="normal"
+                />
         </LinearLayout>
+
+
         <!--third icon -->
         <LinearLayout
             android:layout_width="0dp"
@@ -176,7 +184,8 @@
                 android:id="@+id/myEvents_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="My events"/>
+                android:text="My events"
+                android:textStyle="normal"/>
         </LinearLayout>
 
     </LinearLayout>

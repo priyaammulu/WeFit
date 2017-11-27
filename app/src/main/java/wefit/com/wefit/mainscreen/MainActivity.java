@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -99,8 +100,22 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
                 myEvents_icon.setImageResource(R.drawable.ic_caledar_pressed);
 
+                myEvents_text = (TextView) findViewById(R.id.myEvents_text);
+                myEvents_text.setTextColor(getResources().getColor(R.color.logoBlue));
+
+                myEvents_text.setTypeface(null, Typeface.BOLD);
+
                 settings_icon = (ImageView) findViewById(R.id.settings_icon);
                 settings_icon.setImageResource(R.drawable.ic_user);
+
+                settings_text = (TextView) findViewById(R.id.settings_text);
+                settings_text.setTextColor(getResources().getColor(R.color.black));
+                settings_text.setTypeface(null, Typeface.NORMAL);
+
+                home_text = (TextView) findViewById(R.id.home_text);
+                home_text.setTextColor(getResources().getColor(R.color.black));
+                home_text.setTypeface(null, Typeface.NORMAL);
+
 
                 home_icon = (ImageView) findViewById(R.id.home_icon);
                 home_icon.setImageResource(R.drawable.ic_home);
@@ -117,11 +132,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             @Override
             public void onClick(View view) {
                 fragmentTransaction(profileFragment);
-                settings_text =(TextView) findViewById(R.id.settings_text);
-                settings_text.setVisibility(GONE);
 
                 settings_icon = (ImageView) findViewById(R.id.settings_icon);
-                settings_icon.setImageResource(R.drawable.ic_user_pressed3);
+                settings_icon.setImageResource(R.drawable.ic_user_pressed);
+
+                settings_text = (TextView) findViewById(R.id.settings_text);
+                settings_text.setTextColor(getResources().getColor(R.color.logoBlue));
+                settings_text.setTypeface(null, Typeface.BOLD);
 
                 myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
                 myEvents_icon.setImageResource(R.drawable.ic_calendar);
@@ -129,9 +146,14 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 home_icon = (ImageView) findViewById(R.id.home_icon);
                 home_icon.setImageResource(R.drawable.ic_home);
 
-                settings_text = (TextView) findViewById(R.id.settings_text);
-                //settings_text.setTextColor(314864);
-                settings_text.setHint("4dp");
+                home_text = (TextView) findViewById(R.id.home_text);
+                home_text.setTextColor(getResources().getColor(R.color.black));
+                home_text.setTypeface(null, Typeface.NORMAL);
+
+                myEvents_text = (TextView) findViewById(R.id.myEvents_text);
+                myEvents_text.setTextColor(getResources().getColor(R.color.black));
+                myEvents_text.setTypeface(null, Typeface.NORMAL);
+
 
                 rightTopButtom = (ImageView) findViewById(R.id.rightTopButton);
                 rightTopButtom.setImageResource(R.drawable.ic_search);
@@ -146,8 +168,21 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 home_icon = (ImageView) findViewById(R.id.home_icon);
                 home_icon.setImageResource(R.drawable.ic_home_pressed);
 
+                home_text = (TextView) findViewById(R.id.home_text);
+                home_text.setTextColor(getResources().getColor(R.color.logoBlue));
+                home_text.setTypeface(null, Typeface.BOLD);
+
                 settings_icon = (ImageView) findViewById(R.id.settings_icon);
                 settings_icon.setImageResource(R.drawable.ic_user);
+
+                settings_text = (TextView) findViewById(R.id.settings_text);
+                settings_text.setTextColor(getResources().getColor(R.color.black));
+                settings_text.setTypeface(null, Typeface.NORMAL);
+
+                myEvents_text = (TextView) findViewById(R.id.myEvents_text);
+                myEvents_text.setTextColor(getResources().getColor(R.color.black));
+                myEvents_text.setTypeface(null, Typeface.NORMAL);
+
 
                 myEvents_icon = (ImageView) findViewById(R.id.myEvents_icon);
                 myEvents_icon.setImageResource(R.drawable.ic_calendar);

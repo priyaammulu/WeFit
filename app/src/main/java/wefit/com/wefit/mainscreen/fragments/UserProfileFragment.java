@@ -69,7 +69,7 @@ public class UserProfileFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden){
-            mListener.fillInIcons(R.drawable.ic_arrow, "Profiles", R.drawable.ic_warning);
+            mListener.fillInIcons(R.drawable.ic_arrow, "Profile", R.drawable.ic_warning);
             mListener.changeStatusPressedInProfile();
 
         }
@@ -86,7 +86,7 @@ public class UserProfileFragment extends Fragment {
         mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mShowedUser.getPhoto()));
         mUserName.setText(mShowedUser.getFullName());
         mBirthDate.setText(getDate(new Date(mShowedUser.getBirthDate())));
-        mUserBio.setText(mShowedUser.getBiography());
+//        mUserBio.setText(mShowedUser.getBiography());
 
     }
 
