@@ -85,17 +85,13 @@
                 android:layout_marginTop="5dp"
                 android:background="@android:color/darker_gray" />
 
-            <EditText
+            <TextView
                 android:id="@+id/retrieved_user_bio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="10dp"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:text="Lorem ipsum"
-                android:windowSoftInputMode="adjustResize" />
+                android:text="Lorem ipsum" />
 
         </LinearLayout>
 
