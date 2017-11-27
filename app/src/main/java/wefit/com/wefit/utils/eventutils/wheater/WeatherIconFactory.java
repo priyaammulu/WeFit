@@ -22,10 +22,10 @@ public class WeatherIconFactory {
     private WeatherIconFactory() {
 
         // TODO change the icons
-        this.availableWeathers.put(Weather.SUNNY, R.drawable.ic_gym_cardio);
-        this.availableWeathers.put(Weather.RAINY, R.drawable.rain_ico);
-        this.availableWeathers.put(Weather.SNOWY, R.drawable.ic_gym_weightlifting);
-        this.availableWeathers.put(Weather.DISASTROUS, R.drawable.ic_gym_weightlifting);
+        this.availableWeathers.put(Weather.SUNNY, R.drawable.ic_sunny_weather);
+        this.availableWeathers.put(Weather.RAINY, R.drawable.ic_rain);
+        this.availableWeathers.put(Weather.SNOWY, R.drawable.ic_snow);
+        this.availableWeathers.put(Weather.DISASTROUS, R.drawable.ic_tornado);
 
     }
 

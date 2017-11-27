@@ -15,6 +15,7 @@ import org.reactivestreams.Subscription;
 
 import java.util.List;
 
+import io.reactivex.FlowableSubscriber;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.utils.ExtrasLabels;
@@ -27,9 +28,15 @@ import wefit.com.wefit.viewmodels.UserViewModel;
 
 
 public class ScheduledEventsFragment extends Fragment {
+
+    /**
+     * RxJava observer subscriptions
+     */
+    private Subscription eventRetrieveSubscription;
+
     private FragmentsInteractionListener mActivity;
     private EventViewModel mEventViewModel;
-    private Subscription mSubscription; // TODO what to do with this?
+
     private ListView mListView;
     private AttendancesEventAdapter attendancesEventAdapter;
     private UserViewModel mUserViewModel;
@@ -136,7 +143,7 @@ public class ScheduledEventsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSubscription != null)
-            mSubscription.cancel();
+        if (eventRetrieveSubscription != null)
+            eventRetrieveSubscription.cancel();
     }
 }

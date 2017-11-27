@@ -39,5 +39,7 @@
     <string name="send_email_picker_title">Send mail…</string>
     <string name="toat_email_user_agent_not_installed">There is no email client installed!</string>
     <string name="email_body_report_separator">would like to report the user</string>
+    <string name="biography_label">Biography</string>
+    <string name="birth_date_label">Birth date:</string>
 
 </resources>
