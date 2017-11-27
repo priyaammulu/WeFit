@@ -37,7 +37,7 @@ public class EventViewModel {
     }
 
     public void createNewEvent(Event newEvent) {
-        mEventModel.createEvent(newEvent);
+        mEventModel.storeEvent(newEvent);
     }
 
     public EventLocation getUserLocation() {
@@ -63,6 +63,12 @@ public class EventViewModel {
     public void addAttendeeToEvent(String eventID, String userID) {
 
         mEventModel.addAttendee(eventID, userID);
+
+    }
+
+    public void updateEvent(Event event) {
+
+        mEventModel.storeEvent(event);
 
     }
 }

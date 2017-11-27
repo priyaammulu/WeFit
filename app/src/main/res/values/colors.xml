@@ -18,5 +18,5 @@
     <color name="panelColor">#d1e0e0</color>
     <color name="logoBlue">#314864</color>
     <color name="alert_red">#a90000</color>
-    <color name="join_event_green">#008c1a</color>
+    <color name="positive_event_green">#008c1a</color>
 </resources>

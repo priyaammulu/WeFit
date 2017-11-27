@@ -7,32 +7,33 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import io.reactivex.functions.Consumer;
+import io.reactivex.FlowableSubscriber;
+import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.utils.calendar.CalendarFormatter;
 import wefit.com.wefit.utils.eventutils.wheater.Weather;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherIconFactory;
@@ -58,9 +59,11 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private Event mRetrievedEvent;
 
     /**
-     * True if the event is private
+     * RxJava listeners
      */
-    private boolean isPrivateEvent;
+    private Subscription eventRetrieve;
+    private Subscription weatherForecastRetrieve;
+    private Subscription attendeesInfosRetrieve;
 
 
     /**
@@ -68,7 +71,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
      */
     private ImageView mEventImage;
     private TextView mEventName;
-    private TextView mEventDescription;
+    private EditText mEventDescription;
     private TextView mEventPublishDate;
     private TextView mEventDate;
     private TextView mEventTime;
@@ -81,6 +84,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private Button mJoinEvent;
     private Button mAbandonEvent;
     private Button mModifyEvent;
+    private Button mAcceptModifyEvent;
 
     private UserViewModel mUserViewModel;
     private EventViewModel mEventViewModel;
@@ -89,121 +93,224 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     private ProgressDialog popupDialogProgress;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // tODO extract text
-        popupDialogProgress = ProgressDialog.show(this, "", "Loading. Please wait...", true);
-
-        // retrieve the view-models
-        mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
-        mEventViewModel = ((WefitApplication) getApplication()).getEventViewModel();
-
-        // retrieve utils
-        weatherForecast = ((WefitApplication) getApplication()).getWeatherForecast();
-
         super.onCreate(savedInstanceState);
-
-        /*
-        ActionBar mActionBar = this.getSupportActionBar();
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setHomeButtonEnabled(true);
-        */
-
 
         // retrieve the event from the intent
         String eventID = this.getIntent().getStringExtra(ExtrasLabels.EVENT);
 
+        // creation of the popup spinner
+        // it will be shown until the event is fully loaded
+        this.popupDialogProgress = ProgressDialog.show(this, null, getString(R.string.loading_popup_message_spinner), true);
+
+        // retrieve the view-models
+        this.mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
+        this.mEventViewModel = ((WefitApplication) getApplication()).getEventViewModel();
+
+        // retrieve utils
+        this.weatherForecast = ((WefitApplication) getApplication()).getWeatherForecast();
+
         // check if the event is public or local (default public)
-        this.isPrivateEvent = this.getIntent().getBooleanExtra(ExtrasLabels.IS_PRIVATE, false);
+        if (!this.getIntent().getBooleanExtra(ExtrasLabels.IS_PRIVATE, false)) {
 
-        if (!isPrivateEvent) {
-
-            // download the update event from the server
-            mEventViewModel.getEvent(eventID).subscribe(new Consumer<Event>() {
+            // request the data from the remote store
+            mEventViewModel.getEvent(eventID).subscribe(new FlowableSubscriber<Event>() {
                 @Override
-                public void accept(Event event) throws Exception {
+                public void onSubscribe(Subscription subscription) {
 
+                    subscription.request(Long.MAX_VALUE);
+                    eventRetrieve = subscription;
+
+                }
+
+                @Override
+                public void onNext(Event event) {
+
+                    // keep the retrieved event
                     mRetrievedEvent = event;
 
+                    // show the layout
                     showLayout();
 
                     // fill the activity with the new data
-                    fillActivity(event);
+                    fillActivityInformation(event);
+
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+
+                    showRetrieveErrorPopupDialog();
+                }
+
+                @Override
+                public void onComplete() {
 
                 }
             });
+
         } else {
 
-            fillActivity(mEventViewModel.getPrivateEvent(eventID));
+            // the event is private, retrieve from the local store
+            mRetrievedEvent = mEventViewModel.getPrivateEvent(eventID);
+
+            // show the layout
             showLayout();
+
+            // can just fill the activity
+            fillActivityInformation(mRetrievedEvent);
 
         }
 
     }
 
+    /**
+     * Inflate the layout in the activity
+     */
     private void showLayout() {
+
+        // remove the spinner dialog, as the download is ended
         popupDialogProgress.dismiss();
+
+        // inflate the layout
         setContentView(R.layout.activity_event_description);
-        this.bindViews();
+
+        // bind the layout components to the class properties
+        this.bindComponents();
     }
 
 
-    private void bindViews() {
+    /**
+     * Bind the layout components to the class properties
+     */
+    private void bindComponents() {
 
         this.mEventImage = (ImageView) findViewById(R.id.event_main_img);
         this.mEventName = (TextView) findViewById(R.id.event_title_txt);
-        this.mEventDescription = (TextView) findViewById(R.id.event_description_txt);
+        this.mEventDescription = (EditText) findViewById(R.id.event_description_txt);
         this.mEventPublishDate = (TextView) findViewById(R.id.event_date_posted);
         this.mEventDate = (TextView) findViewById(R.id.event_date);
         this.mEventTime = (TextView) findViewById(R.id.event_time);
         this.mEventPlace = (TextView) findViewById(R.id.place_name_txt);
         this.mEventCity = (TextView) findViewById(R.id.city_name_txt);
         this.mWeatherForecast = (ImageView) findViewById(R.id.weather_shower_pic);
-
         this.mAttendees = (LinearLayout) findViewById(R.id.attendees_list);
-
         this.mOpenMapButton = (LinearLayout) findViewById(R.id.open_map_btn);
         this.mAddCalendarButton = (LinearLayout) findViewById(R.id.calendar_add_btn);
-
-        // buttons
         this.mJoinEvent = (Button) findViewById(R.id.join_event_btn);
         this.mAbandonEvent = (Button) findViewById(R.id.abandon_event_btn);
         this.mModifyEvent = (Button) findViewById(R.id.modify_event_btn);
+        this.mAcceptModifyEvent = (Button) findViewById(R.id.accept_modification_btn);
 
     }
 
-    private void fillActivity(final Event retrievedEvent) {
+    /**
+     * Fill the activity with the retrieved informations
+     *
+     * @param retrievedEvent retrieved event
+     */
+    private void fillActivityInformation(final Event retrievedEvent) {
 
+        // event infos filling
         this.mEventName.setText(retrievedEvent.getName());
         this.mEventImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(retrievedEvent.getImage()));
         this.mEventDescription.setText(retrievedEvent.getDescription());
-        this.mEventPublishDate.setText(getDate(new Date(retrievedEvent.getPublicationDate())));
-        this.mEventDate.setText(getDate(new Date(retrievedEvent.getEventDate())));
-        this.mEventTime.setText(getTime(new Date(retrievedEvent.getEventDate())));
-        this.mEventPlace.setText(retrievedEvent.getEventLocation().getName().split(",")[0].trim());
-        this.mEventCity.setText(retrievedEvent.getEventLocation().getName().split(",")[1].trim());
+        this.mEventPublishDate.setText(CalendarFormatter.getDate(retrievedEvent.getPublicationDate()));
+        this.mEventDate.setText(CalendarFormatter.getDate(retrievedEvent.getEventDate()));
+        this.mEventTime.setText(CalendarFormatter.getDate(retrievedEvent.getEventDate()));
+        this.mEventPlace.setText(retrievedEvent.getEventLocation().getName().trim());
+        this.mEventCity.setText(String.format(Locale.ENGLISH,
+                "%4.5f, %4.5f",
+                retrievedEvent.getEventLocation().getLatitude(),
+                retrievedEvent.getEventLocation().getLongitude()));
+
+        // show the action buttons depending on the ownership of the event
+        setEventActionButtons();
+
+        showMapAndCalendarButtons(retrievedEvent);
+
+        handleWeatherForecast(retrievedEvent);
+
+        retrieveAttendeesInfos(retrievedEvent);
 
 
-        if (retrievedEvent.getAdminID().equals(mUserViewModel.retrieveCachedUser().getId())) {
-            // user cannot join or abandon his own event
-            mAbandonEvent.setVisibility(View.GONE);
-            mJoinEvent.setVisibility(View.GONE);
-        } else {
-            // common attendees cannot modify an event
-            mModifyEvent.setVisibility(View.GONE);
+    }
 
-            // check if the user has already joined the event
-            if (isLoggedUserJoint()) {
-                mJoinEvent.setVisibility(View.GONE);
-                mAbandonEvent.setVisibility(View.VISIBLE);
+    private void retrieveAttendeesInfos(final Event retrievedEvent) {
+
+        // retrieve attendees and owner
+        final List<String> attendeeIDs = new ArrayList<>();
+        final List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
+
+
+        if (!retrievedEvent.isPrivateEvent()) { // public event
+
+            // check if the user is the admin of the event
+            if (checkIsCurrentUserAdmin()) {
+                coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
             } else {
-                mJoinEvent.setVisibility(View.VISIBLE);
-                mAbandonEvent.setVisibility(View.GONE);
+                attendeeIDs.add(retrievedEvent.getAdminID());
+
             }
+
+            // if there are other attendees, retrieve them
+            if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
+                attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
+
+                this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new FlowableSubscriber<Map<String, User>>() {
+                    @Override
+                    public void onSubscribe(Subscription subscription) {
+                        subscription.request(Long.MAX_VALUE);
+                        attendeesInfosRetrieve = subscription;
+                    }
+
+                    @Override
+                    public void onNext(Map<String, User> attendees) {
+
+                        // add users to the list of attendees
+
+                        if (!checkIsCurrentUserAdmin()) {
+                            // add the admin as firs element
+                            coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+                        }
+
+                        // add the other attendees
+                        for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
+                            coupleAttendances.add(
+                                    new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
+                            );
+                        }
+
+                        // show all the attending users
+                        showAttendaces(coupleAttendances);
+
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                        showRetrieveErrorPopupDialog();
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+            } else {
+                showAttendaces(coupleAttendances);
+            }
+
+        } else { // private event
+            mAttendees.setVisibility(View.INVISIBLE); // there are no attendees
+
         }
+    }
 
-
+    private void showMapAndCalendarButtons(final Event retrievedEvent) {
         // open maps to the location
         this.mOpenMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,15 +355,24 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    private void handleWeatherForecast(Event retrievedEvent) {
         // hide weather forecast
         this.mWeatherForecast.setVisibility(View.INVISIBLE);
 
         // retrieve weather if the date is closer than 5 days
         if ((retrievedEvent.getEventDate() - new Date().getTime()) < FIVE_DAYS_DISTANCE_MILLIS) {
-            this.weatherForecast.getForecast(retrievedEvent).subscribe(new Consumer<Weather>() {
+
+            this.weatherForecast.getForecast(retrievedEvent).subscribe(new FlowableSubscriber<Weather>() {
                 @Override
-                public void accept(Weather weather) throws Exception {
+                public void onSubscribe(Subscription subscription) {
+                    subscription.request(Long.MAX_VALUE);
+                    weatherForecastRetrieve = subscription;
+                }
+
+                @Override
+                public void onNext(Weather weather) {
 
                     // retrieve weather icon and set it
                     int weatherIcon = WeatherIconFactory.getInstance().getWeatherIconByID(weather);
@@ -265,92 +381,110 @@ public class EventDescriptionActivity extends AppCompatActivity {
                     // show the icon on screen
                     mWeatherForecast.setVisibility(View.VISIBLE);
                 }
-            });
-        }
 
-        // retrieve attendees and owner
-        final List<String> attendeeIDs = new ArrayList<>();
-        final List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
-
-
-        if (!isPrivateEvent) {
-            // public event
-            // check if the user is the admin of the event
-            if (checkIsCurrentUserAdmin()) {
-                coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
-            } else {
-                attendeeIDs.add(retrievedEvent.getAdminID());
-
-            }
-
-            // if there are other attendees, retrieve them
-            if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
-                attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
-
-                this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new Consumer<Map<String, User>>() {
-                    @Override
-                    public void accept(Map<String, User> attendees) throws Exception {
-
-                        Log.i("attendees", attendees.toString());
-
-                        // add users to the list of attendees
-
-                        if (!checkIsCurrentUserAdmin()) {
-                            // add the admin as firs element
-                            coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
-                        }
-
-                        // add the other attendees
-                        for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
-                            coupleAttendances.add(
-                                    new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
-                            );
-                        }
-
-                        showAttendaces(coupleAttendances);
-                    }
-                });
-            } else {
-                showAttendaces(coupleAttendances);
-            }
-
-        } else { // private event
-            mAttendees.setVisibility(View.INVISIBLE); // there are no attendees
-
-        }
-
-
-        // cannot join a private event
-        if (!mRetrievedEvent.isPrivateEvent()) {
-
-            // join event
-            mJoinEvent.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    mEventViewModel.addAttendeeToEvent(mRetrievedEvent.getId(), mUserViewModel.retrieveCachedUser().getId());
-                    refresh();
+                public void onError(Throwable throwable) {
+
+                    Toast.makeText(getApplicationContext(), R.string.weather_error_toast_label, Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onComplete() {
+
                 }
             });
 
-            // abandon event
-            mAbandonEvent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showEventAbandonDialog();
+
+        }
+    }
+
+    private void setEventActionButtons() {
+
+        // join event button
+        mJoinEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEventViewModel.addAttendeeToEvent(mRetrievedEvent.getId(), mUserViewModel.retrieveCachedUser().getId());
+                refresh();
+            }
+        });
+
+        // abandon event button
+        mAbandonEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // event abandon confirm
+                showEventAbandonDialog();
+            }
+        });
+
+        mModifyEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View modificationButton) {
+                modificationButton.setVisibility(View.GONE);
+
+                // allow description modification
+                mEventDescription.setEnabled(true);
+                mEventDescription.requestFocus();
+                mEventDescription.setSelection(mEventDescription.getText().length());
+
+                mAcceptModifyEvent.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        mAcceptModifyEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View modifyAcceptButton) {
+
+                String newDescription = mEventDescription.getText().toString();
+                if (newDescription.length() != 0) {
+                    // update the description
+                    mRetrievedEvent.setDescription(mEventDescription.getText().toString());
+
+                    // disable modification
+                    mEventDescription.setEnabled(false);
+
+                    // update the event
+                    mEventViewModel.updateEvent(mRetrievedEvent);
+
+                    mModifyEvent.setVisibility(View.VISIBLE);
+                    modifyAcceptButton.setVisibility(View.GONE);
                 }
-            });
+
+
+            }
+        });
+
+        mAcceptModifyEvent.setVisibility(View.GONE);
+
+        // if the user is the event owner
+        if (checkIsCurrentUserAdmin()) {
+
+            // user cannot join or abandon his own event
+            mAbandonEvent.setVisibility(View.GONE);
+            mJoinEvent.setVisibility(View.GONE);
 
         } else {
-            // just security check
-            mAbandonEvent.setVisibility(View.INVISIBLE);
-            mJoinEvent.setVisibility(View.INVISIBLE);
-        }
 
+            // attendees cannot modify an event
+            mModifyEvent.setVisibility(View.GONE);
+
+            // check if the user has already joined the event
+            if (isLoggedUserJoint()) {
+                mJoinEvent.setVisibility(View.GONE);
+                mAbandonEvent.setVisibility(View.VISIBLE);
+            } else {
+                mJoinEvent.setVisibility(View.VISIBLE);
+                mAbandonEvent.setVisibility(View.GONE);
+            }
+        }
 
     }
 
     /**
      * Check if the user has already joint the event
+     *
      * @return true if joint
      */
     private boolean isLoggedUserJoint() {
@@ -371,24 +505,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private String getMonthDay(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        String month = new SimpleDateFormat("MMM").format(cal.getTime());
-        return month.concat(" ").concat(day);
-    }
-
-    private String getDate(Date date) {
-        Locale locale = Locale.ENGLISH;
-        return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
-    }
-
-    private String getTime(Date date) {
-        Locale locale = Locale.ITALIAN;
-        return DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
     }
 
     private void showAttendaces(List<Pair<User, Boolean>> attendances) {
@@ -469,7 +585,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         boolean isAdmin = false;
 
-        if (mRetrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
+        if (mRetrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId()) || mRetrievedEvent.isPrivateEvent()) {
             isAdmin = true;
         }
 
@@ -540,15 +656,61 @@ public class EventDescriptionActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Refresh the activity reopening it
+     */
     private void refresh() {
 
         Intent refresh = new Intent(this, EventDescriptionActivity.class);
-
-        refresh.putExtras(getIntent().getExtras());
+        Bundle oldExtras = getIntent().getExtras();
+        if (oldExtras != null)
+            refresh.putExtras(getIntent().getExtras());
 
         startActivity(refresh);
 
     }
 
+    /**
+     * If the user presses back, it opens the main activity
+     */
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Avoid memory leaks (remove all the observers)
+        if (eventRetrieve != null) {
+            eventRetrieve.cancel();
+        }
+        if (attendeesInfosRetrieve != null) {
+            attendeesInfosRetrieve.cancel();
+
+        }
+        if (weatherForecastRetrieve != null) {
+            weatherForecastRetrieve.cancel();
+
+        }
+
+    }
+
+    private void showRetrieveErrorPopupDialog() {
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage(R.string.error_message_download_resources)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // , go to the main activity
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 }

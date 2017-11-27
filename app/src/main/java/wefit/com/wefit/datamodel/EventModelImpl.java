@@ -162,7 +162,7 @@ public class EventModelImpl implements EventModel {
     }
 
     @Override
-    public void createEvent(Event event) {
+    public void storeEvent(Event event) {
         remoteEventDao.save(event);
     }
 

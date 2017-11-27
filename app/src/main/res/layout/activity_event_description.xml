@@ -14,21 +14,21 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_gravity="center"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/backbutton_margin_left"
-            android:src="@drawable/ic_arrow"
-            android:layout_marginStart="@dimen/backbutton_margin_left" />
+            android:layout_marginStart="@dimen/backbutton_margin_left"
+            android:src="@drawable/ic_arrow" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="@string/event_description_label"
-            android:textSize="@dimen/text_label_font_size"
             android:textColor="@color/white"
-            android:layout_centerInParent="true" />
+            android:textSize="@dimen/text_label_font_size" />
 
     </RelativeLayout>
 
@@ -46,9 +46,9 @@
                 android:id="@+id/event_main_img"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:contentDescription="@string/event_image"
                 android:scaleType="centerCrop"
-                android:src="@drawable/running_placeholder"
-                android:contentDescription="@string/event_image" />
+                android:src="@drawable/running_placeholder" />
 
             <!-- main body -->
             <LinearLayout
@@ -107,8 +107,8 @@
                         android:layout_width="120dp"
                         android:layout_height="50dp"
                         android:layout_weight="2"
-                        android:src="@drawable/rain_ico"
-                        android:contentDescription="@string/weather" />
+                        android:contentDescription="@string/weather"
+                        android:src="@drawable/rain_ico" />
 
                 </LinearLayout>
 
@@ -125,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/border_join_event_button"
                         android:text="@string/join_event_label_btn"
-                        android:textColor="@color/join_event_green"
+                        android:textColor="@color/positive_event_green"
                         tools:ignore="ButtonStyle" />
 
                     <Button
@@ -146,18 +146,34 @@
                         android:textColor="@color/colorPrimary"
                         tools:ignore="ButtonStyle" />
 
+                    <Button
+                        android:id="@+id/accept_modification_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/border_primary"
+                        android:text="@string/accept_edit_label_btn"
+                        android:textColor="@color/positive_event_green"
+                        tools:ignore="ButtonStyle" />
+
+
                 </LinearLayout>
 
                 <!-- main description -->
-                <TextView
+                <EditText
                     android:id="@+id/event_description_txt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:hint="@string/description_type_modify_hint"
+                    android:inputType="text"
                     android:paddingBottom="20dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingStart="20dp"
-                    android:paddingTop="0dp" />
+                    android:paddingTop="0dp"
+                    android:textColor="@drawable/textdescription_selector"/>
 
                 <!-- date and hour -->
                 <LinearLayout
@@ -173,16 +189,16 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/calendar_ico"
-                        android:contentDescription="@string/calendar_icon" />
+                        android:contentDescription="@string/calendar_icon"
+                        android:src="@drawable/calendar_ico" />
 
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:orientation="vertical"
-                        android:layout_marginStart="20dp">
+                        android:layout_marginStart="20dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/event_date"
@@ -203,9 +219,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:gravity="right"
                         android:orientation="horizontal"
-                        android:layout_marginStart="20dp"
                         tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
                         <TextView
@@ -220,9 +236,9 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="5dp"
-                            android:src="@drawable/forward_icon"
                             android:layout_marginStart="5dp"
-                            android:contentDescription="@string/right_button" />
+                            android:contentDescription="@string/right_button"
+                            android:src="@drawable/forward_icon" />
 
 
                     </LinearLayout>
@@ -245,16 +261,16 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_landmark"
-                        android:contentDescription="@string/landmark_icon_descr" />
+                        android:contentDescription="@string/landmark_icon_descr"
+                        android:src="@drawable/ic_landmark" />
 
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:orientation="vertical"
-                        android:layout_marginStart="20dp">
+                        android:layout_marginStart="20dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/place_name_txt"
@@ -275,9 +291,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
+                        android:layout_marginStart="20dp"
                         android:gravity="right"
                         android:orientation="horizontal"
-                        android:layout_marginStart="20dp"
                         tools:ignore="RtlHardcoded,UseCompoundDrawables">
 
                         <TextView
@@ -292,8 +308,8 @@
                             android:layout_height="25dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="5dp"
-                            android:src="@drawable/forward_icon"
-                            android:contentDescription="@string/right_button" />
+                            android:contentDescription="@string/right_button"
+                            android:src="@drawable/forward_icon" />
 
 
                     </LinearLayout>
@@ -314,8 +330,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:textSize="15sp"
-                        android:layout_marginStart="10dp" />
+                        android:layout_marginStart="10dp"
+                        android:textSize="15sp" />
 
                 </LinearLayout>
 

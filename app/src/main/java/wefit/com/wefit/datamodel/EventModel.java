@@ -19,7 +19,7 @@ public interface EventModel {
 
     Flowable<List<Event>> getUserEvents();
 
-    void createEvent(Event event);
+    void storeEvent(Event event);
 
     EventLocation getUserLocation();
 
