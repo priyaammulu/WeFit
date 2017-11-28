@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/backbutton_margin_left"
             android:layout_marginStart="@dimen/backbutton_margin_left"
-            android:src="@drawable/ic_new_event" />
+            android:src="@drawable/ic_edit" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,14 +46,16 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/p"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/user_profile_top_bar"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
+        android:layout_above="@+id/user_profile_bottom_bar">
 
         <!--Profile data -->
         <LinearLayout
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
             android:id="@+id/user_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -130,5 +132,87 @@
         android:background="@drawable/my_edit_button"
         android:drawableBottom="@drawable/ic_edit"
         android:padding="10dp" />
+
+    <!--Navbar-->
+    <LinearLayout
+        android:id="@id/user_profile_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <!-- Profile icon -->
+        <LinearLayout
+            android:id="@+id/profile_profile_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_profile_pressed" />
+
+            <TextView
+                android:id="@+id/settings_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <!--Second icon -->
+
+        <LinearLayout
+            android:id="@+id/profile_button_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_home_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+
+        <!--third icon -->
+        <LinearLayout
+            android:id="@+id/profile_myevents_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_my_events" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My events"
+                android:textStyle="normal"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

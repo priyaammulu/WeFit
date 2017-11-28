@@ -4,10 +4,42 @@
     android:layout_height="match_parent"
     android:background="@color/cardview_light_background">
 
+    <!--TopBar-->
+    <RelativeLayout
+        android:id="@+id/attendances_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/your_events_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_label_font_size" />
+
+        <ImageView
+            android:id="@+id/new_event_attendances_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/topbar_button_margin_right"
+            android:layout_marginRight="@dimen/topbar_button_margin_right"
+            android:src="@drawable/ic_new_event_plus" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/baggar_all_events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/attendances_top_bar"
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:visibility="gone">
@@ -16,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_events_around_label"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <TextView
             android:layout_width="match_parent"
@@ -29,7 +61,92 @@
         android:id="@+id/myevents_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/attendances_top_bar"
         android:divider="@color/cardview_light_background"
-        android:dividerHeight="10dp" />
+        android:dividerHeight="10dp"
+        android:layout_above="@+id/myevents_bottom_bar"/>
+
+    <!--Navbar-->
+    <LinearLayout
+        android:id="@id/myevents_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <!-- Profile icon -->
+        <LinearLayout
+            android:id="@+id/myevents_profile_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_profile_icon" />
+
+            <TextView
+                android:id="@+id/settings_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+        <!--Second icon -->
+
+        <LinearLayout
+            android:id="@+id/myevents_button_main"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_home_white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+
+        <!--third icon -->
+        <LinearLayout
+            android:id="@+id/myevents_myevents_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_caledar_pressed" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My events"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

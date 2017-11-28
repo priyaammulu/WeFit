@@ -54,5 +54,6 @@
     <string name="description_input_label">Type a description for your new event!</string>
     <string name="type_here_hint">Type here!</string>
     <string name="your_profile_title">Your profile</string>
+    <string name="your_events_title">Your events</string>
 
 </resources>
