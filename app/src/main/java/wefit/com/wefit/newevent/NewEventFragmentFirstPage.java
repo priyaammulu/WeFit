@@ -248,7 +248,7 @@ public class NewEventFragmentFirstPage extends Fragment {
                     event.setName(mEventName.getText().toString());
 
                     if (isEventPrivate) {
-                        event.setPrivateEvent(true);
+                        event.setPrivateEvent(isEventPrivate);
                         event.setMaxAttendees(numberAttendees);
                     }
                     event.setEventDate(calSelected.getTime().getTime());
@@ -271,6 +271,7 @@ public class NewEventFragmentFirstPage extends Fragment {
                 Place place = PlacePicker.getPlace(getContext(), data);
 
                 mRetrievedLocation = new EventLocation(place.getLatLng().latitude, place.getLatLng().longitude);
+                mRetrievedLocation.setName(place.getAddress().toString());
                 mRetrievedPositionLabel.setText(place.getAddress().toString());
 
                 positionSelected = true;

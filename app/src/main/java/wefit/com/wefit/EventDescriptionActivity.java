@@ -157,6 +157,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
             // the event is private, retrieve from the local store
             mRetrievedEvent = mEventViewModel.getPrivateEvent(eventID);
 
+            // just for security reasons
+            mRetrievedEvent.setPrivateEvent(true);
+
             // show the layout
             showLayout();
 
@@ -596,7 +599,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
         boolean isAdmin = false;
 
-        if (mRetrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId()) || mRetrievedEvent.isPrivateEvent()) {
+        if (mRetrievedEvent.isPrivateEvent() || mRetrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
             isAdmin = true;
         }
 
