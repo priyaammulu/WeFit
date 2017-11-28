@@ -41,5 +41,10 @@
     <string name="email_body_report_separator">would like to report the user</string>
     <string name="biography_label">Biography</string>
     <string name="birth_date_label">Birth date:</string>
+    <string name="attendees_list_label">Attendees</string>
+    <string name="new_event_page_label">New event</string>
+    <string name="go_ahead_button">Further details</string>
+    <string name="create_event_button_label">Create event!</string>
+    <string name="one_more_step_button_label">One more step</string>
 
 </resources>

@@ -108,8 +108,7 @@
                         android:layout_width="120dp"
                         android:layout_height="50dp"
                         android:layout_weight="2"
-                        android:contentDescription="@string/weather"
-                        android:src="@drawable/rain_ico" />
+                        android:contentDescription="@string/weather" />
 
                 </LinearLayout>
 
@@ -124,7 +123,7 @@
                         android:id="@+id/join_event_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/border_join_event_button"
+                        android:background="@drawable/border_positive_event_button"
                         android:text="@string/join_event_label_btn"
                         android:textColor="@color/positive_event_green"
                         tools:ignore="ButtonStyle" />
@@ -151,7 +150,7 @@
                         android:id="@+id/accept_modification_btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/border_primary"
+                        android:background="@drawable/border_positive_event_button"
                         android:text="@string/accept_edit_label_btn"
                         android:textColor="@color/positive_event_green"
                         tools:ignore="ButtonStyle" />
@@ -332,7 +331,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginStart="10dp"
-                        android:textSize="15sp" />
+                        android:textSize="17sp"
+                        android:text="@string/attendees_list_label"/>
 
                 </LinearLayout>
 

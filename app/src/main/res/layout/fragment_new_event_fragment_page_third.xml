@@ -3,7 +3,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--TopBar-->
+    <RelativeLayout
+        android:id="@+id/new_event_page3_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/new_event_page2_backbutton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/backbutton_margin_left"
+            android:layout_marginStart="@dimen/backbutton_margin_left"
+            android:src="@drawable/ic_arrow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/new_event_page_label"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_label_font_size" />
+
+    </RelativeLayout>
+
     <LinearLayout
+        android:layout_below="@id/new_event_page3_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -37,8 +68,8 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
         android:padding="20dp"
-        android:text="Publish"
-        android:textColor="@color/black"
+        android:text="@string/create_event_button_label"
+        android:textColor="@color/white"
         android:textSize="16sp" />
 
 </RelativeLayout>

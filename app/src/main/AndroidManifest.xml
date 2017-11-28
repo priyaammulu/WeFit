@@ -54,7 +54,8 @@
         <activity
             android:name=".newevent.NewEventActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name=".GioTestActivity" />
 
         <meta-data
