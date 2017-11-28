@@ -68,8 +68,8 @@
 
                 <com.mikhaellopez.circularimageview.CircularImageView
                     android:id="@+id/profile_user_pic"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
+                    android:layout_width="170dp"
+                    android:layout_height="170dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
                     android:src="@drawable/calendar_ico"

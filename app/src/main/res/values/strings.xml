@@ -58,5 +58,6 @@
     <string name="alert_no_age">Hey, tell us your birthdate!</string>
     <string name="confirm">Confirm</string>
     <string name="discard">Discard</string>
+    <string name="bio_forgot_toast">Hey, you forgot your bio!</string>
 
 </resources>
