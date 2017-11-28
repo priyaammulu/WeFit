@@ -305,13 +305,12 @@ public class LoginActivity extends AppCompatActivity {
      *
      * @param credential Wrapped User credential (facebook or google)
      */
-    private void buildFirebaseUser(AuthCredential credential) {
+    private void buildFirebaseUser(final AuthCredential credential) {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
 
                             // this is a round trip operation to guarantee that the user is in the remote DB
                             loginViewModel.retrieveUserFromRemoteStore().subscribe(new Consumer<User>() {
@@ -326,8 +325,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             stopSpinner();
-                            // TODO english
-                            Toast.makeText(getApplicationContext(), "Ops, server problems", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Ops, server problems during login", Toast.LENGTH_LONG).show();
                         }
 
                     }

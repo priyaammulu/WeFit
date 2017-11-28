@@ -26,7 +26,7 @@ public class User {
     /**
      * Birth date in un UNIX second format
      */
-    private int birthDate;
+    private long birthDate;
 
     /**
      * List of the IDs of the events
@@ -81,11 +81,11 @@ public class User {
         this.photo = photo;
     }
 
-    public int getBirthDate() {
+    public long getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(int birthDate) {
+    public void setBirthDate(long birthDate) {
         this.birthDate = birthDate;
     }
 

@@ -55,5 +55,8 @@
     <string name="type_here_hint">Type here!</string>
     <string name="your_profile_title">Your profile</string>
     <string name="your_events_title">Your events</string>
+    <string name="alert_no_age">Hey, tell us your birthdate!</string>
+    <string name="confirm">Confirm</string>
+    <string name="discard">Discard</string>
 
 </resources>
