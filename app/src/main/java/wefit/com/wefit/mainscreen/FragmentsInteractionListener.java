@@ -17,10 +17,4 @@ public interface FragmentsInteractionListener {
     EventViewModel getEventViewModel();
     UserViewModel getUserViewModel();
     void provideLocation();
-    void fillInIcons(int IconLeft, String iconMiddle, int iconRight);
-    void fillInIconsWithLogo(int iconLeft, int logo, int iconRight);
-    void changeStatusPressedInProfile();
-    void changeStatusPressedInMain();
-
-    void toggleBottomBar();
 }

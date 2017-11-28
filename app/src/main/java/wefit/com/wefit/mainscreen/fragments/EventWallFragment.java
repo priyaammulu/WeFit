@@ -20,6 +20,7 @@ import java.util.List;
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
+import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.mainscreen.adapters.EventWallAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
@@ -64,11 +65,50 @@ public class EventWallFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getEventViewModel();
         mListener.provideLocation();
-        mListener.fillInIconsWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
-        mListener.changeStatusPressedInMain();
+
 
     }
 
+    private void setupNavbar(View layout) {
+
+
+        layout.findViewById(R.id.wall_myevents_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MY_ATTENDANCES_FRAGMENT);
+            }
+        });
+
+        layout.findViewById(R.id.wall_button_main).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MAIN_FRAGMENT);
+            }
+        });
+
+        layout.findViewById(R.id.wall_profile_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.PROFILE_FRAGMENT);
+            }
+        });
+
+
+    }
+
+    private void setupTopbar(View layout) {
+
+
+        layout.findViewById(R.id.event_wall_bottom_bar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), NewEventActivity.class));
+            }
+        });
+
+
+
+    }
 
 
     private void fetchEvents() {
@@ -99,6 +139,10 @@ public class EventWallFragment extends Fragment {
     }
 
     private void bind(View view) {
+
+        this.setupNavbar(view);
+        this.setupTopbar(view);
+
         mEventList = (ListView) view.findViewById(R.id.event_list);
         mEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -130,8 +174,7 @@ public class EventWallFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden) {
 
-            mListener.fillInIconsWithLogo(R.drawable.ic_edit, R.drawable.wefitlogo_extended, R.drawable.ic_search);
-            mListener.changeStatusPressedInMain();
+           // TOdo here the operations
 
         }
     }

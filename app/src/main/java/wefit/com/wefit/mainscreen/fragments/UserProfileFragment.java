@@ -1,6 +1,7 @@
 package wefit.com.wefit.mainscreen.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
+import wefit.com.wefit.mainscreen.MainActivity;
+import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
@@ -52,16 +56,19 @@ public class UserProfileFragment extends Fragment {
     }
 
     private void bind(View view) {
+
+        setupTopbar(view);
+        setupNavbar(view);
+
         mUserPic = (ImageView) view.findViewById(R.id.profile_user_pic);
         mUserName = (TextView) view.findViewById(R.id.user_name);
         mBirthDate = (TextView) view.findViewById(R.id.birth_date);
         mUserBio = (EditText) view.findViewById(R.id.user_bio);
-        mButton = (Button) view.findViewById(R.id.profile_edit);
+        /*mButton = (Button) view.findViewById(R.id.profile_edit);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mUserBio.setEnabled(!mUserBio.isEnabled());
-                mListener.toggleBottomBar();
                 if (mUserBio.isEnabled()) {
                     mUserBio.requestFocus();
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -71,6 +78,7 @@ public class UserProfileFragment extends Fragment {
                 }
             }
         });
+        */
     }
 
     @Override
@@ -85,8 +93,8 @@ public class UserProfileFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            mListener.fillInIcons(R.drawable.ic_arrow, "Profile", R.drawable.ic_warning);
-            mListener.changeStatusPressedInProfile();
+
+            // TODO here the operations
 
         }
     }
@@ -134,6 +142,50 @@ public class UserProfileFragment extends Fragment {
     private String getDate(Date date) {
         Locale locale = Locale.ENGLISH;
         return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
+    }
+
+    private void setupNavbar(View layout) {
+
+
+        layout.findViewById(R.id.profile_myevents_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MY_ATTENDANCES_FRAGMENT);
+            }
+        });
+
+        layout.findViewById(R.id.profile_button_main).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MAIN_FRAGMENT);
+            }
+        });
+
+        layout.findViewById(R.id.profile_profile_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.PROFILE_FRAGMENT);
+            }
+        });
+
+
+    }
+
+    private void setupTopbar(View layout) {
+
+
+        layout.findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUserViewModel.signOut();
+                startActivity(new Intent(getContext(), LoginActivity.class));
+                getActivity().finish();
+
+            }
+        });
+
+
+
     }
 
 }
