@@ -1,6 +1,9 @@
 package wefit.com.wefit.mainscreen.fragments;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -46,7 +49,7 @@ public class EventWallFragment extends Fragment {
     private ListView mEventList;
     private EventViewModel mMainViewModel;
     private FragmentsInteractionListener mListener;
-
+    private ProgressDialog popupDialogProgress;
 
 
     public EventWallFragment() {
@@ -56,6 +59,7 @@ public class EventWallFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
+        showWaitSpinner();
         fetchEvents();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -123,12 +127,14 @@ public class EventWallFragment extends Fragment {
 
                     @Override
                     public void onNext(List<Event> events) {
+                        stopWaitSpinner();
                         handleAdapter(events);
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
-                        handleError(throwable);
+                        stopWaitSpinner();
+                        showRetrieveErrorPopupDialog();
                     }
 
                     @Override
@@ -174,15 +180,12 @@ public class EventWallFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden) {
 
-           // TOdo here the operations
+            showWaitSpinner();
+            fetchEvents();
 
         }
     }
 
-
-    private void handleError(Throwable error) {
-        //todo implement
-    }
 
     private void handleAdapter(List<Event> events) {
         if (mAdapter == null) {
@@ -227,6 +230,36 @@ public class EventWallFragment extends Fragment {
         super.onDestroy();
         if (mSubscription != null)
             mSubscription.cancel();
+    }
+
+    private void showWaitSpinner() {
+        // creation of the popup spinner
+        // it will be shown until the event is fully loaded
+        this.popupDialogProgress = ProgressDialog.show(getActivity(), null, getString(R.string.loading_popup_message_spinner), true);
+    }
+
+    private void stopWaitSpinner() {
+        if (this.popupDialogProgress != null) {
+            popupDialogProgress.dismiss();
+        }
+    }
+
+    private void showRetrieveErrorPopupDialog() {
+
+        stopWaitSpinner();
+
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.error_message_download_resources)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // , go to the main activity
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

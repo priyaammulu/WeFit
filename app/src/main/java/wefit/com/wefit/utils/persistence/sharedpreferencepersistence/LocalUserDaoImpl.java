@@ -49,7 +49,7 @@ public class LocalUserDaoImpl implements LocalUserDao {
         editor.putString(GENDER_FIELD, userToSave.getGender());
         editor.putString(IMAGE_FIELD, userToSave.getPhoto());
         editor.putString(BIO_FIELD, userToSave.getBiography());
-        editor.putInt(BIRTH_FIELD, userToSave.getBirthDate());
+        editor.putLong(BIRTH_FIELD, userToSave.getBirthDate());
 
         Set<String> events = new HashSet<>();
 
