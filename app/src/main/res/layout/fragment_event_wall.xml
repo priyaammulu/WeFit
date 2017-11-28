@@ -8,18 +8,16 @@
     <RelativeLayout
         android:id="@+id/eventwall_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_gravity="top"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+        android:background="@color/colorPrimary">
 
         <ImageView
-            android:layout_centerInParent="true"
             android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/ic_wefit_logo"
-            />
+            android:layout_height="55dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_wefit_logo" />
 
         <ImageView
             android:id="@+id/new_event_button"
@@ -35,10 +33,10 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_below="@id/eventwall_top_bar"
         android:id="@+id/no_available_events_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/eventwall_top_bar"
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:visibility="gone">
@@ -47,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_events_around_label"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
 
         <TextView
             android:layout_width="match_parent"
@@ -58,25 +56,24 @@
 
 
     <ListView
-        android:layout_below="@id/eventwall_top_bar"
         android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@color/cardview_light_background"
-        android:dividerHeight="10dp"
         android:layout_above="@+id/event_wall_bottom_bar"
-         />
+        android:layout_below="@id/eventwall_top_bar"
+        android:divider="@color/cardview_light_background"
+        android:dividerHeight="10dp" />
 
     <!--Navbar-->
     <LinearLayout
         android:id="@id/event_wall_bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:padding="5dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <!-- Profile icon -->
         <LinearLayout
@@ -88,8 +85,8 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_profile_icon" />
 
             <TextView
@@ -97,6 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
+                android:textSize="12sp"
                 android:textColor="@color/white"
                 android:textStyle="normal" />
 
@@ -112,17 +110,17 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:src="@drawable/ic_home_pressed" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
+                android:textSize="12sp"
                 android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
         </LinearLayout>
 
 
@@ -144,8 +142,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="My events"
-                android:textStyle="normal"
-                android:textColor="@color/white"/>
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:textStyle="normal" />
         </LinearLayout>
 
     </LinearLayout>

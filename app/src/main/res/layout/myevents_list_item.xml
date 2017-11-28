@@ -27,16 +27,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
-            android:orientation="vertical"
-            android:layout_marginStart="15dp">
+            android:layout_marginStart="15dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/myevents_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
                 android:padding="2dp"
                 android:text="Speed running"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="19sp"
                 android:textStyle="bold" />
 
@@ -44,15 +44,11 @@
                 android:id="@+id/myevents_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="180dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:maxWidth="180dp"
                 android:padding="2dp"
-                android:text="Stillorgan road"
-                android:maxWidth="180dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                />
+                android:text="Stillorgan road" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -81,9 +77,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="15dp"
+        android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
-        android:layout_height="match_parent">
+        android:layout_marginTop="15dp">
 
         <ImageView
             android:id="@+id/myattendance_category_pic"
