@@ -3,11 +3,11 @@ package wefit.com.wefit.mainscreen.fragments;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,8 +32,12 @@ import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class UserProfileFragment extends Fragment {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 200;
 
     private FragmentsInteractionListener mListener;
     private UserViewModel mUserViewModel;
@@ -59,6 +64,7 @@ public class UserProfileFragment extends Fragment {
     private LinearLayout mActionModifyButton;
     private Button mDeclineModify;
     private Button mAcceptModify;
+    private ImageView mEditPhotoIndicator;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -82,6 +88,7 @@ public class UserProfileFragment extends Fragment {
         mUserBio = (EditText) view.findViewById(R.id.user_bio);
         mEditButton = (ImageView) view.findViewById(R.id.user_profile_editbutton);
         mEditDate = (ImageView) view.findViewById(R.id.modify_birthdate_btn);
+        mEditPhotoIndicator = (ImageView) view.findViewById(R.id.image_modify_indicator);
 
         mActionModifyButton = (LinearLayout) view.findViewById(R.id.profile_modify_actions);
         mAcceptModify = (Button) view.findViewById(R.id.profile_accept_modification_btn);
@@ -96,11 +103,24 @@ public class UserProfileFragment extends Fragment {
                 mEditDate.setVisibility(View.VISIBLE);
                 mActionModifyButton.setVisibility(View.VISIBLE);
                 mEditButton.setVisibility(View.INVISIBLE);
+                mEditPhotoIndicator.setVisibility(View.VISIBLE);
+
 
                 // copy the old infos (to perform rollback)
                 tmpOldBiography = mShowedUser.getBiography();
                 tmpOldBirthDate = mShowedUser.getBirthDate();
                 tmpOldPicture = mShowedUser.getPhoto();
+
+                mUserPic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                        }
+                    }
+                });
+
 
             }
         });
@@ -111,9 +131,7 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                mEditDate.setVisibility(View.GONE);
-                mActionModifyButton.setVisibility(View.GONE);
-                mEditButton.setVisibility(View.VISIBLE);
+                resetInvisibleModificationComponents();
 
                 mShowedUser.setBiography(tmpOldBiography);
                 mShowedUser.setBirthDate(tmpOldBirthDate);
@@ -130,8 +148,6 @@ public class UserProfileFragment extends Fragment {
                 new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-                        tmpOldBirthDate = mShowedUser.getBirthDate();
 
                         Calendar cal = Calendar.getInstance();
 
@@ -151,27 +167,32 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-        mUserBio.addTextChangedListener(new TextWatcher() {
+        mAcceptModify.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onClick(View v) {
 
-                tmpOldBiography = mUserBio.getText().toString();
+                resetInvisibleModificationComponents();
 
+                if (mUserBio.getText().toString().length() > 0) {
 
-            }
+                    mShowedUser.setBiography(mUserBio.getText().toString());
+                    mUserViewModel.updateUser(mShowedUser);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-
+                }
+                else {
+                    Toast.makeText(getContext(), getString(R.string.bio_forgot_toast), Toast.LENGTH_LONG).show();
+                }
 
             }
         });
+    }
+
+    private void resetInvisibleModificationComponents() {
+        mEditDate.setVisibility(View.GONE);
+        mActionModifyButton.setVisibility(View.GONE);
+        mEditButton.setVisibility(View.VISIBLE);
+        mEditPhotoIndicator.setVisibility(View.GONE);
+        mUserBio.setEnabled(false);
     }
 
     @Override
@@ -185,11 +206,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
-
-            // TODO here the operations
-
-        }
     }
 
 
@@ -287,6 +303,19 @@ public class UserProfileFragment extends Fragment {
 
 
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // result for the image capture
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mUserPic.setImageBitmap(imageBitmap);
+
+            mShowedUser.setPhoto(ImageBase64Marshaller.encodeBase64BitmapString(imageBitmap));
+        }
     }
 
 }
