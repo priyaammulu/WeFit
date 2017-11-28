@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 
@@ -39,11 +38,12 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
     private RecyclerView.LayoutManager mLayoutManager;
 
     private NewFragmentListener mListener;
-    private Button mButtonFinish;
+    private Button mButtonNextPage;
     private ImageView mImage;
     private Category mCategory;
     private ScrollView scrollView;
     private UserViewModel mUserViewModel;
+    private ImageView mBackButton;
 
     public NewEventFragmentSecondPage() {
         // Required empty public constructor
@@ -64,9 +64,18 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
     }
 
     private void bind(View view) {
+
+        mBackButton = (ImageView) view.findViewById(R.id.new_event_page2_backbutton);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.category_event_recycler_view);
         initRecyclerView();
-        mButtonFinish = (Button) view.findViewById(R.id.new_event_finish);
+        mButtonNextPage = (Button) view.findViewById(R.id.new_event_finish);
 
 
         mImage = (ImageView) view.findViewById(R.id.new_event_image);
@@ -82,13 +91,11 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
             }
         });
 
-        // TODO devi fare controlli sulla lunghezza oppure ci sta in XML mDescription = (EditText) view.findViewById(R.id.new_event_description);
-
         // category picker
         scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview) ;
 
         // button finish
-        mButtonFinish.setOnClickListener(new View.OnClickListener() {
+        mButtonNextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

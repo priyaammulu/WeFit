@@ -59,9 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:backgroundTint="@color/colorPrimaryDark"
                 android:gravity="center"
-                android:hint="Name"
+                android:hint="Name of the new event"
                 android:textColor="@color/colorPrimaryDark"
                 android:textColorHint="@color/colorPrimaryDark" />
 
@@ -87,9 +86,10 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/position_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Select A Position"
+                        android:text="Select a position for the event"
                         android:textAlignment="center"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp" />
@@ -120,12 +120,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:layout_marginLeft="25dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginStart="25dp">
 
                     <TextView
+                        android:id="@+id/new_event_date_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Select A Date"
+                        android:text="Select a date for the event"
                         android:textAlignment="center"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp" />
@@ -210,12 +212,41 @@
                     android:layout_gravity="bottom"
                     android:layout_marginLeft="25dp"
                     android:layout_marginStart="25dp"
+                    android:layout_marginTop="20dp"
                     android:orientation="vertical">
+
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Number of Attendees"
+                        android:text="Number of attendees"
+                        android:textAlignment="center"
+                        android:textColor="@color/darkerGrey"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:id="@+id/number_of_attendees_show"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="2"
+                        android:textAlignment="center"
+                        android:textColor="@color/darkerGrey"
+                        android:textSize="18sp" />
+
+                    <SeekBar
+                        android:id="@+id/number_of_attendees_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="8"
+                        android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                        />
+
+                    <!--
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Number of attendees"
                         android:textAlignment="center"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="18sp" />
@@ -224,6 +255,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/colorPrimaryDark" />
+                        -->
                 </LinearLayout>
 
             </LinearLayout>

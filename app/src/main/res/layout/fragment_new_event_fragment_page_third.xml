@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/new_event_page2_backbutton"
+            android:id="@+id/new_event_page3_backbutton"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"

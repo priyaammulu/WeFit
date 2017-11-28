@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
@@ -20,6 +21,7 @@ public class NewEventFragmentThirdPage extends Fragment {
     private UserViewModel mUserViewModel;
     private Button finishButton;
     private EditText mEventDescription;
+    private ImageView mBackButton;
 
     public NewEventFragmentThirdPage() {
         // Required empty public constructor
@@ -40,6 +42,14 @@ public class NewEventFragmentThirdPage extends Fragment {
     }
 
     private void bind(View view) {
+
+        mBackButton = (ImageView) view.findViewById(R.id.new_event_page3_backbutton);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().onBackPressed();
+            }
+        });
 
         finishButton = (Button) view.findViewById(R.id.new_event_button_finish);
         mEventDescription = (EditText) view.findViewById(R.id.new_event_third_description);

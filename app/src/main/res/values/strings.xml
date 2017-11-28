@@ -46,5 +46,9 @@
     <string name="go_ahead_button">Further details</string>
     <string name="create_event_button_label">Create event!</string>
     <string name="one_more_step_button_label">One more step</string>
+    <string name="form_not_completely_filled_popup">Hey, you\'ve forgotten some parameters</string>
+    <string name="private_event_label">Private event</string>
+    <string name="public_event_label">Public event</string>
+    <string name="category_selection_label">Select a category for your event!</string>
 
 </resources>
