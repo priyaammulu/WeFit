@@ -204,14 +204,20 @@
                             android:id="@+id/event_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:maxWidth="150dp"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/event_time"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:maxWidth="150dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp" />
+                            android:textSize="11sp" />
 
                     </LinearLayout>
 
@@ -273,20 +279,23 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:maxWidth="200dp"
+                            android:maxWidth="160dp"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:id="@+id/place_name_txt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/city_name_txt"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="12sp" />
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:maxWidth="160dp"
+                            android:textSize="11sp" />
 
                     </LinearLayout>
 

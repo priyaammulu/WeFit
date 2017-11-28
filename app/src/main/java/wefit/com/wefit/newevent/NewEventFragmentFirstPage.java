@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 import wefit.com.wefit.R;
@@ -246,7 +247,7 @@ public class NewEventFragmentFirstPage extends Fragment {
 
                 if (isFormFilled()) {
                     Event event = new Event();
-
+                    event.setPublicationDate(new Date().getTime());
                     event.setName(mEventName.getText().toString());
 
                     if (isEventPrivate) {
