@@ -41,7 +41,7 @@ public class EventModelImpl implements EventModel {
     private DistanceSorter distanceSorter;
 
     //private Event event;
-    private EventLocation dublin = new EventLocation(53.3498, 6.2603);
+    private EventLocation dublin = new EventLocation(53.3498, -6.2603);
 
 
     public EventModelImpl(RemoteEventDao eventPersistence,
