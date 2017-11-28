@@ -63,7 +63,6 @@
             android:name=".newevent.NewEventActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".GioTestActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

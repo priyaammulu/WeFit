@@ -118,7 +118,6 @@ public class NewEventFragmentFirstPage extends Fragment {
             }
         });
 
-        //TODO cambiare
         final DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
