@@ -49,7 +49,7 @@ public class LocalUserDaoImpl implements LocalUserDao {
         editor.putString(GENDER_FIELD, userToSave.getGender());
         editor.putString(IMAGE_FIELD, userToSave.getPhoto());
         editor.putString(BIO_FIELD, userToSave.getBiography());
-        editor.putInt(BIRTH_FIELD, userToSave.getBirthDate());
+        editor.putLong(BIRTH_FIELD, userToSave.getBirthDate());
 
         Set<String> events = new HashSet<>();
 
@@ -78,7 +78,7 @@ public class LocalUserDaoImpl implements LocalUserDao {
         localStoredUser.setGender(sharedPreferences.getString(GENDER_FIELD, null));
         localStoredUser.setPhoto(sharedPreferences.getString(IMAGE_FIELD, null));
         localStoredUser.setBiography(sharedPreferences.getString(BIO_FIELD, null));
-        localStoredUser.setBirthDate(sharedPreferences.getInt(BIRTH_FIELD, 0));
+        localStoredUser.setBirthDate(sharedPreferences.getLong(BIRTH_FIELD, 0));
 
         List<String> events = new ArrayList<>();
         events.addAll(sharedPreferences.getStringSet(EVENTS_FIELD, new HashSet<String>()));

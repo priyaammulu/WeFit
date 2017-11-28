@@ -181,6 +181,10 @@ public class NewEventFragmentFirstPage extends Fragment {
             public void onClick(View view) {
                 // it will be set on the user current position
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                LatLng southest = new LatLng(mUserLocation.getLatitude() - 0.00000001, mUserLocation.getLongitude() - 0.00000001);
+                LatLng northest = new LatLng(mUserLocation.getLatitude() + 0.00000001, mUserLocation.getLongitude() + 0.00000001);
+                LatLngBounds bounds = new LatLngBounds(southest, northest);
+                builder.setLatLngBounds(bounds);
                 try {
                     startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {
