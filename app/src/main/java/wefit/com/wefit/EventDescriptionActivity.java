@@ -157,9 +157,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
             // the event is private, retrieve from the local store
             mRetrievedEvent = mEventViewModel.getPrivateEvent(eventID);
 
-            // just for security reasons
-            mRetrievedEvent.setPrivateEvent(true);
-
             // show the layout
             showLayout();
 
@@ -336,7 +333,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 double longitude = eventLocation.getLongitude();
 
                 // Create a Uri from an intent string. Use the result to create an Intent.
-                Uri gmmIntentUri = Uri.parse("geo:" + longitude + "," + latitude + "?q=" + longitude + "," + latitude);
+                Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude);
 
                 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);

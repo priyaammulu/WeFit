@@ -113,7 +113,6 @@ public class LocalSQLiteEventDao implements LocalEventDao {
         while (cursor.moveToNext()) {
 
             Event retrieved = this.retrieveEvent(cursor);
-            retrieved.setPrivateEvent(true);
             events.add(retrieved);
 
         }
@@ -231,13 +230,15 @@ public class LocalSQLiteEventDao implements LocalEventDao {
         // set location
         EventLocation location = new EventLocation();
         location.setLatitude(cursor.getDouble(latC));
-        location.setLatitude(cursor.getDouble(lonC));
+        location.setLongitude(cursor.getDouble(lonC));
         location.setName(cursor.getString(placeNameC));
         retrievedEvent.setEventLocation(location);
 
         // date creation and event date
         retrievedEvent.setPublicationDate(cursor.getLong(creationDateC));
         retrievedEvent.setEventDate(cursor.getLong(eventDateC));
+
+        retrievedEvent.setPrivateEvent(true);
 
         return retrievedEvent;
 
