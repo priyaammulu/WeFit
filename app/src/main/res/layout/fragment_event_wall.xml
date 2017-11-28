@@ -4,12 +4,38 @@
     android:layout_height="match_parent"
     tools:context="wefit.com.wefit.mainscreen.fragments.EventWallFragment">
 
-    <Button
-        android:id="@+id/new_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--TopBar-->
+    <RelativeLayout
+        android:id="@+id/eventwall_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/ic_wefit_logo"
+            />
+
+        <ImageView
+            android:id="@+id/new_event_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/topbar_button_margin_right"
+            android:layout_marginRight="@dimen/topbar_button_margin_right"
+            android:src="@drawable/ic_new_event_plus" />
+
+    </RelativeLayout>
 
     <LinearLayout
+        android:layout_below="@id/eventwall_top_bar"
         android:id="@+id/no_available_events_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,6 +58,7 @@
 
 
     <ListView
+        android:layout_below="@id/eventwall_top_bar"
         android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -113,7 +113,8 @@ public class EventWallFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        view.findViewById(R.id.new_event).setOnClickListener(new View.OnClickListener() {
+
+        view.findViewById(R.id.new_event_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivity().startActivity(new Intent(getActivity(), NewEventActivity.class));
