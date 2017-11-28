@@ -61,7 +61,7 @@ public class NewEventFragmentFirstPage extends Fragment {
     private TextView mPublicPrivate;
 
     private SeekBar mAttendeesSeekbar;
-    private int numberAttendees = 0;
+    private int numberAttendees = 2; // the minimum is always 2
 
     private ImageView mBackButton;
     private TextView mAttendeesNumberLabel;
@@ -78,8 +78,6 @@ public class NewEventFragmentFirstPage extends Fragment {
     private boolean nameSelected = false;
     private boolean dateSelected = false;
     private boolean positionSelected = false;
-    private boolean numberAttendeesSelected = false;
-
 
     public NewEventFragmentFirstPage() {
         // Required empty public constructor
@@ -137,8 +135,8 @@ public class NewEventFragmentFirstPage extends Fragment {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
                         // TODO rivedere come è calcolata sta data
-                        calSelected.add(Calendar.HOUR, hourOfDay);
-                        calSelected.add(Calendar.MINUTE, minute);
+                        calSelected.set(Calendar.HOUR, hourOfDay);
+                        calSelected.set(Calendar.MINUTE, minute);
                         dateMillis = calSelected.getTimeInMillis();
 
                         String dateFormatted = CalendarFormatter.getDate(dateMillis) + " " + CalendarFormatter.getTime(dateMillis);
@@ -165,12 +163,7 @@ public class NewEventFragmentFirstPage extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (mEventName.getText().length() > 0) {
-                    nameSelected = true;
-                }
-                else {
-                    nameSelected = false;
-                }
+                nameSelected = mEventName.getText().length() > 0;
             }
         });
 
@@ -178,7 +171,6 @@ public class NewEventFragmentFirstPage extends Fragment {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                //TODO prendere il risulato
                 new DatePickerDialog(getActivity(), dateListener, cal
                         .get(Calendar.YEAR), cal.get(Calendar.MONTH),
                         cal.get(Calendar.DAY_OF_MONTH)).show();
@@ -219,13 +211,12 @@ public class NewEventFragmentFirstPage extends Fragment {
 
         mAttendeesSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            private int minValue = 2;
+            private int minValue = numberAttendees;
             private int foundProgress;
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-                numberAttendeesSelected = false;
                 foundProgress = progress + minValue;
                 if (foundProgress < minValue) {
                     foundProgress = minValue;
@@ -244,7 +235,6 @@ public class NewEventFragmentFirstPage extends Fragment {
                 String label = String.valueOf(foundProgress);
                 mAttendeesNumberLabel.setText(label);
                 numberAttendees = foundProgress;
-                numberAttendeesSelected = true;
             }
         });
 
@@ -319,14 +309,7 @@ public class NewEventFragmentFirstPage extends Fragment {
 
         if (nameSelected && dateSelected && positionSelected) {
 
-            if (isEventPrivate) {
-                isFilled = true;
-            }
-            else {
-                if (numberAttendeesSelected) {
-                    isFilled = true;
-                }
-            }
+            isFilled = true;
 
         }
 

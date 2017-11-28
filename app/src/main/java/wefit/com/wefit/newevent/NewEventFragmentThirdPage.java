@@ -1,5 +1,6 @@
 package wefit.com.wefit.newevent;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -57,9 +58,15 @@ public class NewEventFragmentThirdPage extends Fragment {
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Event event = mListener.getEvent();
-                event.setDescription(mEventDescription.getText().toString());
-                mListener.finish(event);
+
+                if (isFormFilled()) {
+                    Event event = mListener.getEvent();
+                    event.setDescription(mEventDescription.getText().toString());
+                    mListener.finish(event);
+                } else {
+                    showRetrieveErrorPopupDialog();
+                }
+
             }
         });
     }
@@ -86,5 +93,20 @@ public class NewEventFragmentThirdPage extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    private boolean isFormFilled() {
+        return mEventDescription.getText().length() > 0;
+    }
+
+    private void showRetrieveErrorPopupDialog() {
+
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.form_not_completely_filled_popup)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, null);
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

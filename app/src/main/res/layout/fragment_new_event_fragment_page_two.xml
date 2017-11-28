@@ -56,21 +56,39 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/runner_placeholder" />
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/image_picker_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_camera_pick"
-                    android:layout_width="50dp"
-                    android:layout_height="50sp" />
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50sp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/ic_camera_pick" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="Select a picture"
+                        android:textColor="@color/white"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+
             </RelativeLayout>
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:text="@string/category_selection_label"
                 android:textColor="@color/darkerGrey"

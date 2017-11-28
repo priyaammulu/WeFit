@@ -50,5 +50,8 @@
     <string name="private_event_label">Private event</string>
     <string name="public_event_label">Public event</string>
     <string name="category_selection_label">Select a category for your event!</string>
+    <string name="select_image_error_toast">Impossible to load the selected image</string>
+    <string name="description_input_label">Type a description for your new event!</string>
+    <string name="type_here_hint">Type here!</string>
 
 </resources>

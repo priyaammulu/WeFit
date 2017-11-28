@@ -1,10 +1,12 @@
 package wefit.com.wefit.newevent;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -16,8 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import wefit.com.wefit.R;
@@ -44,6 +49,9 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
     private ScrollView scrollView;
     private UserViewModel mUserViewModel;
     private ImageView mBackButton;
+    private LinearLayout mImagePickerLabel;
+
+    private boolean isImagePicked = false;
 
     public NewEventFragmentSecondPage() {
         // Required empty public constructor
@@ -65,6 +73,8 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
 
     private void bind(View view) {
 
+        mImagePickerLabel = (LinearLayout) view.findViewById(R.id.image_picker_label);
+
         mBackButton = (ImageView) view.findViewById(R.id.new_event_page2_backbutton);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +91,7 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
         mImage = (ImageView) view.findViewById(R.id.new_event_image);
 
         // listener, take picture
+        /*
         mImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,28 +101,49 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
                 }
             }
         });
+        */
+
+        mImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                // Show only images, no videos or anything else
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                // Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_IMAGE_CAPTURE);
+            }
+        });
 
         // category picker
-        scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview) ;
+        scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview);
 
         // button finish
         mButtonNextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Event newEvent = mListener.getEvent();
+                if (isFormFilled()) {
+                    Event newEvent = mListener.getEvent();
 
-                // set creator ID
-                newEvent.setAdminID(mUserViewModel.retrieveCachedUser().getId());
+                    // set creator ID
+                    newEvent.setAdminID(mUserViewModel.retrieveCachedUser().getId());
 
-                // take encode image
-                Bitmap bitmap = ((BitmapDrawable) mImage.getDrawable()).getBitmap();
-                newEvent.setImage(ImageBase64Marshaller.encodeBase64BitmapString(bitmap));
+                    // take encode image
+                    Bitmap bitmap = ((BitmapDrawable) mImage.getDrawable()).getBitmap();
+                    newEvent.setImage(ImageBase64Marshaller.encodeBase64BitmapString(bitmap));
 
-                newEvent.setCategoryID(mCategory.getId());
+                    newEvent.setCategoryID(mCategory.getId());
 
-                mListener.thirdFragment(newEvent);
+                    mListener.thirdFragment(newEvent);
+                } else {
+
+                    showRetrieveErrorPopupDialog();
+
+                }
             }
+
+
         });
     }
 
@@ -166,10 +198,37 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         // result for the image capture
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImage.setImageBitmap(imageBitmap);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            //Bundle extras = data.getExtras();
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+            //mImage.setImageBitmap(imageBitmap);
+
+            Uri uri = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+                mImage.setImageBitmap(bitmap);
+                isImagePicked = true;
+                mImagePickerLabel.setVisibility(View.GONE);
+            } catch (IOException e) {
+                Toast.makeText(getContext(), R.string.select_image_error_toast, Toast.LENGTH_LONG).show();
+            }
         }
     }
+
+    private boolean isFormFilled() {
+        return isImagePicked && mCategory != null;
+    }
+
+    private void showRetrieveErrorPopupDialog() {
+
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.form_not_completely_filled_popup)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, null);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 }

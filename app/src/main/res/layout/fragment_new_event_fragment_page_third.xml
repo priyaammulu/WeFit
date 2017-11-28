@@ -34,9 +34,9 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_below="@id/new_event_page3_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/new_event_page3_top_bar"
         android:orientation="vertical"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
@@ -45,18 +45,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="Insert the description of the event"
+            android:text="@string/description_input_label"
             android:textColor="@color/darkerGrey"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
         <EditText
-            android:layout_width="match_parent"
             android:id="@+id/new_event_third_description"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@null"
-            android:hint="Description"
+            android:hint="@string/type_here_hint"
             android:maxHeight="400dp" />
 
     </LinearLayout>
