@@ -3,6 +3,7 @@ package wefit.com.wefit.datamodel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -141,6 +142,8 @@ public class EventModelImpl implements EventModel {
                                                     // check if the user has been confirmed
                                                     // if not, do not return the event
                                                     attendances = filterUnconfirmedAttendances(attendances);
+
+                                                    attendances = filterOldEvents(attendances);
 
                                                     retrievedEvents.addAll(attendances);
                                                     Collections.reverse(retrievedEvents);
@@ -289,6 +292,33 @@ public class EventModelImpl implements EventModel {
 
             if (!currentUserID.equals(singleAttendance.getAdminID())) {
                 availableEvents.add(singleAttendance);
+            }
+
+        }
+
+        return availableEvents;
+
+    }
+
+    /**
+     * Filter all the events that are past (according to the system clock)
+     *
+     * @param events events to filter
+     * @return filtered list
+     */
+    private List<Event> filterOldEvents(List<Event> events) {
+
+        List<Event> availableEvents = new ArrayList<>();
+
+        long currentMillis = new Date().getTime();
+
+        for (Event singleAttendance : events) {
+
+            if (currentMillis < singleAttendance.getEventDate()) {
+                // event is NOT old
+
+                availableEvents.add(singleAttendance);
+
             }
 
         }

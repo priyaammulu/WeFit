@@ -4,12 +4,26 @@
     android:layout_height="match_parent"
     android:background="@color/cardview_light_background">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/baggar_all_events"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Press + to create a new event"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_events_around_label"
+            android:textAlignment="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_event_suggestion_label"
+            android:textAlignment="center" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/myevents_listview"

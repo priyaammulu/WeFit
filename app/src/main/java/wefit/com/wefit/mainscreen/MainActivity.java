@@ -61,11 +61,17 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // startActivity(new Intent(this, GioTestActivity.class));
+
         mUserViewModel = getUserViewModel();
         mEventViewModel = getEventViewModel();
-        if (!mUserViewModel.isAuth())
+
+        // check if the user is logged (security)
+        if (!mUserViewModel.isAuth()) {
             signOut();
+        }
+
         setContentView(R.layout.activity_main);
         bindLayoutComponents();
         setFragments();
@@ -193,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 .add(R.id.main_fragment, profileFragment)
                 .hide(myAttendancesFragment)
                 .hide(profileFragment)
-
                 .commit();
+
         stack.push(mainFragment);
     }
 

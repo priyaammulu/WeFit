@@ -35,14 +35,17 @@ import wefit.com.wefit.viewmodels.EventViewModel;
  * to handle interaction events.
  */
 public class EventWallFragment extends Fragment {
+
+    /**
+     * RxJava Observer Listener
+     */
+    private Subscription mSubscription;
+
     private EventWallAdapter mAdapter;
     private ListView mEventList;
     private EventViewModel mMainViewModel;
     private FragmentsInteractionListener mListener;
-    // this should be handled by another class
-    private Subscription mSubscription;
 
-    private ImageView search_icon;
 
 
     public EventWallFragment() {

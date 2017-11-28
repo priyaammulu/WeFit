@@ -28,7 +28,7 @@
     <string name="right_button">Right button</string>
     <string name="landmark_icon_descr">Landmark icon</string>
     <string name="loading_popup_message_spinner">Loading. Please wait…</string>
-    <string name="error_message_download_resources">Something went wrong!</string>
+    <string name="error_message_download_resources">Something went wrong while retrieving the data! Sorry…</string>
     <string name="ok_button">Ok</string>
     <string name="weather_error_toast_label">Ouch, no weather infos available</string>
     <string name="accept_edit_label_btn">Accept edit</string>
