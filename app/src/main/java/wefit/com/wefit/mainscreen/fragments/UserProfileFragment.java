@@ -1,19 +1,25 @@
 package wefit.com.wefit.mainscreen.fragments;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -40,7 +46,19 @@ public class UserProfileFragment extends Fragment {
     private TextView mUserName;
     private TextView mBirthDate;
     private EditText mUserBio;
-    private Button mButton;
+
+    /**
+     * Backup old data
+     */
+    private String tmpOldPicture;
+    private long tmpOldBirthDate;
+    private String tmpOldBiography;
+
+    private ImageView mEditButton;
+    private ImageView mEditDate;
+    private LinearLayout mActionModifyButton;
+    private Button mDeclineModify;
+    private Button mAcceptModify;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -62,21 +80,98 @@ public class UserProfileFragment extends Fragment {
         mUserName = (TextView) view.findViewById(R.id.user_name);
         mBirthDate = (TextView) view.findViewById(R.id.birth_date);
         mUserBio = (EditText) view.findViewById(R.id.user_bio);
-        /*mButton = (Button) view.findViewById(R.id.profile_edit);
-        mButton.setOnClickListener(new View.OnClickListener() {
+        mEditButton = (ImageView) view.findViewById(R.id.user_profile_editbutton);
+        mEditDate = (ImageView) view.findViewById(R.id.modify_birthdate_btn);
+
+        mActionModifyButton = (LinearLayout) view.findViewById(R.id.profile_modify_actions);
+        mAcceptModify = (Button) view.findViewById(R.id.profile_accept_modification_btn);
+        mDeclineModify = (Button) view.findViewById(R.id.profile_discard_modification_btn);
+
+        mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                mUserBio.setEnabled(!mUserBio.isEnabled());
-                if (mUserBio.isEnabled()) {
-                    mUserBio.requestFocus();
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.showSoftInput(mUserBio, InputMethodManager.SHOW_IMPLICIT);
-                    }
-                }
+            public void onClick(View v) {
+
+                mUserBio.setEnabled(true);
+
+                mEditDate.setVisibility(View.VISIBLE);
+                mActionModifyButton.setVisibility(View.VISIBLE);
+                mEditButton.setVisibility(View.INVISIBLE);
+
+                // copy the old infos (to perform rollback)
+                tmpOldBiography = mShowedUser.getBiography();
+                tmpOldBirthDate = mShowedUser.getBirthDate();
+                tmpOldPicture = mShowedUser.getPhoto();
+
             }
         });
-        */
+
+
+
+        mDeclineModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mEditDate.setVisibility(View.GONE);
+                mActionModifyButton.setVisibility(View.GONE);
+                mEditButton.setVisibility(View.VISIBLE);
+
+                mShowedUser.setBiography(tmpOldBiography);
+                mShowedUser.setBirthDate(tmpOldBirthDate);
+                mShowedUser.setPhoto(tmpOldPicture);
+
+                fillFragment();
+            }
+        });
+
+        mEditDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+
+                        tmpOldBirthDate = mShowedUser.getBirthDate();
+
+                        Calendar cal = Calendar.getInstance();
+
+                        // set day
+                        cal.set(Calendar.YEAR, year);
+                        cal.set(Calendar.MONTH, month);
+                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        mShowedUser.setBirthDate(cal.getTime().getTime());
+
+                        fillFragment();
+
+                    }
+                }, cal
+                        .get(Calendar.YEAR), cal.get(Calendar.MONTH),
+                        cal.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        mUserBio.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                tmpOldBiography = mUserBio.getText().toString();
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+
+            }
+        });
     }
 
     @Override
@@ -102,7 +197,15 @@ public class UserProfileFragment extends Fragment {
         if (mShowedUser != null) {
             mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mShowedUser.getPhoto()));
             mUserName.setText(mShowedUser.getFullName());
-            mBirthDate.setText(getDate(new Date(mShowedUser.getBirthDate())));
+
+            // if the user has not specified his birth date
+            if (mShowedUser.getBirthDate() == 0) {
+                mBirthDate.setText(R.string.alert_no_age);
+            }
+            else {
+                mBirthDate.setText(getDate(new Date(mShowedUser.getBirthDate())));
+            }
+
             mUserBio.setText(mShowedUser.getBiography());
         }
 

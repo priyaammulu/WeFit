@@ -134,7 +134,6 @@ public class NewEventFragmentFirstPage extends Fragment {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
-                        // TODO rivedere come è calcolata sta data
                         calSelected.set(Calendar.HOUR, hourOfDay);
                         calSelected.set(Calendar.MINUTE, minute);
                         dateMillis = calSelected.getTimeInMillis();
