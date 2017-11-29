@@ -48,6 +48,8 @@ public class UserModelAsyncImpl implements UserModel {
 
     @Override
     public void signOut() {
+        // delete local user infos
+        localUserDao.wipe();
         loginHandler.signOut();
     }
 

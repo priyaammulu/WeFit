@@ -30,6 +30,7 @@ import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
+import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
 import static android.app.Activity.RESULT_OK;
@@ -65,6 +66,7 @@ public class UserProfileFragment extends Fragment {
     private Button mDeclineModify;
     private Button mAcceptModify;
     private ImageView mEditPhotoIndicator;
+    private EventViewModel mEventViewModel;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -209,6 +211,8 @@ public class UserProfileFragment extends Fragment {
         this.mUserViewModel = mListener.getUserViewModel();
         // retrieve the user from the local store
         mShowedUser = mUserViewModel.retrieveCachedUser();
+
+        this.mEventViewModel = mListener.getEventViewModel();
     }
 
     @Override
@@ -276,7 +280,10 @@ public class UserProfileFragment extends Fragment {
         layout.findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 mUserViewModel.signOut();
+                mEventViewModel.wipeLocalEvents();
+
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 getActivity().finish();
 

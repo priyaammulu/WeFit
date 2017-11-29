@@ -46,7 +46,6 @@ public class LocalUserDaoImpl implements LocalUserDao {
         editor.putString(ID_FIELD, userToSave.getId());
         editor.putString(NAME_FIELD, userToSave.getFullName());
         editor.putString(CONTACT_FIELD, userToSave.getEmail());
-        editor.putString(GENDER_FIELD, userToSave.getGender());
         editor.putString(IMAGE_FIELD, userToSave.getPhoto());
         editor.putString(BIO_FIELD, userToSave.getBiography());
         editor.putLong(BIRTH_FIELD, userToSave.getBirthDate());
@@ -75,7 +74,6 @@ public class LocalUserDaoImpl implements LocalUserDao {
         localStoredUser.setId(sharedPreferences.getString(ID_FIELD, null));
         localStoredUser.setFullName(sharedPreferences.getString(NAME_FIELD, null));
         localStoredUser.setEmail(sharedPreferences.getString(CONTACT_FIELD, null));
-        localStoredUser.setGender(sharedPreferences.getString(GENDER_FIELD, null));
         localStoredUser.setPhoto(sharedPreferences.getString(IMAGE_FIELD, null));
         localStoredUser.setBiography(sharedPreferences.getString(BIO_FIELD, null));
         localStoredUser.setBirthDate(sharedPreferences.getLong(BIRTH_FIELD, 0));
@@ -85,6 +83,14 @@ public class LocalUserDaoImpl implements LocalUserDao {
         localStoredUser.setAttendances(events);
 
         return localStoredUser;
+    }
+
+    @Override
+    public void wipe() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
     }
 
     public LocalUserDaoImpl(Context context) {

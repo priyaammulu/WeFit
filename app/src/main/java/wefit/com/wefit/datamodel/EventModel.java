@@ -40,4 +40,5 @@ public interface EventModel {
     void joinEvent(String eventID);
 
 
+    void wipeLocalEvents();
 }

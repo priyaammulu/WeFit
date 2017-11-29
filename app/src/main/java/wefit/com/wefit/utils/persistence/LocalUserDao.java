@@ -20,4 +20,9 @@ public interface LocalUserDao {
      */
     User load();
 
+    /**
+     * Delete all local user infos
+     */
+    void wipe();
+
 }

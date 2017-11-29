@@ -13,7 +13,6 @@ public class User {
      */
     private String id;
 
-    private String gender;
     private String fullName;
     private String email;
     private String biography;
@@ -41,13 +40,7 @@ public class User {
         this.id = id;
     }
 
-    public String getGender() {
-        return gender;
-    }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
 
     public String getFullName() {
         return fullName;
@@ -101,7 +94,6 @@ public class User {
     public String toString() {
         return "User{" +
                 ", id='" + id + '\'' +
-                ", gender='" + gender + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", biography='" + biography + '\'' +

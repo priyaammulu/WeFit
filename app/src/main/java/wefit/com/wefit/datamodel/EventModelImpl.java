@@ -197,6 +197,11 @@ public class EventModelImpl implements EventModel {
         remoteEventDao.addAttendee(eventID, currentUser.getId());
     }
 
+    @Override
+    public void wipeLocalEvents() {
+        localEventDao.wipe();
+    }
+
 
     /**
      * Filter all the events that are still not confirmed for the currently logged user

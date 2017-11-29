@@ -75,4 +75,8 @@ public class EventViewModel {
     public Flowable<List<Event>> getNewEvents() {
         return mEventModel.getNewEvents();
     }
+
+    public void wipeLocalEvents() {
+        mEventModel.wipeLocalEvents();
+    }
 }
