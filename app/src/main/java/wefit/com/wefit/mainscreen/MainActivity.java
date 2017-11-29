@@ -1,36 +1,11 @@
 package wefit.com.wefit.mainscreen;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.IntentSender;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,15 +17,12 @@ import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
 import wefit.com.wefit.mainscreen.fragments.ScheduledEventsFragment;
 import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
-import wefit.com.wefit.pojo.EventLocation;
-import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.EventViewModel;
+import wefit.com.wefit.viewmodels.UserViewModel;
+
+import static wefit.com.wefit.mainscreen.fragments.EventWallFragment.REQUEST_CHECK_SETTINGS;
 
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
-
-    private static final int LOCATION_PERMISSION = 1;
-    private static final int REQUEST_CHECK_SETTINGS = 2;
-
     public static final String WALL_FRAGMENT = "main";
     public static final String MY_EVENTS_FRAGMENT = "attendances";
     public static final String PROFILE_FRAGMENT = "profile";
@@ -191,7 +163,19 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
             fragmentTransaction(switchFragmentID);
         }
+    }
 
+    // cannot put it in the fragment
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CHECK_SETTINGS:
+                if (resultCode == RESULT_OK)
+                    mainFragment.enableGoogleApiClient();
+                else
+                    mainFragment.fetchEvents();
+                break;
+        }
     }
 
     private void signOut() {
@@ -212,113 +196,6 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         if (this.mUserViewModel == null)
             mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         return mUserViewModel;
-    }
-
-    @Override
-    public void provideLocation() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION);
-        } else {
-            enableGoogleApiClient();
-        }
-    }
-
-
-    @SuppressLint("MissingPermission")
-    private void enableGoogleApiClient() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest);
-        builder.setAlwaysShow(true);
-        SettingsClient client = LocationServices.getSettingsClient(this);
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-        task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                LocationCallback mLocationCallback = new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        for (Location location : locationResult.getLocations()) {
-                            EventLocation loc = new EventLocation();
-                            loc.setLatitude(location.getLatitude());
-                            loc.setLongitude(location.getLongitude());
-                            mEventViewModel.setLocation(loc);
-                        }
-                    }
-
-
-                };
-                FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
-                LocationRequest mLocationRequest = new LocationRequest();
-                mLocationRequest.setInterval(10000);
-                mLocationRequest.setFastestInterval(5000);
-                mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
-                mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                        mLocationCallback,
-                        null /* Looper */);
-            }
-        });
-        task.addOnFailureListener(this, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                int statusCode = ((ApiException) e).getStatusCode();
-                switch (statusCode) {
-                    case CommonStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied, but this can be fixed
-                        // by showing the user a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            ResolvableApiException resolvable = (ResolvableApiException) e;
-                            resolvable.startResolutionForResult(MainActivity.this,
-                                    REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException sendEx) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        // Location settings are not satisfied. However, we have no way
-                        // to fix the settings so we won't show the dialog.
-                        break;
-                }
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case REQUEST_CHECK_SETTINGS:
-                if (resultCode == RESULT_OK)
-                    enableGoogleApiClient();
-                break;
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    enableGoogleApiClient();
-
-                } else {
-
-                    Toast.makeText(getApplicationContext(), R.string.location_permission_notallowed_toast, Toast.LENGTH_LONG).show();
-                }
-
-                break;
-            }
-        }
     }
 
     private void openWall() {

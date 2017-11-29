@@ -16,5 +16,4 @@ import wefit.com.wefit.viewmodels.UserViewModel;
 public interface FragmentsInteractionListener {
     EventViewModel getEventViewModel();
     UserViewModel getUserViewModel();
-    void provideLocation();
 }
