@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,6 +21,7 @@ import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
 import static wefit.com.wefit.mainscreen.fragments.EventWallFragment.REQUEST_CHECK_SETTINGS;
 
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
@@ -171,9 +173,11 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS:
                 if (resultCode == RESULT_OK)
-                    mainFragment.enableGoogleApiClient();
-                else
+                        mainFragment.enableGoogleApiClient();
+                else {
                     mainFragment.fetchEvents();
+                    Toast.makeText(getApplicationContext(), R.string.location_permission_notallowed_toast, Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
