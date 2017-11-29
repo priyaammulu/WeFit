@@ -64,5 +64,6 @@
     <string name="admin_label">admin</string>
     <string name="confirmed_label">confirmed</string>
     <string name="not_confirmed_label">NOT confirmed</string>
+    <string name="recconnecting_request">No internet connection. Once reconnected it could take a while to recontact the server</string>
 
 </resources>
