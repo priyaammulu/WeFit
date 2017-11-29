@@ -9,7 +9,7 @@ import wefit.com.wefit.pojo.EventLocation;
  * Created by gioacchino on 21/11/2017.
  */
 
-public interface DistanceSorter {
+public interface DistanceManager {
 
-    List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventToSort);
+    List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventToSort, int distanceKmFilter);
 }

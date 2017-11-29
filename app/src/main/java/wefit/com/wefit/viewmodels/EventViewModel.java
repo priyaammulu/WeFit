@@ -25,7 +25,7 @@ public class EventViewModel {
     }
 
     public Flowable<Event> getEvent(String eventID) {
-        return mEventModel.getEvent(eventID);
+        return mEventModel.getEventByID(eventID);
     }
 
     public void setLocation(EventLocation location) {
@@ -45,7 +45,7 @@ public class EventViewModel {
     }
 
     public Flowable<Map<String, User>> getAttendees(List<String> attendeeIDs) {
-        return mEventModel.getAttendees(attendeeIDs);
+        return mEventModel.retrieveAttendees(attendeeIDs);
     }
 
     public void confirmAttendee(String eventID, String userID) {
@@ -60,9 +60,9 @@ public class EventViewModel {
         return mEventModel.getLocalEvent(eventID);
     }
 
-    public void addAttendeeToEvent(String eventID, String userID) {
+    public void addAttendeeToEvent(String eventID) {
 
-        mEventModel.addAttendee(eventID, userID);
+        mEventModel.joinEvent(eventID);
 
     }
 
@@ -70,5 +70,9 @@ public class EventViewModel {
 
         mEventModel.storeEvent(event);
 
+    }
+
+    public Flowable<List<Event>> getNewEvents() {
+        return mEventModel.getNewEvents();
     }
 }

@@ -14,9 +14,6 @@ import wefit.com.wefit.pojo.EventLocation;
 
 public interface RemoteEventDao {
 
-    @Deprecated
-    Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable EventLocation centralPosition);
-
     Flowable<List<Event>> loadNewEvents(int numResults, @Nullable String anchorID);
 
     Flowable<Event> loadEventByID(String eventID);

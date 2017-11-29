@@ -32,14 +32,15 @@
 
     </RelativeLayout>
 
+    <!-- no event show -->
     <LinearLayout
         android:id="@+id/no_available_events_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/eventwall_top_bar"
         android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <TextView
             android:layout_width="match_parent"
@@ -56,6 +57,7 @@
 
 
     <ListView
+        android:visibility="gone"
         android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

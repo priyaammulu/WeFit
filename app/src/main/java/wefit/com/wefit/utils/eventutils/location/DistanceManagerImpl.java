@@ -13,20 +13,25 @@ import wefit.com.wefit.pojo.EventLocation;
  * Created by gioacchino on 21/11/2017.
  */
 
-public class DistanceSorterImpl implements DistanceSorter {
+public class DistanceManagerImpl implements DistanceManager {
     @Override
-    public List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventToSort) {
+    public List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventToSort, int distanceKmFilter) {
 
         List<Event> orderedList = new ArrayList<>();
         List<DistanceHolder> wrapped = this.getSortableList(center, eventToSort);
         Collections.sort(wrapped);
 
         for (DistanceHolder holder : wrapped) {
-            orderedList.add(holder.event);
+
+            if (!(holder.distance > distanceKmFilter)) {
+                orderedList.add(holder.event);
+            }
+
         }
 
         return orderedList;
     }
+
 
     private List<DistanceHolder> getSortableList(EventLocation center, List<Event> eventToSort) {
 
@@ -50,7 +55,7 @@ public class DistanceSorterImpl implements DistanceSorter {
      * difference pass 0.0. Uses Haversine method as its base.
      *
      * lat1, center.getLongitude() Start point lat2, eventPosition.getLongitude() End point el1 Start altitude in meters
-     * @return Distance in Meters
+     * @return Distance in Km
      */
     private double computeDistance(EventLocation center, EventLocation eventPosition) {
 
@@ -62,7 +67,7 @@ public class DistanceSorterImpl implements DistanceSorter {
                 + Math.cos(Math.toRadians(center.getLatitude())) * Math.cos(Math.toRadians(eventPosition.getLatitude()))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c * 1000; // convert to meters
+        return R * c;
     }
 
     private class DistanceHolder implements Comparable<DistanceHolder> {

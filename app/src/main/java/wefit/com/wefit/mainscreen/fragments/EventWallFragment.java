@@ -11,16 +11,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.reactivestreams.Subscription;
 
 import java.util.List;
 
 import io.reactivex.FlowableSubscriber;
+import io.reactivex.functions.Consumer;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.MainActivity;
@@ -43,13 +45,18 @@ public class EventWallFragment extends Fragment {
     /**
      * RxJava Observer Listener
      */
-    private Subscription mSubscription;
+    private Subscription mEventRetrieveSubscription;
+    private Subscription mOtherEventsSubscription;
+
 
     private EventWallAdapter mAdapter;
     private ListView mEventList;
     private EventViewModel mMainViewModel;
     private FragmentsInteractionListener mListener;
     private ProgressDialog popupDialogProgress;
+    private LinearLayout mNoEventShow;
+
+    private List<Event> retrievedEvents;
 
 
     public EventWallFragment() {
@@ -111,7 +118,6 @@ public class EventWallFragment extends Fragment {
         });
 
 
-
     }
 
 
@@ -122,7 +128,7 @@ public class EventWallFragment extends Fragment {
                     @Override
                     public void onSubscribe(Subscription subscription) {
                         subscription.request(Long.MAX_VALUE);
-                        mSubscription = subscription;
+                        mEventRetrieveSubscription = subscription;
                     }
 
                     @Override
@@ -149,6 +155,8 @@ public class EventWallFragment extends Fragment {
         this.setupNavbar(view);
         this.setupTopbar(view);
 
+        mNoEventShow = (LinearLayout) view.findViewById(R.id.no_available_events_label);
+
         mEventList = (ListView) view.findViewById(R.id.event_list);
         mEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -172,7 +180,6 @@ public class EventWallFragment extends Fragment {
         });
 
 
-
     }
 
     @Override
@@ -188,12 +195,63 @@ public class EventWallFragment extends Fragment {
 
 
     private void handleAdapter(List<Event> events) {
-        if (mAdapter == null) {
-            mAdapter = new EventWallAdapter(events, getActivity());
-            mEventList.setAdapter(mAdapter);
-        } else
-            mAdapter.setEvents(events);
-        mAdapter.notifyDataSetChanged();
+
+        if (events.size() != 0) {
+
+            retrievedEvents = events;
+
+            mEventList.setVisibility(View.VISIBLE);
+            mNoEventShow.setVisibility(View.GONE);
+
+            if (mAdapter == null) {
+                mAdapter = new EventWallAdapter(retrievedEvents, getActivity());
+                mEventList.setAdapter(mAdapter);
+            } else
+                mAdapter.setEvents(retrievedEvents);
+            mAdapter.notifyDataSetChanged();
+
+            mEventList.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                    int visibleElementCount = firstVisibleItem + visibleItemCount;
+
+                    if (visibleElementCount == totalItemCount && totalItemCount != 0) {
+
+
+                        mMainViewModel.getNewEvents().subscribe(new Consumer<List<Event>>() {
+                            @Override
+                            public void accept(List<Event> events) throws Exception {
+
+
+                                // TODO not tested, I need more events!!!
+                                if (events.size() != 0) {
+
+                                    retrievedEvents.addAll(events);
+                                    mAdapter.notifyDataSetChanged();
+
+                                }
+
+                            }
+                        });
+
+
+                    }
+
+                }
+            });
+
+        } else {
+            mEventList.setVisibility(View.GONE);
+            mNoEventShow.setVisibility(View.VISIBLE);
+
+        }
+
     }
 
     @Override
@@ -228,8 +286,8 @@ public class EventWallFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mSubscription != null)
-            mSubscription.cancel();
+        if (mEventRetrieveSubscription != null)
+            mEventRetrieveSubscription.cancel();
     }
 
     private void showWaitSpinner() {

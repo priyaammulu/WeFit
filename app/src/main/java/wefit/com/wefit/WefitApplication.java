@@ -13,8 +13,8 @@ import wefit.com.wefit.datamodel.UserModel;
 import wefit.com.wefit.datamodel.UserModelAsyncImpl;
 import wefit.com.wefit.utils.auth.Auth20FirebaseHandlerImpl;
 import wefit.com.wefit.utils.auth.Auth20Handler;
-import wefit.com.wefit.utils.eventutils.location.DistanceSorter;
-import wefit.com.wefit.utils.eventutils.location.DistanceSorterImpl;
+import wefit.com.wefit.utils.eventutils.location.DistanceManager;
+import wefit.com.wefit.utils.eventutils.location.DistanceManagerImpl;
 import wefit.com.wefit.utils.eventutils.wheater.OpenWeatherMapForecastImpl;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
@@ -55,7 +55,7 @@ public class WefitApplication extends Application {
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 
         // utils
-        DistanceSorter distanceSorter = new DistanceSorterImpl();
+        DistanceManager distanceSorter = new DistanceManagerImpl();
         forecastManager = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
 
         // initialise models

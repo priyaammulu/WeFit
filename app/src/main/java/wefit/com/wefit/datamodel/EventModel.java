@@ -13,7 +13,11 @@ import wefit.com.wefit.pojo.User;
  */
 
 public interface EventModel {
+
     Flowable<List<Event>> getEvents();
+
+    Flowable<List<Event>> getNewEvents();
+
 
     void setLocation(EventLocation location);
 
@@ -23,9 +27,9 @@ public interface EventModel {
 
     EventLocation getUserLocation();
 
-    Flowable<Event> getEvent(String eventID);
+    Flowable<Event> getEventByID(String eventID);
 
-    Flowable<Map<String, User>> getAttendees(List<String> attendeeIDs);
+    Flowable<Map<String, User>> retrieveAttendees(List<String> attendeeIDs);
 
     void confirmAttendee(String eventID, String userID);
 
@@ -33,5 +37,7 @@ public interface EventModel {
 
     Event getLocalEvent(String eventID);
 
-    void addAttendee(String eventID, String userID);
+    void joinEvent(String eventID);
+
+
 }

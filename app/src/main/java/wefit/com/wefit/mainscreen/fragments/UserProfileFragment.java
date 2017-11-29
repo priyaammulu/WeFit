@@ -144,8 +144,12 @@ public class UserProfileFragment extends Fragment {
         mEditDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // underaged users are not allowed
+                final long HEIGHTEEN_YEARS_AGO = 568025136000L;
+
                 Calendar cal = Calendar.getInstance();
-                new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog pickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
@@ -163,7 +167,12 @@ public class UserProfileFragment extends Fragment {
                     }
                 }, cal
                         .get(Calendar.YEAR), cal.get(Calendar.MONTH),
-                        cal.get(Calendar.DAY_OF_MONTH)).show();
+                        cal.get(Calendar.DAY_OF_MONTH));
+
+                pickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - HEIGHTEEN_YEARS_AGO);
+                pickerDialog.show();
+
+
             }
         });
 

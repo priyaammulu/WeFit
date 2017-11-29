@@ -57,9 +57,39 @@
             android:id="@+id/user_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
+
+            <LinearLayout
+                android:id="@+id/profile_modify_actions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/profile_accept_modification_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/border_positive_event_button"
+                    android:text="@string/confirm"
+                    android:textColor="@color/positive_event_green"
+                    android:layout_marginEnd="10dp" />
+
+                <Button
+                    android:id="@+id/profile_discard_modification_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_abandon_event_button"
+                    android:text="@string/discard"
+                    android:textColor="@color/alert_red" />
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -70,10 +100,10 @@
                     android:id="@+id/profile_user_pic"
                     android:layout_width="170dp"
                     android:layout_height="170dp"
+                    android:layout_centerInParent="true"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
                     android:src="@drawable/calendar_ico"
-                    android:layout_centerInParent="true"
                     app:civ_border_width="0dp" />
 
                 <ImageView
@@ -82,10 +112,9 @@
                     android:layout_height="50sp"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_camera_pick"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </RelativeLayout>
-
 
 
             <TextView
@@ -116,8 +145,7 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:src="@drawable/calendar_ico"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -125,7 +153,7 @@
                 android:layout_marginTop="20dp"
                 android:text="Biography"
                 android:textColor="@color/colorPrimaryDark"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/user_bio"
@@ -137,34 +165,7 @@
                 android:enabled="false"
                 android:focusable="true"
                 android:text="Lorem ipsum"
-                android:textColor="@color/grey"
                 android:windowSoftInputMode="adjustResize" />
-
-            <LinearLayout
-                android:id="@+id/profile_modify_actions"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <Button
-                    android:id="@+id/profile_accept_modification_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_positive_event_button"
-                    android:text="@string/confirm"
-                    android:textColor="@color/positive_event_green" />
-                <Button
-                    android:layout_marginTop="10dp"
-                    android:id="@+id/profile_discard_modification_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_abandon_event_button"
-                    android:text="@string/discard"
-                    android:textColor="@color/alert_red" />
-
-            </LinearLayout>
-
 
         </LinearLayout>
 

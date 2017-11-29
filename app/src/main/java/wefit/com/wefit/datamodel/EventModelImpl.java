@@ -15,7 +15,7 @@ import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
-import wefit.com.wefit.utils.eventutils.location.DistanceSorter;
+import wefit.com.wefit.utils.eventutils.location.DistanceManager;
 import wefit.com.wefit.utils.persistence.LocalEventDao;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 import wefit.com.wefit.utils.persistence.RemoteUserDao;
@@ -27,7 +27,11 @@ import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 public class EventModelImpl implements EventModel {
 
+    private static final int DISTANCE_FILTER = 10;
+
     private static final int NUMBER_EVENT_REQUESTED = 20;
+
+    private static final EventLocation DUBLIN_POSITION_CENTER = new EventLocation(53.3498, -6.2603);
 
     private EventLocation currentLocation;
 
@@ -38,17 +42,16 @@ public class EventModelImpl implements EventModel {
 
     private LocalEventDao localEventDao;
 
-    private DistanceSorter distanceSorter;
+    private DistanceManager distanceSorter;
 
-    //private Event event;
-    private EventLocation dublin = new EventLocation(53.3498, -6.2603);
+    private String anchorID = null;
 
 
     public EventModelImpl(RemoteEventDao eventPersistence,
                           RemoteUserDao userPersistence,
                           LocalEventDao localEventDao,
                           UserModel userModel,
-                          DistanceSorter sorter) {
+                          DistanceManager sorter) {
 
         this.remoteUserDao = userPersistence;
         this.remoteEventDao = eventPersistence;
@@ -61,50 +64,15 @@ public class EventModelImpl implements EventModel {
     @Override
     public Flowable<List<Event>> getEvents() {
 
-        return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
-            @Override
-            public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
-                remoteEventDao
-                        .loadNewEvents(NUMBER_EVENT_REQUESTED, null)
-                        .subscribe(new Consumer<List<Event>>() {
-                            @Override
-                            public void accept(List<Event> events) throws Exception {
+        // refresh the anchor
+        anchorID = null;
 
-                                // filter events created by the user
-                                // it makes no sens to show these events on the wall
-                                events = filterUserEvents(events);
+        return Flowable.create(new FillEventsDetails(), BackpressureStrategy.BUFFER);
+    }
 
-                                // TODO this location CANNOT be always dublin
-                                // sort the events from the current location
-                                distanceSorter.sortByDistanceFromLocation(dublin, events);
-
-                                // associate each event to its creator
-                                List<String> creatorIDs = new ArrayList<>();
-                                for (Event retrievedEvent : events) {
-                                    creatorIDs.add(retrievedEvent.getAdminID());
-                                }
-
-                                // filter full events
-                                final List<Event> filterFullEvents = filterFullEvents(events);
-
-                                remoteUserDao.loadByIDs(creatorIDs).subscribe(new Consumer<Map<String, User>>() {
-                                    @Override
-                                    public void accept(Map<String, User> stringUserMap) throws Exception {
-
-                                        // assign the correct admin to each event
-                                        for (Event retrieved : filterFullEvents) {
-                                            retrieved.setAdmin(stringUserMap.get(retrieved.getAdminID()));
-                                        }
-
-                                        // send the notification of ended loading
-                                        flowableEmitter.onNext(filterFullEvents);
-
-                                    }
-                                });
-                            }
-                        });
-            }
-        }, BackpressureStrategy.BUFFER);
+    @Override
+    public Flowable<List<Event>> getNewEvents() {
+        return Flowable.create(new FillEventsDetails(), BackpressureStrategy.BUFFER);
     }
 
     @Override
@@ -176,18 +144,23 @@ public class EventModelImpl implements EventModel {
 
     @Override
     public EventLocation getUserLocation() {
+
+        // to keep the system safe, put DUBLIN as default position
+        EventLocation location = DUBLIN_POSITION_CENTER;
+
         if (currentLocation != null)
-            return currentLocation;
-        return dublin;
+            location = currentLocation;
+
+        return location;
     }
 
     @Override
-    public Flowable<Event> getEvent(String eventID) {
+    public Flowable<Event> getEventByID(String eventID) {
         return remoteEventDao.loadEventByID(eventID);
     }
 
     @Override
-    public Flowable<Map<String, User>> getAttendees(List<String> attendeeIDs) {
+    public Flowable<Map<String, User>> retrieveAttendees(List<String> attendeeIDs) {
 
         return this.remoteUserDao.loadByIDs(attendeeIDs);
     }
@@ -210,9 +183,20 @@ public class EventModelImpl implements EventModel {
     }
 
     @Override
-    public void addAttendee(String eventID, String userID) {
-        remoteEventDao.addAttendee(eventID, userID);
+    public void joinEvent(String eventID) {
+        User currentUser = userModel.getLocalUser();
+
+        // update user attendances
+        List<String> attendances = currentUser.getAttendances();
+        attendances.add(eventID);
+        currentUser.setAttendances(attendances);
+
+        // save remotely
+        remoteUserDao.save(currentUser);
+
+        remoteEventDao.addAttendee(eventID, currentUser.getId());
     }
+
 
     /**
      * Filter all the events that are still not confirmed for the currently logged user
@@ -328,4 +312,59 @@ public class EventModelImpl implements EventModel {
     }
 
 
+    private class FillEventsDetails implements FlowableOnSubscribe<List<Event>> {
+
+        @Override
+        public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
+            remoteEventDao
+                    .loadNewEvents(NUMBER_EVENT_REQUESTED, anchorID)
+                    .subscribe(new Consumer<List<Event>>() {
+                        @Override
+                        public void accept(List<Event> events) throws Exception {
+
+                            // if there are no events, simply send a empty list
+                            if (events.size() != 0) {
+
+                                // retrieve anchor to perform future calls
+                                anchorID = events.get(events.size() - 1).getId();
+
+                                // filter events created by the user
+                                // it makes no sens to show these events on the wall
+                                events = filterUserEvents(events);
+
+                                // sort the events from the current location
+                                events = distanceSorter.sortByDistanceFromLocation(getUserLocation(), events, DISTANCE_FILTER);
+
+                                // associate each event to its creator
+                                List<String> creatorIDs = new ArrayList<>();
+                                for (Event retrievedEvent : events) {
+                                    creatorIDs.add(retrievedEvent.getAdminID());
+                                }
+
+                                // filter full events
+                                final List<Event> filterFullEvents = filterFullEvents(events);
+
+                                remoteUserDao.loadByIDs(creatorIDs).subscribe(new Consumer<Map<String, User>>() {
+                                    @Override
+                                    public void accept(Map<String, User> stringUserMap) throws Exception {
+
+                                        // assign the correct admin to each event
+                                        for (Event retrieved : filterFullEvents) {
+                                            retrieved.setAdmin(stringUserMap.get(retrieved.getAdminID()));
+                                        }
+
+                                        // send the notification of ended loading
+                                        flowableEmitter.onNext(filterFullEvents);
+
+                                    }
+                                });
+                            } else {
+                                flowableEmitter.onNext(events);
+                            }
+
+                        }
+                    });
+
+        }
+    }
 }

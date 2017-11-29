@@ -38,11 +38,6 @@ public class FirebaseEventDao implements RemoteEventDao {
      */
     private DatabaseReference mEventStorage;
 
-    @Override
-    public Flowable<List<Event>> loadNewEvents(int numResults, int startOffset, @Nullable EventLocation centralPosition) {
-        // tODO deprecated remove
-        return null;
-    }
 
     @Override
     public Flowable<List<Event>> loadNewEvents(int numResults, @Nullable String anchorID) {
@@ -131,8 +126,6 @@ public class FirebaseEventDao implements RemoteEventDao {
                 // make sure that the IDs are unique
                 final Set<String> uniqueIDs = new HashSet<>(eventIDs);
 
-                Log.i("ALMOND", uniqueIDs.toString());
-
                 for (String eventID : uniqueIDs) {
 
                     // retrieve the user from the system async
@@ -159,7 +152,6 @@ public class FirebaseEventDao implements RemoteEventDao {
 
     @Override
     public Flowable<List<Event>> loadEventsByAdmin(final String adminID) {
-        // TODO controllare se funziona
         return Flowable.create(new FlowableOnSubscribe<List<Event>>() {
             @Override
             public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {

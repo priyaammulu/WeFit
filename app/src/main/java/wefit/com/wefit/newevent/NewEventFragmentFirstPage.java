@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,15 +28,11 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 import wefit.com.wefit.R;
-import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.utils.calendar.CalendarFormatter;
@@ -119,35 +114,6 @@ public class NewEventFragmentFirstPage extends Fragment {
             }
         });
 
-        final DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
-
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear,
-                                  final int dayOfMonth) {
-
-                // set day
-                calSelected.set(Calendar.YEAR, year);
-                calSelected.set(Calendar.MONTH, monthOfYear);
-                calSelected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-
-                        calSelected.set(Calendar.HOUR, hourOfDay);
-                        calSelected.set(Calendar.MINUTE, minute);
-                        dateMillis = calSelected.getTimeInMillis();
-
-                        String dateFormatted = CalendarFormatter.getDate(dateMillis) + " " + CalendarFormatter.getTime(dateMillis);
-                        mEventDateLabel.setText(dateFormatted);
-
-                        dateSelected = true;
-                    }
-                }, 0, 0, false).show();
-
-            }
-
-        };
 
         mEventName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -166,25 +132,69 @@ public class NewEventFragmentFirstPage extends Fragment {
             }
         });
 
+
         mEventDatePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // you can create a event starting from tomorrow
+                final long DAY_MILLIS = 86400000;
+
                 Calendar cal = Calendar.getInstance();
-                new DatePickerDialog(getActivity(), dateListener, cal
+
+                DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                          final int dayOfMonth) {
+
+                        // set day
+                        calSelected.set(Calendar.YEAR, year);
+                        calSelected.set(Calendar.MONTH, monthOfYear);
+                        calSelected.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                        new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+
+                                calSelected.set(Calendar.HOUR, hourOfDay);
+                                calSelected.set(Calendar.MINUTE, minute);
+                                dateMillis = calSelected.getTimeInMillis();
+
+                                String dateFormatted = CalendarFormatter.getDate(dateMillis) + " " + CalendarFormatter.getTime(dateMillis);
+                                mEventDateLabel.setText(dateFormatted);
+
+                                dateSelected = true;
+
+                            }
+                        }, 0, 0, false).show();
+
+                    }
+
+                };
+
+
+                DatePickerDialog pickerDialog = new DatePickerDialog(getActivity(), dateListener, cal
                         .get(Calendar.YEAR), cal.get(Calendar.MONTH),
-                        cal.get(Calendar.DAY_OF_MONTH)).show();
+                        cal.get(Calendar.DAY_OF_MONTH));
+                pickerDialog.getDatePicker().setMinDate(new Date().getTime() + DAY_MILLIS);
+                pickerDialog.show();
             }
         });
 
         mMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // it will be set on the user current position
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                LatLng southest = new LatLng(mUserLocation.getLatitude() - 0.00000001, mUserLocation.getLongitude() - 0.00000001);
-                LatLng northest = new LatLng(mUserLocation.getLatitude() + 0.00000001, mUserLocation.getLongitude() + 0.00000001);
-                LatLngBounds bounds = new LatLngBounds(southest, northest);
-                builder.setLatLngBounds(bounds);
+
+                // note for the group: this is legacy code
+                //LatLng southest = new LatLng(mUserLocation.getLatitude() - 0.00000001, mUserLocation.getLongitude() - 0.00000001);
+                //LatLng northest = new LatLng(mUserLocation.getLatitude() + 0.00000001, mUserLocation.getLongitude() + 0.00000001);
+                //LatLngBounds bounds = new LatLngBounds(southest, northest);
+                //builder.setLatLngBounds(bounds);
+
                 try {
                     startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
                 } catch (GooglePlayServicesRepairableException e) {
@@ -250,14 +260,18 @@ public class NewEventFragmentFirstPage extends Fragment {
                     event.setPublicationDate(new Date().getTime());
                     event.setName(mEventName.getText().toString());
 
+                    // if the event IS NOT private, then set the number of maximum attendees
                     if (isEventPrivate) {
-                        event.setPrivateEvent(isEventPrivate);
+                        event.setPrivateEvent(true);
+                    }
+                    else {
                         event.setMaxAttendees(numberAttendees);
                     }
                     event.setEventDate(calSelected.getTime().getTime());
                     event.setEventLocation(mRetrievedLocation);
 
                     mListener.secondFragment(event);
+
                 } else {
 
                     showRetrieveErrorPopupDialog();

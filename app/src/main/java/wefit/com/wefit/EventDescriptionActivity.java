@@ -12,6 +12,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -230,7 +231,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mEventDescription.setText(retrievedEvent.getDescription());
         this.mEventPublishDate.setText(CalendarFormatter.getDate(retrievedEvent.getPublicationDate()));
         this.mEventDate.setText(CalendarFormatter.getDate(retrievedEvent.getEventDate()));
-        this.mEventTime.setText(CalendarFormatter.getDate(retrievedEvent.getEventDate()));
+        this.mEventTime.setText(CalendarFormatter.getTime(retrievedEvent.getEventDate()));
         this.mEventPlace.setText(retrievedEvent.getEventLocation().getName().trim());
         this.mEventCity.setText(String.format(Locale.ENGLISH,
                 "%4.5f, %4.5f",
@@ -415,7 +416,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         mJoinEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEventViewModel.addAttendeeToEvent(mRetrievedEvent.getId(), mUserViewModel.retrieveCachedUser().getId());
+                mEventViewModel.addAttendeeToEvent(mRetrievedEvent.getId());
                 refresh();
             }
         });
