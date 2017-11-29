@@ -163,9 +163,7 @@ public class EventWallFragment extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
-
             fetchEvents();
-
 
         }
     }
@@ -323,7 +321,7 @@ public class EventWallFragment extends Fragment {
 
         // there was an error, show a popup message
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setMessage(R.string.no_internet_popup_label)
+        builder.setMessage(R.string.recconnecting_request)
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
