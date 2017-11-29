@@ -23,7 +23,10 @@ public class CategoryIconFactory {
 
     private CategoryIconFactory() {
 
-        // TODO si può caricare meglio sta cosa
+        this.availableCategories.put("archery", new Category("Archery", R.drawable.ic_archery, "archery"));
+        this.availableCategories.put("bike", new Category("Bike", R.drawable.ic_bike, "bike"));
+        this.availableCategories.put("running", new Category("Running", R.drawable.ic_running, "running"));
+        this.availableCategories.put("football", new Category("Football", R.drawable.ic_running, "football"));
         this.availableCategories.put("volleyball", new Category("Volleyball", R.drawable.ic_volleyball, "volleyball"));
         this.availableCategories.put("cardio", new Category("Cardio", R.drawable.ic_gym_cardio, "cardio"));
         this.availableCategories.put("wlift", new Category("Weightlifting", R.drawable.ic_gym_weightlifting, "wlift"));

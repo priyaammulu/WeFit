@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/backbutton_margin_left"
             android:layout_marginStart="@dimen/backbutton_margin_left"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit_user" />
 
         <TextView
             android:layout_width="wrap_content"

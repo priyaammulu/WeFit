@@ -220,7 +220,7 @@ public class EventModelImpl implements EventModel {
             Map<String, Boolean> attendanceStates = singleAttendance.getAttendingUsers();
 
             // if the user is confirmed
-            if (attendanceStates.get(currentUserID)) {
+            if (attendanceStates.containsKey(currentUserID) && attendanceStates.get(currentUserID)) {
                 confirmedAttandances.add(singleAttendance);
             }
 
@@ -340,29 +340,34 @@ public class EventModelImpl implements EventModel {
                                 // sort the events from the current location
                                 events = distanceSorter.sortByDistanceFromLocation(getUserLocation(), events, DISTANCE_FILTER);
 
-                                // associate each event to its creator
-                                List<String> creatorIDs = new ArrayList<>();
-                                for (Event retrievedEvent : events) {
-                                    creatorIDs.add(retrievedEvent.getAdminID());
-                                }
 
-                                // filter full events
-                                final List<Event> filterFullEvents = filterFullEvents(events);
-
-                                remoteUserDao.loadByIDs(creatorIDs).subscribe(new Consumer<Map<String, User>>() {
-                                    @Override
-                                    public void accept(Map<String, User> stringUserMap) throws Exception {
-
-                                        // assign the correct admin to each event
-                                        for (Event retrieved : filterFullEvents) {
-                                            retrieved.setAdmin(stringUserMap.get(retrieved.getAdminID()));
-                                        }
-
-                                        // send the notification of ended loading
-                                        flowableEmitter.onNext(filterFullEvents);
-
+                                if (events.size() != 0) {
+                                    // associate each event to its creator
+                                    List<String> creatorIDs = new ArrayList<>();
+                                    for (Event retrievedEvent : events) {
+                                        creatorIDs.add(retrievedEvent.getAdminID());
                                     }
-                                });
+
+                                    // filter full events
+                                    final List<Event> filterFullEvents = filterFullEvents(events);
+
+                                    remoteUserDao.loadByIDs(creatorIDs).subscribe(new Consumer<Map<String, User>>() {
+                                        @Override
+                                        public void accept(Map<String, User> stringUserMap) throws Exception {
+
+                                            // assign the correct admin to each event
+                                            for (Event retrieved : filterFullEvents) {
+                                                retrieved.setAdmin(stringUserMap.get(retrieved.getAdminID()));
+                                            }
+
+                                            // send the notification of ended loading
+                                            flowableEmitter.onNext(filterFullEvents);
+
+                                        }
+                                    });
+                                } else {
+                                    flowableEmitter.onNext(events);
+                                }
                             } else {
                                 flowableEmitter.onNext(events);
                             }
