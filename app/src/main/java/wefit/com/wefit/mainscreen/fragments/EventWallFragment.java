@@ -224,11 +224,18 @@ public class EventWallFragment extends Fragment {
                     if (visibleElementCount == totalItemCount && totalItemCount != 0) {
 
 
-                        mMainViewModel.getNewEvents().subscribe(new Consumer<List<Event>>() {
+                        mMainViewModel.getNewEvents().subscribe(new FlowableSubscriber<List<Event>>() {
                             @Override
-                            public void accept(List<Event> events) throws Exception {
+                            public void onSubscribe(Subscription subscription) {
+                                subscription.request(1L);
+                                if (mOtherEventsSubscription != null) {
+                                    mOtherEventsSubscription.cancel();
+                                }
+                                mOtherEventsSubscription = subscription;
+                            }
 
-
+                            @Override
+                            public void onNext(List<Event> events) {
                                 // TODO not tested, I need more events!!!
                                 if (events.size() != 0) {
 
@@ -236,6 +243,15 @@ public class EventWallFragment extends Fragment {
                                     mAdapter.notifyDataSetChanged();
 
                                 }
+                            }
+
+                            @Override
+                            public void onError(Throwable throwable) {
+
+                            }
+
+                            @Override
+                            public void onComplete() {
 
                             }
                         });
@@ -288,6 +304,10 @@ public class EventWallFragment extends Fragment {
         super.onDestroy();
         if (mEventRetrieveSubscription != null)
             mEventRetrieveSubscription.cancel();
+
+        if (mOtherEventsSubscription != null) {
+            mOtherEventsSubscription.cancel();
+        }
     }
 
     private void showWaitSpinner() {
