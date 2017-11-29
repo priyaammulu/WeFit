@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.LinkedList;
+
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
+import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
@@ -19,6 +22,7 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
     private Event newEvent;
     private EventViewModel mainViewModel;
     private UserViewModel userViewModel;
+    private LinkedList<Fragment> stack = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,23 +30,35 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
         setContentView(R.layout.activity_new_event);
         mainViewModel = ((WefitApplication) getApplication()).getEventViewModel();
         userViewModel = ((WefitApplication) getApplication()).getUserViewModel();
-        bind();
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.new_event_fragment, fragmentFirst)
+                .add(R.id.new_event_fragment, fragmentFirst)
+                .add(R.id.new_event_fragment, fragmentSecond)
+                .add(R.id.new_event_fragment, fragmentThird)
+                .hide(fragmentSecond)
+                .hide(fragmentThird)
                 .commit();
+        stack.push(fragmentFirst);
     }
 
     private void attachFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.new_event_fragment, fragment)
-                .addToBackStack(null)
+                .hide(fragmentFirst)
+                .hide(fragmentSecond)
+                .hide(fragmentThird)
+                .show(fragment)
                 .commit();
+        stack.push(fragment);
     }
 
-    private void bind() {
-
+    @Override
+    public void onBackPressed() {
+        if (stack.isEmpty() || stack.pop() instanceof NewEventFragmentFirstPage)
+            super.onBackPressed();
+        else {
+            attachFragment(stack.pop());
+        }
     }
 
     @Override
