@@ -1,11 +1,12 @@
 package wefit.com.wefit;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -103,21 +104,6 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        // TODO encoment rest and delete onClickListener ->just test for layout
-
-        /*Button button = (Button) findViewById(R.id.facebook_login_btn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getBaseContext(), ProfileActivity.class));
-
-
-            }
-        });*/
-
-
-        // }
-
 
         // bind the services to the buttons
         this.bindFacebookButton();
@@ -182,8 +168,15 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
+
+                if (NetworkCheker.getInstance().isNetworkAvailable(getApplicationContext())) {
+                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                    startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
+                } else {
+                    showNoInternetConnectionToast();
+                }
+
+
 
             }
         });
@@ -211,7 +204,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, requestedPermissions);
+                if (NetworkCheker.getInstance().isNetworkAvailable(getApplicationContext())) {
+                    LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, requestedPermissions);
+                } else {
+                    showNoInternetConnectionToast();
+                }
 
             }
         });
@@ -361,6 +358,13 @@ public class LoginActivity extends AppCompatActivity {
         if (popupDialogProgress != null)
             popupDialogProgress.dismiss();
         popupDialogProgress = null;
+    }
+
+    private void showNoInternetConnectionToast() {
+
+        stopSpinner();
+
+        Toast.makeText(getApplicationContext(), R.string.no_internet_popup_label, Toast.LENGTH_LONG).show();
     }
 
 

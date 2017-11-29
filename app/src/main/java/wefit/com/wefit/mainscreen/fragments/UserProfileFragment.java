@@ -29,6 +29,8 @@ import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.utils.NetworkCheker;
+import wefit.com.wefit.utils.calendar.CalendarFormatter;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
@@ -181,16 +183,21 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                resetInvisibleModificationComponents();
+                if (NetworkCheker.getInstance().isNetworkAvailable(getContext())) {
+                    resetInvisibleModificationComponents();
 
-                if (mUserBio.getText().toString().length() > 0) {
+                    if (mUserBio.getText().toString().length() > 0) {
 
-                    mShowedUser.setBiography(mUserBio.getText().toString());
-                    mUserViewModel.updateUser(mShowedUser);
+                        mShowedUser.setBiography(mUserBio.getText().toString());
+                        mUserViewModel.updateUser(mShowedUser);
 
-                }
-                else {
-                    Toast.makeText(getContext(), getString(R.string.bio_forgot_toast), Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(getContext(), getString(R.string.bio_forgot_toast), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), getString(R.string.no_internet_popup_label), Toast.LENGTH_LONG).show();
+
                 }
 
             }
@@ -231,7 +238,7 @@ public class UserProfileFragment extends Fragment {
                 mBirthDate.setText(R.string.alert_no_age);
             }
             else {
-                mBirthDate.setText(getDate(new Date(mShowedUser.getBirthDate())));
+                mBirthDate.setText(CalendarFormatter.getDate(mShowedUser.getBirthDate()));
             }
 
             mUserBio.setText(mShowedUser.getBiography());
@@ -266,11 +273,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    private String getDate(Date date) {
-        Locale locale = Locale.ENGLISH;
-        return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
     }
 
 

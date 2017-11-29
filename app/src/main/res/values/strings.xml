@@ -60,5 +60,9 @@
     <string name="discard">Discard</string>
     <string name="bio_forgot_toast">Hey, you forgot your bio!</string>
     <string name="location_permission_notallowed_toast">Hey, we respect your privacy</string>
+    <string name="no_internet_popup_label">No internet connection!</string>
+    <string name="admin_label">admin</string>
+    <string name="confirmed_label">confirmed</string>
+    <string name="not_confirmed_label">NOT confirmed</string>
 
 </resources>

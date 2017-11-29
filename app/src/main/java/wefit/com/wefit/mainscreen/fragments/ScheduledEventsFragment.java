@@ -29,6 +29,7 @@ import wefit.com.wefit.mainscreen.adapters.AttendancesEventAdapter;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
@@ -119,48 +120,51 @@ public class ScheduledEventsFragment extends Fragment {
             // load refreshed data
             showWaitSpinner();
 
-            // retrieve events from the server and from the local storage
-            mEventViewModel.getUserEvents().subscribe(new FlowableSubscriber<List<Event>>() {
-                @Override
-                public void onSubscribe(Subscription subscription) {
-                    subscription.request(1L);
+            if (NetworkCheker.getInstance().isNetworkAvailable(getContext())) {
+                // retrieve events from the server and from the local storage
+                mEventViewModel.getUserEvents().subscribe(new FlowableSubscriber<List<Event>>() {
+                    @Override
+                    public void onSubscribe(Subscription subscription) {
+                        subscription.request(1L);
 
-                    // if there are some old listeners, remove them
-                    if (eventRetrieveSubscription != null) {
-                        eventRetrieveSubscription.cancel();
+                        // if there are some old listeners, remove them
+                        if (eventRetrieveSubscription != null) {
+                            eventRetrieveSubscription.cancel();
+                        }
+
+                        eventRetrieveSubscription = subscription;
                     }
 
-                    eventRetrieveSubscription = subscription;
-                }
+                    @Override
+                    public void onNext(List<Event> events) {
 
-                @Override
-                public void onNext(List<Event> events) {
+                        stopWaitSpinner();
 
-                    stopWaitSpinner();
+                        if (events.size() != 0) {
+                            initializeListView(events);
+                        } else { // if the user has no events hide the list
+                            mListView.setVisibility(View.GONE);
+                            mNoEventsLabel.setVisibility(View.VISIBLE);
 
-                    if (events.size() != 0) {
-                        initializeListView(events);
-                    }
-                    else { // if the user has no events hide the list
-                        mListView.setVisibility(View.GONE);
-                        mNoEventsLabel.setVisibility(View.VISIBLE);
+                        }
 
                     }
 
-                }
+                    @Override
+                    public void onError(Throwable throwable) {
 
-                @Override
-                public void onError(Throwable throwable) {
+                        showRetrieveErrorPopupDialog();
 
-                    showRetrieveErrorPopupDialog();
+                    }
 
-                }
+                    @Override
+                    public void onComplete() {
 
-                @Override
-                public void onComplete() {
-
-                }
-            });
+                    }
+                });
+            } else {
+                showNoInternetConnectionPopup();
+            }
 
         }
     }
@@ -224,7 +228,6 @@ public class ScheduledEventsFragment extends Fragment {
     }
 
 
-
     private void setupTopbar(View layout) {
 
 
@@ -236,7 +239,23 @@ public class ScheduledEventsFragment extends Fragment {
         });
 
 
+    }
 
+    private void showNoInternetConnectionPopup() {
+
+        stopWaitSpinner();
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.no_internet_popup_label)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //go to the main activity
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 

@@ -34,6 +34,7 @@ import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
+import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.utils.calendar.CalendarFormatter;
 import wefit.com.wefit.utils.eventutils.wheater.Weather;
 import wefit.com.wefit.utils.eventutils.wheater.WeatherForecast;
@@ -114,56 +115,60 @@ public class EventDescriptionActivity extends AppCompatActivity {
         // retrieve utils
         this.weatherForecast = ((WefitApplication) getApplication()).getWeatherForecast();
 
-        // check if the event is public or local (default public)
-        if (!this.getIntent().getBooleanExtra(ExtrasLabels.IS_PRIVATE, false)) {
+        if (NetworkCheker.getInstance().isNetworkAvailable(this)) {
+            // check if the event is public or local (default public)
+            if (!this.getIntent().getBooleanExtra(ExtrasLabels.IS_PRIVATE, false)) {
 
-            // request the data from the remote store
-            mEventViewModel.getEvent(eventID).subscribe(new FlowableSubscriber<Event>() {
-                @Override
-                public void onSubscribe(Subscription subscription) {
+                // request the data from the remote store
+                mEventViewModel.getEvent(eventID).subscribe(new FlowableSubscriber<Event>() {
+                    @Override
+                    public void onSubscribe(Subscription subscription) {
 
-                    subscription.request(Long.MAX_VALUE);
-                    eventRetrieve = subscription;
+                        subscription.request(Long.MAX_VALUE);
+                        eventRetrieve = subscription;
 
-                }
+                    }
 
-                @Override
-                public void onNext(Event event) {
+                    @Override
+                    public void onNext(Event event) {
 
-                    // keep the retrieved event
-                    mRetrievedEvent = event;
+                        // keep the retrieved event
+                        mRetrievedEvent = event;
 
-                    // show the layout
-                    showLayout();
+                        // show the layout
+                        showLayout();
 
-                    // fill the activity with the new data
-                    fillActivityInformation(event);
+                        // fill the activity with the new data
+                        fillActivityInformation(event);
 
-                }
+                    }
 
-                @Override
-                public void onError(Throwable throwable) {
+                    @Override
+                    public void onError(Throwable throwable) {
 
-                    showRetrieveErrorPopupDialog();
-                }
+                        showRetrieveErrorPopupDialog();
+                    }
 
-                @Override
-                public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-                }
-            });
+                    }
+                });
 
+            } else {
+
+                // the event is private, retrieve from the local store
+                mRetrievedEvent = mEventViewModel.getPrivateEvent(eventID);
+
+                // show the layout
+                showLayout();
+
+                // can just fill the activity
+                fillActivityInformation(mRetrievedEvent);
+
+            }
         } else {
-
-            // the event is private, retrieve from the local store
-            mRetrievedEvent = mEventViewModel.getPrivateEvent(eventID);
-
-            // show the layout
-            showLayout();
-
-            // can just fill the activity
-            fillActivityInformation(mRetrievedEvent);
-
+            showNoInternetConnectionPopup();
         }
 
     }
@@ -257,68 +262,72 @@ public class EventDescriptionActivity extends AppCompatActivity {
         final List<Pair<User, Boolean>> coupleAttendances = new ArrayList<>();
 
 
-        if (!retrievedEvent.isPrivateEvent()) { // public event
+        if (NetworkCheker.getInstance().isNetworkAvailable(this)) {
+            if (!retrievedEvent.isPrivateEvent()) { // public event
 
-            // check if the user is the admin of the event
-            if (checkIsCurrentUserAdmin()) {
-                coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
-            } else {
-                attendeeIDs.add(retrievedEvent.getAdminID());
+                // check if the user is the admin of the event
+                if (checkIsCurrentUserAdmin()) {
+                    coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
+                } else {
+                    attendeeIDs.add(retrievedEvent.getAdminID());
 
-            }
+                }
 
-            // if there are other attendees, retrieve them
-            if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
-                attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
+                // if there are other attendees, retrieve them
+                if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
+                    attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
 
-                this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new FlowableSubscriber<Map<String, User>>() {
-                    @Override
-                    public void onSubscribe(Subscription subscription) {
-                        subscription.request(Long.MAX_VALUE);
-                        attendeesInfosRetrieve = subscription;
-                    }
-
-                    @Override
-                    public void onNext(Map<String, User> attendees) {
-
-                        // add users to the list of attendees
-
-                        if (!checkIsCurrentUserAdmin()) {
-                            // add the admin as firs element
-                            coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+                    this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new FlowableSubscriber<Map<String, User>>() {
+                        @Override
+                        public void onSubscribe(Subscription subscription) {
+                            subscription.request(Long.MAX_VALUE);
+                            attendeesInfosRetrieve = subscription;
                         }
 
-                        // add the other attendees
-                        for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
-                            coupleAttendances.add(
-                                    new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
-                            );
+                        @Override
+                        public void onNext(Map<String, User> attendees) {
+
+                            // add users to the list of attendees
+
+                            if (!checkIsCurrentUserAdmin()) {
+                                // add the admin as firs element
+                                coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+                            }
+
+                            // add the other attendees
+                            for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
+                                coupleAttendances.add(
+                                        new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
+                                );
+                            }
+
+                            // show all the attending users
+                            showAttendaces(coupleAttendances);
+
                         }
 
-                        // show all the attending users
-                        showAttendaces(coupleAttendances);
+                        @Override
+                        public void onError(Throwable throwable) {
 
-                    }
+                            showRetrieveErrorPopupDialog();
 
-                    @Override
-                    public void onError(Throwable throwable) {
+                        }
 
-                        showRetrieveErrorPopupDialog();
+                        @Override
+                        public void onComplete() {
 
-                    }
+                        }
+                    });
+                } else {
+                    showAttendaces(coupleAttendances);
+                }
 
-                    @Override
-                    public void onComplete() {
+            } else { // private event
+                mAttendees.setVisibility(View.INVISIBLE); // there are no attendees
 
-                    }
-                });
-            } else {
-                showAttendaces(coupleAttendances);
             }
-
-        } else { // private event
-            mAttendees.setVisibility(View.INVISIBLE); // there are no attendees
-
+        } else {
+            showNoInternetConnectionPopup();
         }
     }
 
@@ -373,41 +382,48 @@ public class EventDescriptionActivity extends AppCompatActivity {
         // hide weather forecast
         this.mWeatherForecast.setVisibility(View.INVISIBLE);
 
-        // retrieve weather if the date is closer than 5 days
-        if ((retrievedEvent.getEventDate() - new Date().getTime()) < FIVE_DAYS_DISTANCE_MILLIS) {
+            // retrieve weather if the date is closer than 5 days
+            if ((retrievedEvent.getEventDate() - new Date().getTime()) < FIVE_DAYS_DISTANCE_MILLIS) {
 
-            this.weatherForecast.getForecast(retrievedEvent).subscribe(new FlowableSubscriber<Weather>() {
-                @Override
-                public void onSubscribe(Subscription subscription) {
-                    subscription.request(Long.MAX_VALUE);
-                    weatherForecastRetrieve = subscription;
+                if (NetworkCheker.getInstance().isNetworkAvailable(this)) {
+                    this.weatherForecast.getForecast(retrievedEvent).subscribe(new FlowableSubscriber<Weather>() {
+                        @Override
+                        public void onSubscribe(Subscription subscription) {
+                            subscription.request(Long.MAX_VALUE);
+                            weatherForecastRetrieve = subscription;
+                        }
+
+                        @Override
+                        public void onNext(Weather weather) {
+
+                            // retrieve weather icon and set it
+                            int weatherIcon = WeatherIconFactory.getInstance().getWeatherIconByID(weather);
+                            mWeatherForecast.setImageResource(weatherIcon);
+
+                            // show the icon on screen
+                            mWeatherForecast.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
+                        public void onError(Throwable throwable) {
+
+                            Toast.makeText(getApplicationContext(), R.string.weather_error_toast_label, Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Sorry, no internet, no forecast", Toast.LENGTH_LONG).show();
                 }
 
-                @Override
-                public void onNext(Weather weather) {
 
-                    // retrieve weather icon and set it
-                    int weatherIcon = WeatherIconFactory.getInstance().getWeatherIconByID(weather);
-                    mWeatherForecast.setImageResource(weatherIcon);
-
-                    // show the icon on screen
-                    mWeatherForecast.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onError(Throwable throwable) {
-
-                    Toast.makeText(getApplicationContext(), R.string.weather_error_toast_label, Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onComplete() {
-
-                }
-            });
+            }
 
 
-        }
+
     }
 
     private void setEventActionButtons() {
@@ -449,19 +465,23 @@ public class EventDescriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View modifyAcceptButton) {
 
-                String newDescription = mEventDescription.getText().toString();
-                if (newDescription.length() != 0) {
-                    // update the description
-                    mRetrievedEvent.setDescription(mEventDescription.getText().toString());
+                if (NetworkCheker.getInstance().isNetworkAvailable(getApplicationContext())) {
+                    String newDescription = mEventDescription.getText().toString();
+                    if (newDescription.length() != 0) {
+                        // update the description
+                        mRetrievedEvent.setDescription(mEventDescription.getText().toString());
 
-                    // disable modification
-                    mEventDescription.setEnabled(false);
+                        // disable modification
+                        mEventDescription.setEnabled(false);
 
-                    // update the event
-                    mEventViewModel.updateEvent(mRetrievedEvent);
+                        // update the event
+                        mEventViewModel.updateEvent(mRetrievedEvent);
 
-                    mModifyEvent.setVisibility(View.VISIBLE);
-                    modifyAcceptButton.setVisibility(View.GONE);
+                        mModifyEvent.setVisibility(View.VISIBLE);
+                        modifyAcceptButton.setVisibility(View.GONE);
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.no_internet_popup_label, Toast.LENGTH_LONG).show();
                 }
 
 
@@ -522,9 +542,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private void showAttendaces(List<Pair<User, Boolean>> attendances) {
 
         // TODO spostare definizione stringhe
-        final String ADMIN_LABEL = "admin";
-        final String CONFIRMED_LABEL = "confirmed";
-        final String NOT_CONFIRMED_LABEL = "NOT confirmed";
+        final String ADMIN_LABEL = getString(R.string.admin_label);
+        final String CONFIRMED_LABEL = getString(R.string.confirmed_label);
+        final String NOT_CONFIRMED_LABEL = getString(R.string.not_confirmed_label);
 
         // this will add rows the list of attendees
         final LayoutInflater inflater = LayoutInflater.from(this);
@@ -713,7 +733,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     private void showRetrieveErrorPopupDialog() {
 
-        this.popupDialogProgress.dismiss();
+        if (this.popupDialogProgress != null) {
+            this.popupDialogProgress.dismiss();
+        }
 
         // there was an error, show a popup message
         AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
@@ -722,6 +744,26 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // , go to the main activity
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showNoInternetConnectionPopup() {
+
+        if (this.popupDialogProgress != null) {
+            this.popupDialogProgress.dismiss();
+        }
+
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.no_internet_popup_label)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //go to the main activity
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 });

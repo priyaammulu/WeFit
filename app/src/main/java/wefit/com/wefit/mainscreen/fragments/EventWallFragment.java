@@ -15,6 +15,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.reactivestreams.Subscription;
 
@@ -29,6 +30,7 @@ import wefit.com.wefit.mainscreen.adapters.EventWallAdapter;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.pojo.Event;
+import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.EventViewModel;
 
 
@@ -65,6 +67,7 @@ public class EventWallFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         bind(view);
         showWaitSpinner();
+
         fetchEvents();
         super.onViewCreated(view, savedInstanceState);
     }
@@ -94,32 +97,36 @@ public class EventWallFragment extends Fragment {
 
 
     private void fetchEvents() {
-        mMainViewModel
-                .getEvents()
-                .subscribe(new FlowableSubscriber<List<Event>>() {
-                    @Override
-                    public void onSubscribe(Subscription subscription) {
-                        subscription.request(Long.MAX_VALUE);
-                        mEventRetrieveSubscription = subscription;
-                    }
+        if (NetworkCheker.getInstance().isNetworkAvailable(getContext())) {
+            mMainViewModel
+                    .getEvents()
+                    .subscribe(new FlowableSubscriber<List<Event>>() {
+                        @Override
+                        public void onSubscribe(Subscription subscription) {
+                            subscription.request(Long.MAX_VALUE);
+                            mEventRetrieveSubscription = subscription;
+                        }
 
-                    @Override
-                    public void onNext(List<Event> events) {
-                        stopWaitSpinner();
-                        handleAdapter(events);
-                    }
+                        @Override
+                        public void onNext(List<Event> events) {
+                            stopWaitSpinner();
+                            handleAdapter(events);
+                        }
 
-                    @Override
-                    public void onError(Throwable throwable) {
-                        stopWaitSpinner();
-                        showRetrieveErrorPopupDialog();
-                    }
+                        @Override
+                        public void onError(Throwable throwable) {
+                            stopWaitSpinner();
+                            showRetrieveErrorPopupDialog();
+                        }
 
-                    @Override
-                    public void onComplete() {
+                        @Override
+                        public void onComplete() {
 
-                    }
-                });
+                        }
+                    });
+        } else {
+            showNoInternetConnectionPopup();
+        }
     }
 
     private void bind(View view) {
@@ -157,8 +164,8 @@ public class EventWallFragment extends Fragment {
         super.onHiddenChanged(hidden);
         if (!hidden) {
 
-            showWaitSpinner();
             fetchEvents();
+
 
         }
     }
@@ -309,5 +316,24 @@ public class EventWallFragment extends Fragment {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    private void showNoInternetConnectionPopup() {
+
+        stopWaitSpinner();
+
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.no_internet_popup_label)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //go to the main activity
+                        startActivity(new Intent(getContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 
 }

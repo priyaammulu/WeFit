@@ -21,6 +21,7 @@ import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.ExtrasLabels;
+import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.utils.calendar.CalendarFormatter;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
@@ -60,40 +61,47 @@ public class UserDetailsActivity extends AppCompatActivity {
         Intent receivedIntent = this.getIntent();
         String userID = receivedIntent.getStringExtra(ExtrasLabels.USER_ID);
 
-        mUserViewModel.retrieveUserByID(userID).subscribe(new FlowableSubscriber<User>() {
-            @Override
-            public void onSubscribe(Subscription subscription) {
-                subscription.request(1L);
-                retrieveUserSubscription = subscription;
-            }
 
-            @Override
-            public void onNext(User user) {
+        // always check internet connection
+        if (!NetworkCheker.getInstance().isNetworkAvailable(this)) {
+            mUserViewModel.retrieveUserByID(userID).subscribe(new FlowableSubscriber<User>() {
+                @Override
+                public void onSubscribe(Subscription subscription) {
+                    subscription.request(1L);
+                    retrieveUserSubscription = subscription;
+                }
 
-                // memorize the retrieved user
-                mRetrievedUser = user;
+                @Override
+                public void onNext(User user) {
 
-                setupLayout();
-            }
+                    // memorize the retrieved user
+                    mRetrievedUser = user;
 
-            @Override
-            public void onError(Throwable throwable) {
+                    setupLayout();
+                }
 
-                showRetrieveErrorPopupDialog();
+                @Override
+                public void onError(Throwable throwable) {
 
-            }
+                    showRetrieveErrorPopupDialog();
 
-            @Override
-            public void onComplete() {
+                }
 
-            }
-        });
+                @Override
+                public void onComplete() {
+
+                }
+            });
+        } else {
+            showNoInternetConnectionPopup();
+        }
 
 
     }
 
     private void setupLayout() {
-        this.popupDialogProgress.dismiss();
+
+        stopSpinner();
         setContentView(R.layout.activity_user_detail);
         bindActivityComponents();
         fillActivity(); // add user infos
@@ -187,5 +195,29 @@ public class UserDetailsActivity extends AppCompatActivity {
         if (retrieveUserSubscription != null) {
             retrieveUserSubscription.cancel();
         }
+    }
+
+    private void stopSpinner() {
+        if (popupDialogProgress != null)
+            popupDialogProgress.dismiss();
+        popupDialogProgress = null;
+    }
+
+    private void showNoInternetConnectionPopup() {
+
+        stopSpinner();
+
+        // there was an error, show a popup message
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage(R.string.no_internet_popup_label)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //go to the main activity
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
