@@ -50,9 +50,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                     if (currentlySelected != null)
-                        currentlySelected.setBackground(handler.getDrawable(R.drawable.border_black));
+                        currentlySelected.setBackground(handler.getDrawable(R.drawable.border_unchecked_category));
                     handler.onItemClick(categories.get(position));
-                    holder.mLinearLayout.setBackground(handler.getDrawable(R.drawable.border_grey));
+                    holder.mLinearLayout.setBackground(handler.getDrawable(R.drawable.border_checked_category));
                     currentlySelected = holder.mLinearLayout;
                 }
             }

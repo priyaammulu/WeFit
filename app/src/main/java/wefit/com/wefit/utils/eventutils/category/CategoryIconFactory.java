@@ -31,7 +31,6 @@ public class CategoryIconFactory {
         this.availableCategories.put("cardio", new Category("Cardio", R.drawable.ic_gym_cardio, "cardio"));
         this.availableCategories.put("wlift", new Category("Weightlifting", R.drawable.ic_gym_weightlifting, "wlift"));
 
-
     }
 
     /**

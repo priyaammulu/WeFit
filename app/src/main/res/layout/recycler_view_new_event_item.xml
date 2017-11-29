@@ -8,7 +8,7 @@
     android:paddingTop="10dp"
     android:layout_marginRight="20dp"
     android:paddingBottom="10dp"
-    android:background="@drawable/border_black"
+    android:background="@drawable/border_unchecked_category"
     android:id="@+id/new_event_main_layout"
     android:orientation="vertical">
 
