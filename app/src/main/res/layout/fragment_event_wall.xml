@@ -61,94 +61,9 @@
         android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/event_wall_bottom_bar"
         android:layout_below="@id/eventwall_top_bar"
         android:divider="@color/cardview_light_background"
         android:dividerHeight="10dp" />
 
-    <!--Navbar-->
-    <LinearLayout
-        android:id="@id/event_wall_bottom_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        android:orientation="horizontal"
-        android:padding="5dp">
-
-        <!-- Profile icon -->
-        <LinearLayout
-            android:id="@+id/wall_profile_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_profile_icon" />
-
-            <TextView
-                android:id="@+id/settings_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:textStyle="normal" />
-
-        </LinearLayout>
-        <!--Second icon -->
-
-        <LinearLayout
-            android:id="@+id/wall_button_main"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_home_pressed" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home"
-                android:textSize="12sp"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-
-        <!--third icon -->
-        <LinearLayout
-            android:id="@+id/wall_myevents_button"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/ic_my_events" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My events"
-                android:textSize="12sp"
-                android:textColor="@color/white"
-                android:textStyle="normal" />
-        </LinearLayout>
-
-    </LinearLayout>
 
 </RelativeLayout>

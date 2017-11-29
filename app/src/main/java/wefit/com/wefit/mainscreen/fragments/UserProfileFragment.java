@@ -80,7 +80,6 @@ public class UserProfileFragment extends Fragment {
     private void bind(View view) {
 
         setupTopbar(view);
-        setupNavbar(view);
 
         mUserPic = (ImageView) view.findViewById(R.id.profile_user_pic);
         mUserName = (TextView) view.findViewById(R.id.user_name);
@@ -270,32 +269,6 @@ public class UserProfileFragment extends Fragment {
         return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
     }
 
-    private void setupNavbar(View layout) {
-
-
-        layout.findViewById(R.id.profile_myevents_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MY_ATTENDANCES_FRAGMENT);
-            }
-        });
-
-        layout.findViewById(R.id.profile_button_main).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MAIN_FRAGMENT);
-            }
-        });
-
-        layout.findViewById(R.id.profile_profile_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.PROFILE_FRAGMENT);
-            }
-        });
-
-
-    }
 
     private void setupTopbar(View layout) {
 

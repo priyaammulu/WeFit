@@ -101,7 +101,6 @@ public class ScheduledEventsFragment extends Fragment {
     private void bindLayoutComponents(View view) {
 
         setupTopbar(view);
-        setupNavbar(view);
         this.mListView = (ListView) view.findViewById(R.id.myevents_listview);
         this.mNoEventsLabel = (LinearLayout) view.findViewById(R.id.baggar_all_events);
     }
@@ -224,32 +223,7 @@ public class ScheduledEventsFragment extends Fragment {
         alert.show();
     }
 
-    private void setupNavbar(View layout) {
 
-
-        layout.findViewById(R.id.myevents_myevents_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MY_ATTENDANCES_FRAGMENT);
-            }
-        });
-
-        layout.findViewById(R.id.myevents_button_main).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MAIN_FRAGMENT);
-            }
-        });
-
-        layout.findViewById(R.id.myevents_profile_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.PROFILE_FRAGMENT);
-            }
-        });
-
-
-    }
 
     private void setupTopbar(View layout) {
 

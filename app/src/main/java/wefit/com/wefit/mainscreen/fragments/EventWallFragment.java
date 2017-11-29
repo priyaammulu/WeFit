@@ -15,14 +15,12 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.reactivestreams.Subscription;
 
 import java.util.List;
 
 import io.reactivex.FlowableSubscriber;
-import io.reactivex.functions.Consumer;
 import wefit.com.wefit.R;
 import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.MainActivity;
@@ -80,37 +78,11 @@ public class EventWallFragment extends Fragment {
 
     }
 
-    private void setupNavbar(View layout) {
-
-
-        layout.findViewById(R.id.wall_myevents_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MY_ATTENDANCES_FRAGMENT);
-            }
-        });
-
-        layout.findViewById(R.id.wall_button_main).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.MAIN_FRAGMENT);
-            }
-        });
-
-        layout.findViewById(R.id.wall_profile_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).fragmentTransaction(MainActivity.PROFILE_FRAGMENT);
-            }
-        });
-
-
-    }
 
     private void setupTopbar(View layout) {
 
 
-        layout.findViewById(R.id.event_wall_bottom_bar).setOnClickListener(new View.OnClickListener() {
+        layout.findViewById(R.id.new_event_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), NewEventActivity.class));
@@ -151,8 +123,6 @@ public class EventWallFragment extends Fragment {
     }
 
     private void bind(View view) {
-
-        this.setupNavbar(view);
         this.setupTopbar(view);
 
         mNoEventShow = (LinearLayout) view.findViewById(R.id.no_available_events_label);
