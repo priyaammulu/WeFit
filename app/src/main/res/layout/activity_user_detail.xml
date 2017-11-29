@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/user_details_topPanel"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/topbar_height"
         android:layout_alignParentTop="true"
         android:layout_gravity="top"
         android:background="@color/colorPrimary"

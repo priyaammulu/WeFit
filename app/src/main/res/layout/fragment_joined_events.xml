@@ -38,7 +38,7 @@
     <LinearLayout
         android:id="@+id/baggar_all_events"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/topbar_height"
         android:layout_centerInParent="true"
         android:orientation="vertical"
         android:visibility="gone">
