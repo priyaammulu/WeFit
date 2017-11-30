@@ -170,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
     // cannot put it in the fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult( requestCode, resultCode, data);
+
+        // position retrieval
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS:
                 if (resultCode == RESULT_OK)

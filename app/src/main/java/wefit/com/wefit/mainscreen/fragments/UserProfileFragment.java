@@ -41,6 +41,7 @@ import static android.app.Activity.RESULT_OK;
 public class UserProfileFragment extends Fragment {
 
     private static final int REQUEST_IMAGE_CAPTURE = 200;
+    private static final int RESULT_OK = -1;
 
     private FragmentsInteractionListener mListener;
     private UserViewModel mUserViewModel;
