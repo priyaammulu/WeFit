@@ -115,6 +115,12 @@ public class UserDetailsActivity extends AppCompatActivity {
         mUserBio = (TextView) findViewById(R.id.retrieved_user_bio);
 
         ImageView mContactButton = (ImageView) findViewById(R.id.user_contact_button);
+
+        if (mRetrievedUser.getId().equals(mUserViewModel.retrieveCachedUser().getId())) {
+            // the user cannot contact himself
+            mContactButton.setVisibility(View.GONE);
+        }
+
         ImageView mBackbutton = (ImageView) findViewById(R.id.user_details_backbutton);
 
         mBackbutton.setOnClickListener(new View.OnClickListener() {
