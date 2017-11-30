@@ -34,7 +34,7 @@
             tools:ignore="RelativeOverlap" />
 
         <ImageView
-            android:id="@+id/user_report_button"
+            android:id="@+id/user_contact_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
@@ -42,7 +42,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/topbar_button_margin_right"
             android:layout_marginRight="@dimen/topbar_button_margin_right"
-            app:srcCompat="@drawable/ic_report" />
+            app:srcCompat="@drawable/ic_contact" />
     </RelativeLayout>
 
     <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"

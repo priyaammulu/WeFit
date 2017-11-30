@@ -63,7 +63,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
 
         // always check internet connection
-        if (!NetworkCheker.getInstance().isNetworkAvailable(this)) {
+        if (NetworkCheker.getInstance().isNetworkAvailable(this)) {
             mUserViewModel.retrieveUserByID(userID).subscribe(new FlowableSubscriber<User>() {
                 @Override
                 public void onSubscribe(Subscription subscription) {
@@ -114,7 +114,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         mBirthDate = (TextView) findViewById(R.id.retrieved_birth_date);
         mUserBio = (TextView) findViewById(R.id.retrieved_user_bio);
 
-        ImageView mReportButton = (ImageView) findViewById(R.id.user_report_button);
+        ImageView mContactButton = (ImageView) findViewById(R.id.user_contact_button);
         ImageView mBackbutton = (ImageView) findViewById(R.id.user_details_backbutton);
 
         mBackbutton.setOnClickListener(new View.OnClickListener() {
@@ -124,31 +124,27 @@ public class UserDetailsActivity extends AppCompatActivity {
             }
         });
 
-        mReportButton.setOnClickListener(new View.OnClickListener() {
+        mContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // send an email to report the user
-
-                //Log.i("Send email", "");
-                String[] TO = {getString(R.string.report_email_address)};
+                // send an email to the user
+                String[] TO = {mRetrievedUser.getEmail()};
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
                 emailIntent.setData(Uri.parse("mailto:"));
-                emailIntent.setType("text/plain");
+                emailIntent.setType(getString(R.string.email_content_type));
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_report_object) );
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_email_object) );
 
                 // TOO not possible to extract
-                String reportBody = "%s (%s)" + getString(R.string.email_body_report_separator) +"%s (%s)";
+                String mailBody = "Hi %s, I'm %s from WeFit";
 
-                String report = String.format(Locale.ENGLISH, reportBody,
-                        mUserViewModel.retrieveCachedUser().getFullName(),
-                        mUserViewModel.retrieveCachedUser().getId(),
+                String filledMailBody = String.format(Locale.ENGLISH, mailBody,
                         mRetrievedUser.getFullName(),
-                        mRetrievedUser.getId());
+                        mUserViewModel.retrieveCachedUser().getFullName());
 
-                emailIntent.putExtra(Intent.EXTRA_TEXT, report);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, filledMailBody);
 
                 try {
                     startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email_picker_title)));
@@ -208,7 +204,7 @@ public class UserDetailsActivity extends AppCompatActivity {
         stopSpinner();
 
         // there was an error, show a popup message
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.recconnecting_request)
                 .setCancelable(false)
                 .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {

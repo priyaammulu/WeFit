@@ -47,8 +47,8 @@ public class WefitApplication extends Application {
 
         // initialise remote persistence
         FirebaseApp.initializeApp(this);
-        RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), "test_users");
-        RemoteEventDao remoteEventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), "test_event_store");
+        RemoteUserDao remoteUserDao = new FirebaseUserDao(FirebaseDatabase.getInstance(), getString(R.string.firebase_user_store_name));
+        RemoteEventDao remoteEventDao = new FirebaseEventDao(FirebaseDatabase.getInstance(), getString(R.string.firebase_event_store_name));
         Auth20Handler loginHandler = new Auth20FirebaseHandlerImpl(FirebaseAuth.getInstance(), remoteUserDao);
 
         // initialise local persistence
@@ -58,7 +58,7 @@ public class WefitApplication extends Application {
         // utils
         DefaultUserFiller.getInstance().setSysContext(this);
         DistanceManager distanceSorter = new DistanceManagerImpl();
-        forecastManager = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
+        forecastManager = new OpenWeatherMapForecastImpl(getString(R.string.openweathermap_key));
 
         // initialise models
         mUserModel = new UserModelAsyncImpl(loginHandler, localUserDao, remoteUserDao);

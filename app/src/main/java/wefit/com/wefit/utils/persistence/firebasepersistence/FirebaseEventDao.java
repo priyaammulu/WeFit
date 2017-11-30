@@ -218,7 +218,7 @@ public class FirebaseEventDao implements RemoteEventDao {
         private int mNumberResults = 0;
         private String mAnchor;
 
-        public LoadEventsAsync(int numResults, String anchorID) {
+        LoadEventsAsync(int numResults, String anchorID) {
             this.mNumberResults = numResults;
             this.mAnchor = anchorID;
         }
