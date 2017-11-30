@@ -14,7 +14,7 @@ import wefit.com.wefit.pojo.EventLocation;
 
 public interface RemoteEventDao {
 
-    Flowable<List<Event>> loadNewEvents(int numResults, @Nullable String anchorID);
+    Flowable<List<Event>> loadNewEvents(int numResults, int anchorID);
 
     Flowable<Event> loadEventByID(String eventID);
 
@@ -27,7 +27,9 @@ public interface RemoteEventDao {
     void setAttendanceState(String eventID, String userID, boolean state);
 
     void addAttendee(String eventID, String userID);
+
     void removeAttendee(String eventID, String userID);
+
     void deleteEvent(String eventID);
 
 }

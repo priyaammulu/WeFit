@@ -40,7 +40,7 @@ public class FirebaseEventDao implements RemoteEventDao {
 
 
     @Override
-    public Flowable<List<Event>> loadNewEvents(int numResults, @Nullable String anchorID) {
+    public Flowable<List<Event>> loadNewEvents(int numResults, int anchorID) {
         return Flowable.create(new LoadEventsAsync(numResults, anchorID), BackpressureStrategy.BUFFER);
     }
 
@@ -60,12 +60,9 @@ public class FirebaseEventDao implements RemoteEventDao {
             // save in firebase
             this.mEventStorage.child(eventID).setValue(eventToStore);
 
-        }
-        else {
+        } else {
             this.updateEvent(eventToStore);
         }
-
-
 
 
         return eventToStore;
@@ -216,9 +213,9 @@ public class FirebaseEventDao implements RemoteEventDao {
     private class LoadEventsAsync implements FlowableOnSubscribe<List<Event>> {
 
         private int mNumberResults = 0;
-        private String mAnchor;
+        private int mAnchor;
 
-        LoadEventsAsync(int numResults, String anchorID) {
+        LoadEventsAsync(int numResults, int anchorID) {
             this.mNumberResults = numResults;
             this.mAnchor = anchorID;
         }
@@ -226,24 +223,34 @@ public class FirebaseEventDao implements RemoteEventDao {
         @Override
         public void subscribe(final FlowableEmitter<List<Event>> flowableEmitter) throws Exception {
 
-            final List<Event> firebaseEvents = new ArrayList<>();
-
             mEventStorage.orderByKey();
 
-            if (mAnchor != null) {
-                mEventStorage.startAt(mAnchor); // TODO rivedere perché non funziona
+            if (mAnchor != 0) {
+                mEventStorage.limitToFirst(mAnchor); // TODO rivedere perché non funziona
+            } else {
+                mEventStorage.limitToFirst(mNumberResults);
             }
 
             mEventStorage
-                    .limitToFirst(mNumberResults)
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            List<Event> firebaseEvents = new ArrayList<>();
 
                             // retrieve data of the events from the DB
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 Event wrapper = snapshot.getValue(Event.class);
                                 firebaseEvents.add(wrapper);
+                            }
+
+                            // NOTE workaround because firebase do not support pagination
+                            if (mAnchor != 0) {
+                                if (mAnchor > firebaseEvents.size()) {
+                                    mAnchor = firebaseEvents.size();
+                                }
+
+                                firebaseEvents = firebaseEvents.subList(mAnchor, firebaseEvents.size());
                             }
 
                             flowableEmitter.onNext(firebaseEvents);

@@ -44,7 +44,7 @@ public class EventModelImpl implements EventModel {
 
     private DistanceManager distanceSorter;
 
-    private String anchorID = null;
+    private int anchorID = 0;
 
 
     public EventModelImpl(RemoteEventDao eventPersistence,
@@ -65,7 +65,7 @@ public class EventModelImpl implements EventModel {
     public Flowable<List<Event>> getEvents() {
 
         // refresh the anchor
-        anchorID = null;
+        anchorID = 0;
 
         return Flowable.create(new FillEventsDetails(), BackpressureStrategy.BUFFER);
     }
@@ -331,7 +331,7 @@ public class EventModelImpl implements EventModel {
                             if (events.size() != 0) {
 
                                 // retrieve anchor to perform future calls
-                                anchorID = events.get(events.size() - 1).getId();
+                                anchorID += NUMBER_EVENT_REQUESTED;
 
                                 // filter events created by the user
                                 // it makes no sens to show these events on the wall
