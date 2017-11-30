@@ -72,5 +72,6 @@
     <string name="openweathermap_key">3f305e12883b15929de1b1b4a5c0c61d</string>
     <string name="contact_email_object">A WeFit user want to contact you</string>
     <string name="email_content_type">text/plain</string>
+    <string name="need_for_confirmation_popup">Remember that the publisher has to confirm you. Be patient!</string>
 
 </resources>

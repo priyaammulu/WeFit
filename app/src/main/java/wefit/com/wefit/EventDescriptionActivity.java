@@ -433,6 +433,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mEventViewModel.addAttendeeToEvent(mRetrievedEvent.getId());
+                showConfirmationNeedPopup();
                 refresh();
             }
         });
@@ -767,6 +768,15 @@ public class EventDescriptionActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     }
                 });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showConfirmationNeedPopup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.need_for_confirmation_popup)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok_button, null);
         AlertDialog alert = builder.create();
         alert.show();
     }
