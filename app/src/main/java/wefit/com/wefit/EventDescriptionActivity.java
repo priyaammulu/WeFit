@@ -434,7 +434,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mEventViewModel.addAttendeeToEvent(mRetrievedEvent.getId());
                 showConfirmationNeedPopup();
-                refresh();
             }
         });
 
@@ -776,7 +775,12 @@ public class EventDescriptionActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.need_for_confirmation_popup)
                 .setCancelable(false)
-                .setPositiveButton(R.string.ok_button, null);
+                .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        refresh();
+                    }
+                });
         AlertDialog alert = builder.create();
         alert.show();
     }

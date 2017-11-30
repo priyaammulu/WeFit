@@ -50,6 +50,7 @@ public class DistanceManagerImpl implements DistanceManager {
     }
 
     /**
+     * ref: https://stackoverflow.com/questions/3694380/calculating-distance-between-two-points-using-latitude-longitude-what-am-i-doi
      * Calculate computeDistance between two points in latitude and longitude taking
      * into account height difference. If you are not interested in height
      * difference pass 0.0. Uses Haversine method as its base.
