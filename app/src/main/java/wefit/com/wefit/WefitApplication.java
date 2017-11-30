@@ -25,6 +25,7 @@ import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseUserDao;
 import wefit.com.wefit.utils.persistence.firebasepersistence.FirebaseEventDao;
 import wefit.com.wefit.utils.persistence.sharedpreferencepersistence.LocalUserDaoImpl;
 import wefit.com.wefit.utils.persistence.sqlitelocalpersistence.LocalSQLiteEventDao;
+import wefit.com.wefit.utils.userhandling.DefaultUserFiller;
 import wefit.com.wefit.viewmodels.UserViewModel;
 import wefit.com.wefit.viewmodels.EventViewModel;
 
@@ -55,6 +56,7 @@ public class WefitApplication extends Application {
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 
         // utils
+        DefaultUserFiller.getInstance().setSysContext(this);
         DistanceManager distanceSorter = new DistanceManagerImpl();
         forecastManager = new OpenWeatherMapForecastImpl("3f305e12883b15929de1b1b4a5c0c61d");
 
