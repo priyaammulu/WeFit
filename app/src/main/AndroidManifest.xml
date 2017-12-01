@@ -67,11 +67,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAniSobsz_scZ5nYwcxFpDgBmS89NvpwAA" />
-
-        <activity
-            android:name=".UserDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 /**
  * Created by gioacchino on 14/11/2017.
+ * This class is responsible to check if the mobile has internet connection
  */
 
 public class NetworkCheker {
@@ -18,6 +19,9 @@ public class NetworkCheker {
     private NetworkCheker() {
     }
 
+    /**
+     * Returns true if the mobile phone has internet connection, false otherwise
+     */
     public boolean isNetworkAvailable(Context context) {
 
         boolean isAvailable = false;

@@ -7,6 +7,7 @@ import wefit.com.wefit.pojo.User;
 
 /**
  * Created by lorenzo on 10/28/17.
+ * This is a View Model. Its duty is to call the model(s) to fetch result and provide them to the view
  */
 
 public class UserViewModel {

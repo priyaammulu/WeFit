@@ -30,6 +30,7 @@ import wefit.com.wefit.pojo.EventLocation;
 
 /**
  * Created by gioacchino on 23/11/2017.
+ * This class retrieves weather information
  */
 
 public class OpenWeatherMapForecastImpl implements WeatherForecast {

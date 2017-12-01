@@ -39,29 +39,45 @@ import wefit.com.wefit.utils.calendar.CalendarFormatter;
 
 import static android.app.Activity.RESULT_OK;
 
-
+/**
+ * Created by lorenzo on 10/28/17.
+ * This Fragment is the first step in the creation of an Event flow
+ */
 public class NewEventFragmentFirstPage extends Fragment {
+    /**
+     * Place picker constant
+     */
     private static final int PLACE_PICKER_REQUEST = 1;
+    /**
+     * Activity reference
+     */
     private NewFragmentListener mListener;
+    /**
+     * Layout
+     */
     private EditText mEventName;
-    private Button mButtonAhead;
-    private LinearLayout mEventDatePicker;
-    private LinearLayout mMap;
-    private EventLocation mUserLocation;
-    private EventLocation mRetrievedLocation;
     private TextView mRetrievedPositionLabel;
-    private Calendar calSelected = Calendar.getInstance();
-    private long dateMillis;
-    private SwitchCompat mSwitch;
+    private TextView mAttendeesNumberLabel;
+    private TextView mEventDateLabel;
     private LinearLayout mAttendeesLayout;
     private TextView mPublicPrivate;
 
-    private SeekBar mAttendeesSeekbar;
+    /**
+     * Location retrieved
+     */
+    private EventLocation mRetrievedLocation;
+    /**
+     * Date selected
+     */
+    private Calendar calSelected = Calendar.getInstance();
+    /**
+     * Date in millis
+     */
+    private long dateMillis;
+    /**
+     * the number of attendees
+     */
     private int numberAttendees = 2; // the minimum is always 2
-
-    private ImageView mBackButton;
-    private TextView mAttendeesNumberLabel;
-    private TextView mEventDateLabel;
 
     /**
      * True if the event is private
@@ -82,7 +98,7 @@ public class NewEventFragmentFirstPage extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLocation = mListener.getUserLocation();
+        EventLocation mUserLocation = mListener.getUserLocation();
     }
 
     @Override
@@ -91,30 +107,28 @@ public class NewEventFragmentFirstPage extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * Binds UI views to fields
+     */
     private void bind(final View view) {
-
-        mBackButton = (ImageView) view.findViewById(R.id.new_event_backbutton);
+        ImageView mBackButton = (ImageView) view.findViewById(R.id.new_event_backbutton);
         mAttendeesLayout = (LinearLayout) view.findViewById(R.id.new_event_one_attendees);
         mEventName = (EditText) view.findViewById(R.id.new_event_name);
-        mEventDatePicker = (LinearLayout) view.findViewById(R.id.new_event_datepicker);
-        mMap = (LinearLayout) view.findViewById(R.id.new_event_map);
+        LinearLayout mEventDatePicker = (LinearLayout) view.findViewById(R.id.new_event_datepicker);
+        LinearLayout mMap = (LinearLayout) view.findViewById(R.id.new_event_map);
         mPublicPrivate = (TextView) view.findViewById(R.id.new_event_one_private_public);
-        mSwitch = (SwitchCompat) view.findViewById(R.id.new_event_one_switch);
-        mButtonAhead = (Button) view.findViewById(R.id.new_event_button_ahead);
-        mAttendeesSeekbar = (SeekBar) view.findViewById(R.id.number_of_attendees_picker);
+        SwitchCompat mSwitch = (SwitchCompat) view.findViewById(R.id.new_event_one_switch);
+        Button mButtonAhead = (Button) view.findViewById(R.id.new_event_button_ahead);
+        SeekBar mAttendeesSeekbar = (SeekBar) view.findViewById(R.id.number_of_attendees_picker);
         mAttendeesNumberLabel = (TextView) view.findViewById(R.id.number_of_attendees_show);
         mEventDateLabel = (TextView) view.findViewById(R.id.new_event_date_label);
         mRetrievedPositionLabel = (TextView) view.findViewById(R.id.position_label);
-
-
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().onBackPressed();
             }
         });
-
-
         mEventName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -263,8 +277,7 @@ public class NewEventFragmentFirstPage extends Fragment {
                     // if the event IS NOT private, then set the number of maximum attendees
                     if (isEventPrivate) {
                         event.setPrivateEvent(true);
-                    }
-                    else {
+                    } else {
                         event.setMaxAttendees(numberAttendees);
                     }
                     event.setEventDate(calSelected.getTime().getTime());
@@ -281,6 +294,7 @@ public class NewEventFragmentFirstPage extends Fragment {
         });
     }
 
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
@@ -321,19 +335,20 @@ public class NewEventFragmentFirstPage extends Fragment {
         mListener = null;
     }
 
-
+    /**
+     * Returns true if the form is filled, false otherwise
+     */
     private boolean isFormFilled() {
         boolean isFilled = false;
-
         if (nameSelected && dateSelected && positionSelected) {
-
             isFilled = true;
-
         }
-
         return isFilled;
     }
 
+    /**
+     * It shows an error popup
+     */
     private void showRetrieveErrorPopupDialog() {
 
         // there was an error, show a popup message

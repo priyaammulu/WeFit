@@ -9,6 +9,8 @@ import wefit.com.wefit.pojo.User;
 
 /**
  * Created by gioacchino on 13/11/2017.
+ * Ths class follows the DAO (Data Access Object) pattern.
+ * It allows his client to perform operations on Users stored remotely
  */
 
 public interface RemoteUserDao {

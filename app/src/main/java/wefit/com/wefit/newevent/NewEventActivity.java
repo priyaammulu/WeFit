@@ -8,20 +8,38 @@ import java.util.LinkedList;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
-import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
+/**
+ * Created by lorenzo on 10/28/17.
+ * This activity allows the user to create a new event
+ */
 public class NewEventActivity extends AppCompatActivity implements NewFragmentListener {
+    /**
+     * Fragments
+     */
     private NewEventFragmentFirstPage fragmentFirst = new NewEventFragmentFirstPage();
     private NewEventFragmentSecondPage fragmentSecond = new NewEventFragmentSecondPage();
     private NewEventFragmentThirdPage fragmentThird = new NewEventFragmentThirdPage();
+    /**
+     * Event being created
+     */
     private Event newEvent;
+    /**
+     * Event View Model
+     */
     private EventViewModel mainViewModel;
+    /**
+     * User View Model
+     */
     private UserViewModel userViewModel;
+    /**
+     * Stack that manages the back button
+     */
     private LinkedList<Fragment> stack = new LinkedList<>();
 
     @Override
@@ -40,7 +58,9 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
                 .commit();
         stack.push(fragmentFirst);
     }
-
+    /**
+     * It shows a new Fragment
+     */
     private void attachFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

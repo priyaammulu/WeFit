@@ -1,7 +1,5 @@
 package wefit.com.wefit.utils.auth;
 
-import android.util.Log;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -31,14 +29,11 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
 
     @Override
     public boolean isAuth() {
-
-        return mFirebaseAuth.getCurrentUser() != null;// && mFirebaseAuth.getCurrentUser().isEmailVerified();
-
+        return mFirebaseAuth.getCurrentUser() != null;
     }
 
     @Override
     public void signOut() {
-
         mFirebaseAuth.signOut();
     }
 

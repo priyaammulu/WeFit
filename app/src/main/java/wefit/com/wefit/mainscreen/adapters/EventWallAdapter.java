@@ -26,6 +26,7 @@ import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 
 /**
  * Created by lorenzo on 11/3/17.
+ * This class is responsible to populate Events in the selected listview
  */
 
 public class EventWallAdapter extends BaseAdapter {
@@ -38,6 +39,10 @@ public class EventWallAdapter extends BaseAdapter {
         this.context = context;
     }
 
+    /**
+     * Updates the list of events
+     * @param events the events to update
+     */
     public void setEvents(List<Event> events) {
         if (!this.events.equals(events))
             this.events = events;
@@ -106,6 +111,10 @@ public class EventWallAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /**
+     * It formats a Date in order to retrieve a String containing the month and the day
+     * @param date the date to format
+     */
     private String getMonthDay(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -114,16 +123,28 @@ public class EventWallAdapter extends BaseAdapter {
         return month.concat(" ").concat(day);
     }
 
+    /**
+     * It formats a Date in order to retrieve a String containing the date in English format
+     * @param date the date to format
+     */
     private String getDate(Date date) {
         Locale locale = Locale.ENGLISH;
         return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
     }
 
+    /**
+     * It formats a Date in order to retrieve a String containing the time expressed in hours and minutes
+     * @param date the date to format
+     */
     private String getTime(Date date) {
         Locale locale = Locale.ENGLISH;
         return DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
     }
 
+    /**
+     * Created by lorenzo on 11/3/17.
+     * ViewHolder pattern
+     */
     private static class EventViewHolder {
         private ImageView mEventImage;
         private ImageView mUserImage;

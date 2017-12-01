@@ -9,12 +9,17 @@ import wefit.com.wefit.pojo.Category;
 
 /**
  * Created by gioacchino on 21/11/2017.
+ * This Factory is responsible to manage access to categories
  */
 
 public class CategoryIconFactory {
-
+    /**
+     * Categories
+     */
     private Map<String, Category> availableCategories = new HashMap<>();
-
+    /**
+     * Instance of the factory
+     */
     private static final CategoryIconFactory ourInstance = new CategoryIconFactory();
 
     public static CategoryIconFactory getInstance() {

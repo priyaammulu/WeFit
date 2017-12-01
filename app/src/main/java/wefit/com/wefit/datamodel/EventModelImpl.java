@@ -23,27 +23,58 @@ import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by lorenzo on 10/28/17.
+ * This class is an implementation of EventModel. #refer to it for methods explanation.
  */
 
 public class EventModelImpl implements EventModel {
-
+    /**
+     * The filter used to reduce events
+     */
     private static final int DISTANCE_FILTER = 10;
 
+    /**
+     * The number of events requested
+     */
     private static final int NUMBER_EVENT_REQUESTED = 20;
 
+    /**
+     * The coordinates of Dublin
+     */
     private static final EventLocation DUBLIN_POSITION_CENTER = new EventLocation(53.3498, -6.2603);
 
+    /**
+     * The location of the user
+     */
     private EventLocation currentLocation;
 
+    /**
+     * Dao to operates on the Events stored on the remote database
+     */
     private RemoteEventDao remoteEventDao;
+
+    /**
+     * Dao to operates on the Users stored on the remote database
+     */
     private RemoteUserDao remoteUserDao;
 
+    /**
+     * Model to operates on Users
+     */
     private UserModel userModel;
 
+    /**
+     * Dao to operates on the Events stored locally
+     */
     private LocalEventDao localEventDao;
 
+    /**
+     * object responsible to sort events based on the distance
+     */
     private DistanceManager distanceSorter;
 
+    /**
+     * Anchor of the current list of events
+     */
     private int anchorID = 0;
 
 

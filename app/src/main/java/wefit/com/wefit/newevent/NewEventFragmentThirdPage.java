@@ -17,12 +17,20 @@ import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
+/**
+ * Created by lorenzo on 10/28/17.
+ * This Fragment is the third step in the creation of an Event flow
+ */
 public class NewEventFragmentThirdPage extends Fragment {
+    /**
+     * Reference to the activity
+     */
     private NewFragmentListener mListener;
-    private UserViewModel mUserViewModel;
-    private Button finishButton;
+
+    /**
+     * Layout
+     */
     private EditText mEventDescription;
-    private ImageView mBackButton;
 
     public NewEventFragmentThirdPage() {
         // Required empty public constructor
@@ -31,9 +39,6 @@ public class NewEventFragmentThirdPage extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        this.mUserViewModel = ((WefitApplication) getActivity().getApplication()).getUserViewModel();
-
     }
 
     @Override
@@ -42,9 +47,12 @@ public class NewEventFragmentThirdPage extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * Binds UI views to fields
+     */
     private void bind(View view) {
 
-        mBackButton = (ImageView) view.findViewById(R.id.new_event_page3_backbutton);
+        ImageView mBackButton = (ImageView) view.findViewById(R.id.new_event_page3_backbutton);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +60,7 @@ public class NewEventFragmentThirdPage extends Fragment {
             }
         });
 
-        finishButton = (Button) view.findViewById(R.id.new_event_button_finish);
+        Button finishButton = (Button) view.findViewById(R.id.new_event_button_finish);
         mEventDescription = (EditText) view.findViewById(R.id.new_event_third_description);
 
         finishButton.setOnClickListener(new View.OnClickListener() {
@@ -94,11 +102,15 @@ public class NewEventFragmentThirdPage extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
+    /**
+     * Return true if the form is filled
+     */
     private boolean isFormFilled() {
         return mEventDescription.getText().length() > 0;
     }
-
+    /**
+     * It shows an error popup dialog
+     */
     private void showRetrieveErrorPopupDialog() {
 
         // there was an error, show a popup message

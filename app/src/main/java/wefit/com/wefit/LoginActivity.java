@@ -1,8 +1,6 @@
 package wefit.com.wefit;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,7 +38,10 @@ import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.UserViewModel;
-
+/**
+ * Created by lorenzo on 10/28/17.
+ * This activity handles login
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private static final int GOOGLE_REQ_LOGIN_CODE = 1;
@@ -108,12 +109,6 @@ public class LoginActivity extends AppCompatActivity {
         // bind the services to the buttons
         this.bindFacebookButton();
         this.bindGoogleButton();
-    }
-
-    private void hideActionBar() {
-        if (getActionBar() != null) {
-            getActionBar().hide();
-        }
     }
 
     private void setupFirebaseAuth() {

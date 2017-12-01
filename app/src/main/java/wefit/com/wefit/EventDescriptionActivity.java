@@ -42,7 +42,10 @@ import wefit.com.wefit.utils.eventutils.wheater.WeatherIconFactory;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
-
+/**
+ * Created by lorenzo on 10/28/17.
+ * This activity presents a single event
+ */
 public class EventDescriptionActivity extends AppCompatActivity {
 
     /**
@@ -87,14 +90,20 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private Button mAbandonEvent;
     private Button mModifyEvent;
     private Button mAcceptModifyEvent;
-    private ImageView mBackButton;
-
+    private ProgressDialog popupDialogProgress;
+    /**
+     * User View Model
+     */
     private UserViewModel mUserViewModel;
+    /**
+     * Event View Model
+     */
     private EventViewModel mEventViewModel;
-
+    /**
+     * Weather forecast
+     */
     private WeatherForecast weatherForecast;
 
-    private ProgressDialog popupDialogProgress;
 
 
     @Override
@@ -210,7 +219,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
         this.mAbandonEvent = (Button) findViewById(R.id.abandon_event_btn);
         this.mModifyEvent = (Button) findViewById(R.id.modify_event_btn);
         this.mAcceptModifyEvent = (Button) findViewById(R.id.accept_modification_btn);
-        this.mBackButton = (ImageView) findViewById(R.id.event_description_backbutton);
+        ImageView mBackButton = (ImageView) findViewById(R.id.event_description_backbutton);
 
         // set backbutton
         mBackButton.setOnClickListener(new View.OnClickListener() {

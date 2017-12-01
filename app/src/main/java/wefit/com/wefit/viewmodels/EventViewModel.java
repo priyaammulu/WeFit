@@ -11,9 +11,11 @@ import wefit.com.wefit.pojo.User;
 
 /**
  * Created by lorenzo on 11/3/17.
+ * This is a View Model. Its duty is to call the model(s) to fetch result and provide them to the view
  */
 
 public class EventViewModel {
+
     private EventModel mEventModel;
 
     public EventViewModel(EventModel eventModel) {

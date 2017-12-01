@@ -47,7 +47,6 @@ import java.util.List;
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
-import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.mainscreen.adapters.EventWallAdapter;
 import wefit.com.wefit.newevent.NewEventActivity;
@@ -57,7 +56,6 @@ import wefit.com.wefit.utils.ExtrasLabels;
 import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.EventViewModel;
 
-import static android.app.Activity.RESULT_OK;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -70,21 +68,48 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class EventWallFragment extends Fragment {
 
     /**
-     * RxJava Observer Listener
+     * RxJava Subscription
      */
     private Subscription mEventRetrieveSubscription;
+    /**
+     * RxJava Subscription
+     */
     private Subscription mOtherEventsSubscription;
-
+    /**
+     * Location permission constant
+     */
     private static final int LOCATION_PERMISSION = 1;
+    /**
+     * Request check settings
+     */
     public static final int REQUEST_CHECK_SETTINGS = 2;
-
+    /**
+     * Event Wall Adapter
+     */
     private EventWallAdapter mAdapter;
+    /**
+     * Listview with events
+     */
     private ListView mEventList;
+    /**
+     * Main View Model
+     */
     private EventViewModel mMainViewModel;
+    /**
+     * Activity listener
+     */
     private FragmentsInteractionListener mListener;
+    /**
+     * Popup to show progresses
+     */
     private ProgressDialog popupDialogProgress;
+    /**
+     * LinearLayout for no events
+     */
     private LinearLayout mNoEventShow;
-
+    /**
+     * retrieved events
+     */
     private List<Event> retrievedEvents;
 
 
@@ -104,7 +129,9 @@ public class EventWallFragment extends Fragment {
         mMainViewModel = mListener.getEventViewModel();
         provideLocation();
     }
-
+    /**
+     * Checks for location permissions and retrieves it
+     */
     public void provideLocation() {
         if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -114,7 +141,9 @@ public class EventWallFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Asks the user to enable the GPS
+     */
     @SuppressLint("MissingPermission")
     public void enableGoogleApiClient() {
         LocationRequest mLocationRequest = new LocationRequest();
@@ -191,21 +220,21 @@ public class EventWallFragment extends Fragment {
             }
         }
     }
-
+    /**
+     * Setups the toolbar
+     */
     private void setupTopbar(View layout) {
-
-
         layout.findViewById(R.id.new_event_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), NewEventActivity.class));
             }
         });
-
-
     }
 
-
+    /**
+     * It fetches events
+     */
     public void fetchEvents() {
         if (NetworkCheker.getInstance().isNetworkAvailable(getContext())) {
             showWaitSpinner();
@@ -240,6 +269,9 @@ public class EventWallFragment extends Fragment {
         }
     }
 
+    /**
+     * Binds UI views to fields
+     */
     private void bind(View view) {
         this.setupTopbar(view);
 
@@ -275,6 +307,9 @@ public class EventWallFragment extends Fragment {
         }
     }
 
+    /**
+     * Manages the events adapter to show the events retrieved
+     */
     private void handleAdapter(List<Event> events) {
         if (events.size() != 0) {
             retrievedEvents = events;
@@ -379,23 +414,29 @@ public class EventWallFragment extends Fragment {
             mOtherEventsSubscription.cancel();
         }
     }
-
+    /**
+     * It shows the wait spinner
+     */
     private void showWaitSpinner() {
         // creation of the popup spinner
         // it will be shown until the event is fully loaded
         this.popupDialogProgress = ProgressDialog.show(getActivity(), null, getString(R.string.loading_popup_message_spinner), true);
     }
 
+    /**
+     * It stops the wait spinner
+     */
     private void stopWaitSpinner() {
         if (this.popupDialogProgress != null) {
             popupDialogProgress.dismiss();
         }
     }
 
+    /**
+     * It shows a Dialog containing an error to the user
+     */
     private void showRetrieveErrorPopupDialog() {
-
         stopWaitSpinner();
-
         // there was an error, show a popup message
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.error_message_download_resources)
@@ -410,10 +451,11 @@ public class EventWallFragment extends Fragment {
         alert.show();
     }
 
+    /**
+     * It shows no internet connection popup
+     */
     private void showNoInternetConnectionPopup() {
-
         stopWaitSpinner();
-
         // there was an error, show a popup message
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.recconnecting_request)

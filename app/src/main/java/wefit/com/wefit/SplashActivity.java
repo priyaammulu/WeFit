@@ -7,6 +7,10 @@ import android.os.Bundle;
 import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
+/**
+ * Created by lorenzo on 10/28/17.
+ * This is a Splash Activity
+ */
 public class SplashActivity extends AppCompatActivity {
 
     @Override

@@ -31,6 +31,7 @@ import wefit.com.wefit.viewmodels.EventViewModel;
 
 /**
  * Created by lorenzo on 10/28/17.
+ * Applications class. Models and data providers are initialized here.
  */
 
 public class WefitApplication extends Application {

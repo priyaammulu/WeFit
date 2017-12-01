@@ -13,12 +13,12 @@ public class Category {
     private String displayName;
 
     /**
-     * Category displayName in the local system
+     * image of the category
      */
     private int image;
 
     /**
-     *
+     * Unique ID of the category in the system
      */
     private String id;
 

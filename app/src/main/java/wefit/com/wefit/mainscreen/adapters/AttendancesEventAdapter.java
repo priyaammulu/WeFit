@@ -24,8 +24,8 @@ import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 
 /**
  * Created by lorenzo on 11/3/17.
+ * This class is responsible to populate Attendances in the selected listview
  */
-
 public class AttendancesEventAdapter extends BaseAdapter {
 
     private List<Event> events;
@@ -33,12 +33,14 @@ public class AttendancesEventAdapter extends BaseAdapter {
     private User mCurrentUser;
 
     public AttendancesEventAdapter(List<Event> events, Context context, User currentUser) {
-
         this.events = events;
         this.context = context;
         this.mCurrentUser = currentUser;
     }
-
+    /**
+     * Updates the list of events
+     * @param events the events to update
+     */
     public void setEvents(List<Event> events) {
         if (!this.events.equals(events))
             this.events = events;
@@ -119,6 +121,10 @@ public class AttendancesEventAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /**
+     * It formats a Date in order to retrieve a String containing the month and the day
+     * @param date the day to format
+     */
     private String getMonthDay(Date date) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -127,16 +133,18 @@ public class AttendancesEventAdapter extends BaseAdapter {
         return month.concat(" ").concat(day);
     }
 
-    private String getDate(Date date) {
-        Locale locale = Locale.ENGLISH;
-        return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, locale).format(date);
-    }
-
+    /**
+     * It formats a Date in order to retrieve a String containing the time expressed in hours and minutes
+     * @param date the day to format
+     */
     private String getTime(Date date) {
         Locale locale = Locale.ITALIAN;
         return DateFormat.getTimeInstance(DateFormat.SHORT, locale).format(date);
     }
-
+    /**
+     * Created by lorenzo on 11/3/17.
+     * ViewHolder pattern
+     */
     private static class EventViewHolder {
         private ImageView mEventImage;
         private ImageView mCategoryPic;

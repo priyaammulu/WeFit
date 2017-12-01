@@ -1,4 +1,4 @@
-package wefit.com.wefit.mainscreen;
+package wefit.com.wefit.mainscreen.fragments;
 
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
@@ -8,12 +8,14 @@ import wefit.com.wefit.viewmodels.UserViewModel;
  * fragment to allow an interaction in this fragment to be communicated
  * to the activity and potentially other fragments contained in that
  * activity.
- * <p>
- * See the Android Training lesson <a href=
- * "http://developer.android.com/training/basics/fragments/communicating.html"
- * >Communicating with Other Fragments</a> for more information.
  */
 public interface FragmentsInteractionListener {
+    /**
+     * It returns an Event view model
+     */
     EventViewModel getEventViewModel();
+    /**
+     * It returns an User view model
+     */
     UserViewModel getUserViewModel();
 }

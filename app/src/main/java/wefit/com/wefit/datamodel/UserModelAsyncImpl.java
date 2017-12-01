@@ -16,8 +16,17 @@ import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 public class UserModelAsyncImpl implements UserModel {
 
+    /**
+     * Dao to operates on the Users stored locally
+     */
     private final LocalUserDao localUserDao;
+    /**
+     * Login handler
+     */
     private final Auth20Handler loginHandler;
+    /**
+     * Dao to operates on the Users stored on the remote database
+     */
     private final RemoteUserDao remoteUserStore;
 
     @Override

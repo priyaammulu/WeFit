@@ -16,6 +16,7 @@ import wefit.com.wefit.pojo.Category;
 
 /**
  * Created by lorenzo on 11/15/17.
+ * This class is responsible to populate Categories in the selected listview
  */
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
@@ -64,6 +65,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return categories.size();
     }
 
+    /**
+     * Created by lorenzo on 11/3/17.
+     * ViewHolder pattern
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout mLinearLayout;
         public TextView mTextView;

@@ -19,15 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
-import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
-import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.utils.calendar.CalendarFormatter;
@@ -35,17 +30,29 @@ import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
-import static android.app.Activity.RESULT_OK;
-
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link FragmentsInteractionListener} interface
+ * to handle interaction events.
+ */
 public class UserProfileFragment extends Fragment {
-
+    /**
+     * Constants for #onActivityResult
+     */
     private static final int REQUEST_IMAGE_CAPTURE = 200;
     private static final int RESULT_OK = -1;
-
+    /**
+     * Reference to the activity
+     */
     private FragmentsInteractionListener mListener;
+    /**
+     * User View Model
+     */
     private UserViewModel mUserViewModel;
-
+    /**
+     * User showed in this layout
+     */
     private User mShowedUser;
 
     /**
@@ -55,6 +62,11 @@ public class UserProfileFragment extends Fragment {
     private TextView mUserName;
     private TextView mBirthDate;
     private EditText mUserBio;
+    private ImageView mEditButton;
+    private ImageView mEditDate;
+    private LinearLayout mActionModifyButton;
+    private ImageView mEditPhotoIndicator;
+    private EventViewModel mEventViewModel;
 
     /**
      * Backup old data
@@ -62,14 +74,6 @@ public class UserProfileFragment extends Fragment {
     private String tmpOldPicture;
     private long tmpOldBirthDate;
     private String tmpOldBiography;
-
-    private ImageView mEditButton;
-    private ImageView mEditDate;
-    private LinearLayout mActionModifyButton;
-    private Button mDeclineModify;
-    private Button mAcceptModify;
-    private ImageView mEditPhotoIndicator;
-    private EventViewModel mEventViewModel;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -82,6 +86,9 @@ public class UserProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * It binds UI layout to properties
+     */
     private void bind(View view) {
 
         setupTopbar(view);
@@ -95,8 +102,8 @@ public class UserProfileFragment extends Fragment {
         mEditPhotoIndicator = (ImageView) view.findViewById(R.id.image_modify_indicator);
 
         mActionModifyButton = (LinearLayout) view.findViewById(R.id.profile_modify_actions);
-        mAcceptModify = (Button) view.findViewById(R.id.profile_accept_modification_btn);
-        mDeclineModify = (Button) view.findViewById(R.id.profile_discard_modification_btn);
+        Button mAcceptModify = (Button) view.findViewById(R.id.profile_accept_modification_btn);
+        Button mDeclineModify = (Button) view.findViewById(R.id.profile_discard_modification_btn);
 
         mEditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +135,6 @@ public class UserProfileFragment extends Fragment {
 
             }
         });
-
 
 
         mDeclineModify.setOnClickListener(new View.OnClickListener() {
@@ -192,8 +198,7 @@ public class UserProfileFragment extends Fragment {
                         mShowedUser.setBiography(mUserBio.getText().toString());
                         mUserViewModel.updateUser(mShowedUser);
 
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getContext(), getString(R.string.bio_forgot_toast), Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -204,7 +209,9 @@ public class UserProfileFragment extends Fragment {
             }
         });
     }
-
+    /**
+     * It modifies the layout
+     */
     private void resetInvisibleModificationComponents() {
         mEditDate.setVisibility(View.GONE);
         mActionModifyButton.setVisibility(View.GONE);
@@ -228,7 +235,9 @@ public class UserProfileFragment extends Fragment {
         super.onHiddenChanged(hidden);
     }
 
-
+    /**
+     * Loads the UI with the selected user
+     */
     private void fillFragment() {
         if (mShowedUser != null) {
             mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mShowedUser.getPhoto()));
@@ -237,8 +246,7 @@ public class UserProfileFragment extends Fragment {
             // if the user has not specified his birth date
             if (mShowedUser.getBirthDate() == 0) {
                 mBirthDate.setText(R.string.alert_no_age);
-            }
-            else {
+            } else {
                 mBirthDate.setText(CalendarFormatter.getDate(mShowedUser.getBirthDate()));
             }
 
@@ -276,30 +284,23 @@ public class UserProfileFragment extends Fragment {
         super.onDestroy();
     }
 
-
+    /**
+     * It setups the toolbar
+     */
     private void setupTopbar(View layout) {
-
-
         layout.findViewById(R.id.logout_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mUserViewModel.signOut();
                 mEventViewModel.wipeLocalEvents();
-
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 getActivity().finish();
-
             }
         });
-
-
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         // result for the image capture
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();

@@ -16,26 +16,53 @@ import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
+import wefit.com.wefit.mainscreen.fragments.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.fragments.ScheduledEventsFragment;
 import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 import static wefit.com.wefit.mainscreen.fragments.EventWallFragment.REQUEST_CHECK_SETTINGS;
 
+/**
+ * Created by lorenzo on 10/28/17.
+ * This is the first Activity showed in the authenticated area of the app
+ */
 public class MainActivity extends AppCompatActivity implements FragmentsInteractionListener {
+    /**
+     * Constants used to handle fragments
+     */
     public static final String WALL_FRAGMENT = "main";
     public static final String MY_EVENTS_FRAGMENT = "attendances";
     public static final String PROFILE_FRAGMENT = "profile";
 
-
+    /**
+     * User View Model
+     */
     private UserViewModel mUserViewModel;
+    /**
+     * Event View Model
+     */
     private EventViewModel mEventViewModel;
+    /**
+     * Event Wall Fragment
+     */
     private EventWallFragment mainFragment = new EventWallFragment();
+    /**
+     * Scheduled Events Fragment
+     */
     private ScheduledEventsFragment myEventsFragment = new ScheduledEventsFragment();
+    /**
+     * Profile Fragment
+     */
     private UserProfileFragment profileFragment = new UserProfileFragment();
+    /**
+     * Stack used to manage Fragment states (in order to handle back button)
+     */
     private LinkedList<Fragment> stack = new LinkedList<>();
+    /**
+     * Maps containing fragments
+     */
     private Map<String, Fragment> fragmentMap;
 
     /**
@@ -63,9 +90,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         bindLayoutComponents();
         setFragments();
     }
-
+    /**
+     * It binds UI layout to properties
+     */
     private void bindLayoutComponents() {
-
         mWallButtonPressed = (LinearLayout) findViewById(R.id.button_wall_pressed);
         mWallButton = (LinearLayout) findViewById(R.id.button_wall_not_pressed);
         mProfileButton = (LinearLayout) findViewById(R.id.profile_button_not_pressed);
@@ -96,9 +124,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     }
 
-
+    /**
+     * It initializes fragments
+     */
     private void setFragments() {
-
         this.fragmentMap = new HashMap<>();
         fragmentMap.put(WALL_FRAGMENT, mainFragment);
         fragmentMap.put(MY_EVENTS_FRAGMENT, myEventsFragment);
@@ -126,7 +155,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 .commit();
         stack.push(fragment);
     }
-
+    /**
+     * It shows the right fragment
+     */
     public void fragmentTransaction(String fragmentID) {
 
         if (fragmentID.equals(WALL_FRAGMENT)) {
@@ -155,11 +186,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
             if (oldfragment == mainFragment) {
                 switchFragmentID = WALL_FRAGMENT;
-            }
-            else if (oldfragment == myEventsFragment){
+            } else if (oldfragment == myEventsFragment) {
                 switchFragmentID = MY_EVENTS_FRAGMENT;
-            }
-            else if (oldfragment == profileFragment){
+            } else if (oldfragment == profileFragment) {
                 switchFragmentID = PROFILE_FRAGMENT;
             }
 
@@ -169,13 +198,13 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult( requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
 
         // position retrieval
         switch (requestCode) {
             case REQUEST_CHECK_SETTINGS:
                 if (resultCode == RESULT_OK)
-                        mainFragment.enableGoogleApiClient();
+                    mainFragment.enableGoogleApiClient();
                 else {
                     mainFragment.fetchEvents();
                     Toast.makeText(getApplicationContext(), R.string.location_permission_notallowed_toast, Toast.LENGTH_LONG).show();
@@ -183,7 +212,9 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
                 break;
         }
     }
-
+    /**
+     * It signs out the user
+     */
     private void signOut() {
         mUserViewModel.signOut();
         startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -203,9 +234,10 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
             mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
         return mUserViewModel;
     }
-
+    /**
+     * Modify top and bottom bar according to the wall fragment
+     */
     private void openWall() {
-
         mWallButtonPressed.setVisibility(View.VISIBLE);
         mWallButton.setVisibility(View.GONE);
         mProfileButton.setVisibility(View.VISIBLE);
@@ -214,18 +246,20 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         mMyEventsButtonPressed.setVisibility(View.GONE);
 
     }
-
+    /**
+     * Modify top and bottom bar according to the profile fragment
+     */
     private void openProfile() {
-
         mWallButtonPressed.setVisibility(View.GONE);
         mWallButton.setVisibility(View.VISIBLE);
         mProfileButton.setVisibility(View.GONE);
         mProfileButtonPressed.setVisibility(View.VISIBLE);
         mMyEventsButton.setVisibility(View.VISIBLE);
         mMyEventsButtonPressed.setVisibility(View.GONE);
-
     }
-
+    /**
+     * Modify top and bottom bar according to the my events fragment
+     */
     private void openMyEvents() {
 
         mWallButtonPressed.setVisibility(View.GONE);

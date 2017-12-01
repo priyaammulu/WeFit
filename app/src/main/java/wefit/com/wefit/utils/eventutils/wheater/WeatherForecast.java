@@ -6,6 +6,7 @@ import wefit.com.wefit.pojo.EventLocation;
 
 /**
  * Created by gioacchino on 23/11/2017.
+ *
  */
 
 public interface WeatherForecast {

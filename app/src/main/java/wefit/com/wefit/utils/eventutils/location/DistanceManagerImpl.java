@@ -15,10 +15,10 @@ import wefit.com.wefit.pojo.EventLocation;
 
 public class DistanceManagerImpl implements DistanceManager {
     @Override
-    public List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventToSort, int distanceKmFilter) {
+    public List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventsToSort, int distanceKmFilter) {
 
         List<Event> orderedList = new ArrayList<>();
-        List<DistanceHolder> wrapped = this.getSortableList(center, eventToSort);
+        List<DistanceHolder> wrapped = this.getSortableList(center, eventsToSort);
         Collections.sort(wrapped);
 
         for (DistanceHolder holder : wrapped) {
@@ -32,7 +32,9 @@ public class DistanceManagerImpl implements DistanceManager {
         return orderedList;
     }
 
-
+    /**
+     * Returns a sortable list
+     */
     private List<DistanceHolder> getSortableList(EventLocation center, List<Event> eventToSort) {
 
         List<DistanceHolder> listWrappers = new ArrayList<>();
@@ -54,8 +56,9 @@ public class DistanceManagerImpl implements DistanceManager {
      * Calculate computeDistance between two points in latitude and longitude taking
      * into account height difference. If you are not interested in height
      * difference pass 0.0. Uses Haversine method as its base.
-     *
+     * <p>
      * lat1, center.getLongitude() Start point lat2, eventPosition.getLongitude() End point el1 Start altitude in meters
+     *
      * @return Distance in Km
      */
     private double computeDistance(EventLocation center, EventLocation eventPosition) {
@@ -89,7 +92,7 @@ public class DistanceManagerImpl implements DistanceManager {
             if (this.distance > holder.distance) {
                 compareResult = -1;
             }
-            if (this.distance < holder.distance){
+            if (this.distance < holder.distance) {
                 compareResult = 1;
             }
 

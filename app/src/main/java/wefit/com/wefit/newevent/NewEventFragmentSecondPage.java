@@ -33,24 +33,34 @@ import wefit.com.wefit.utils.eventutils.category.CategoryIconFactory;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
+/**
+ * Created by lorenzo on 10/28/17.
+ * This Fragment is the second step in the creation of an Event flow
+ */
 public class NewEventFragmentSecondPage extends Fragment implements AdapterHandler {
-
+    /**
+     * Constants
+     */
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int RESULT_OK = -1;
-
+    /**
+     * Recycler View
+     */
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
+    /**
+     * Reference to the activity
+     */
     private NewFragmentListener mListener;
-    private Button mButtonNextPage;
+    /**
+     * Layout
+     */
     private ImageView mImage;
     private Category mCategory;
-    private ScrollView scrollView;
     private UserViewModel mUserViewModel;
-    private ImageView mBackButton;
     private LinearLayout mImagePickerLabel;
-
+    /**
+     * Image picked
+     */
     private boolean isImagePicked = false;
 
     public NewEventFragmentSecondPage() {
@@ -60,9 +70,7 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         this.mUserViewModel = ((WefitApplication) getActivity().getApplication()).getUserViewModel();
-
     }
 
     @Override
@@ -71,11 +79,14 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
         super.onViewCreated(view, savedInstanceState);
     }
 
+    /**
+     * Binds UI views to fields
+     */
     private void bind(View view) {
 
         mImagePickerLabel = (LinearLayout) view.findViewById(R.id.image_picker_label);
 
-        mBackButton = (ImageView) view.findViewById(R.id.new_event_page2_backbutton);
+        ImageView mBackButton = (ImageView) view.findViewById(R.id.new_event_page2_backbutton);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +96,7 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.category_event_recycler_view);
         initRecyclerView();
-        mButtonNextPage = (Button) view.findViewById(R.id.new_event_finish);
+        Button mButtonNextPage = (Button) view.findViewById(R.id.new_event_finish);
 
 
         mImage = (ImageView) view.findViewById(R.id.new_event_image);
@@ -116,7 +127,7 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
         });
 
         // category picker
-        scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview);
+        ScrollView scrollView = (ScrollView) view.findViewById(R.id.new_event_scrollview);
 
         // button finish
         mButtonNextPage.setOnClickListener(new View.OnClickListener() {
@@ -147,17 +158,20 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
         });
     }
 
+    /**
+     * It initializes the recycler view
+     */
     private void initRecyclerView() {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new CategoryAdapter(new ArrayList<>(CategoryIconFactory.getInstance().getAvailableCategories().values()), this);
+        RecyclerView.Adapter mAdapter = new CategoryAdapter(new ArrayList<>(CategoryIconFactory.getInstance().getAvailableCategories().values()), this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -190,6 +204,7 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
         mCategory = category;
     }
 
+    @Override
     public Drawable getDrawable(int drawable) {
         return getResources().getDrawable(drawable);
     }
@@ -216,12 +231,17 @@ public class NewEventFragmentSecondPage extends Fragment implements AdapterHandl
         }
     }
 
+    /**
+     * Return true if the form is filled
+     */
     private boolean isFormFilled() {
         return isImagePicked && mCategory != null;
     }
 
+    /**
+     * It shows an error popup dialog
+     */
     private void showRetrieveErrorPopupDialog() {
-
         // there was an error, show a popup message
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(R.string.form_not_completely_filled_popup)

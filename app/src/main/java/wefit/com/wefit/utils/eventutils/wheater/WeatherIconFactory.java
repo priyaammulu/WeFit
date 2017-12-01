@@ -7,6 +7,7 @@ import wefit.com.wefit.R;
 
 /**
  * Created by gioacchino on 24/11/2017.
+ * This Factory is responsible to manage access to Weather Icon
  */
 
 public class WeatherIconFactory {
