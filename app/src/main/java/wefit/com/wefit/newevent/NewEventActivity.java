@@ -1,5 +1,6 @@
 package wefit.com.wefit.newevent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
+import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.pojo.Event;
 import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
@@ -98,7 +100,8 @@ public class NewEventActivity extends AppCompatActivity implements NewFragmentLi
 
         mainViewModel.createNewEvent(newEvent);
 
-        finish();
+        // go to the main wall
+        startActivity(new Intent(this, MainActivity.class));
     }
 
     @Override
