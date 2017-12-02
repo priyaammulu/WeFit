@@ -176,7 +176,7 @@ public class EventModelImpl implements EventModel {
     }
 
     @Override
-    public EventLocation getUserLocation() {
+    public synchronized EventLocation getUserLocation() {
 
         // to keep the system safe, put DUBLIN as default position
 
