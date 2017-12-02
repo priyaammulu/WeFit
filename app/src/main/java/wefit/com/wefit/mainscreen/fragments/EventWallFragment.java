@@ -47,6 +47,7 @@ import java.util.List;
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.EventDescriptionActivity;
 import wefit.com.wefit.R;
+import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.mainscreen.adapters.EventWallAdapter;
 import wefit.com.wefit.newevent.NewEventActivity;

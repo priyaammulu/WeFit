@@ -42,7 +42,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/topbar_button_margin_right"
             android:layout_marginRight="@dimen/topbar_button_margin_right"
-            app:srcCompat="@drawable/ic_contact" />
+            app:srcCompat="@drawable/ic_report" />
     </RelativeLayout>
 
     <ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"

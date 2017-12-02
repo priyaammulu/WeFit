@@ -38,6 +38,13 @@ public class FirebaseEventDao implements RemoteEventDao {
      */
     private DatabaseReference mEventStorage;
 
+    public FirebaseEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName) {
+
+        // access to the remote user store
+        this.mEventStorage = firebaseDatabase.getReference(eventStoreName);
+
+    }
+
 
     @Override
     public Flowable<List<Event>> loadNewEvents(int numResults, int anchorID) {
@@ -196,18 +203,6 @@ public class FirebaseEventDao implements RemoteEventDao {
     @Override
     public void removeAttendee(String eventID, String userID) {
         this.mEventStorage.child(eventID).child("attendingUsers").child(userID).removeValue();
-    }
-
-    @Override
-    public void deleteEvent(String eventID) {
-        this.mEventStorage.child(eventID).removeValue();
-    }
-
-    public FirebaseEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName) {
-
-        // access to the remote user store
-        this.mEventStorage = firebaseDatabase.getReference(eventStoreName);
-
     }
 
     private class LoadEventsAsync implements FlowableOnSubscribe<List<Event>> {

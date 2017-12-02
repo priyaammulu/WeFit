@@ -16,7 +16,6 @@ import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
 import wefit.com.wefit.WefitApplication;
 import wefit.com.wefit.mainscreen.fragments.EventWallFragment;
-import wefit.com.wefit.mainscreen.fragments.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.fragments.ScheduledEventsFragment;
 import wefit.com.wefit.mainscreen.fragments.UserProfileFragment;
 import wefit.com.wefit.viewmodels.EventViewModel;

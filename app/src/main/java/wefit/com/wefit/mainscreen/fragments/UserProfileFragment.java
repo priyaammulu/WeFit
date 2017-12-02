@@ -23,6 +23,7 @@ import java.util.Calendar;
 
 import wefit.com.wefit.LoginActivity;
 import wefit.com.wefit.R;
+import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.utils.calendar.CalendarFormatter;

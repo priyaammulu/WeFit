@@ -22,6 +22,7 @@ import java.util.List;
 
 import io.reactivex.FlowableSubscriber;
 import wefit.com.wefit.EventDescriptionActivity;
+import wefit.com.wefit.mainscreen.FragmentsInteractionListener;
 import wefit.com.wefit.mainscreen.MainActivity;
 import wefit.com.wefit.newevent.NewEventActivity;
 import wefit.com.wefit.utils.ExtrasLabels;
