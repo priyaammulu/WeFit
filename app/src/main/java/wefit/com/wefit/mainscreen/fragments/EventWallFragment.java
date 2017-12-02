@@ -12,8 +12,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -77,14 +79,7 @@ public class EventWallFragment extends Fragment {
      * RxJava Subscription
      */
     private Subscription mOtherEventsSubscription;
-    /**
-     * Location permission constant
-     */
-    private static final int LOCATION_PERMISSION = 1;
-    /**
-     * Request check settings
-     */
-    public static final int REQUEST_CHECK_SETTINGS = 2;
+
     /**
      * Event Wall Adapter
      */
@@ -129,119 +124,8 @@ public class EventWallFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMainViewModel = mListener.getEventViewModel();
-        provideLocation();
-    }
-    /**
-     * Checks for location permissions and retrieves it
-     */
-    public void provideLocation() {
-
-        final LocationManager manager = (LocationManager) getApplicationContext().getSystemService( Context.LOCATION_SERVICE );
-
-        // check if the GPS is enabled
-        if (manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION);
-            } else {
-                enableGoogleApiClient();
-            }
-        }
-        else {
-            // if the GPS is not enabled, position in dublin
-            Toast.makeText(getApplicationContext(), R.string.gps_not_available, Toast.LENGTH_LONG).show();
-            fetchEvents();
-        }
-
     }
 
-    /**
-     * Asks the user to enable the GPS
-     */
-    @SuppressLint("MissingPermission")
-    public void enableGoogleApiClient() {
-
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest);
-        builder.setAlwaysShow(true);
-
-        SettingsClient client = LocationServices.getSettingsClient(getActivity());
-        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
-        task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
-            @Override
-            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-
-                LocationCallback mLocationCallback = new LocationCallback() {
-                    @Override
-                    public void onLocationResult(LocationResult locationResult) {
-                        for (Location location : locationResult.getLocations()) {
-                            EventLocation loc = new EventLocation();
-                            loc.setLatitude(location.getLatitude());
-                            loc.setLongitude(location.getLongitude());
-                            mMainViewModel.setLocation(loc);
-                            fetchEvents();
-                        }
-                    }
-
-
-                };
-
-                FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-                LocationRequest mLocationRequest = new LocationRequest();
-                mLocationRequest.setInterval(10000);
-                mLocationRequest.setFastestInterval(5000);
-                mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
-                mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                        mLocationCallback,
-                        null /* Looper */);
-            }
-        });
-        task.addOnFailureListener(getActivity(), new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-
-                int statusCode = ((ApiException) e).getStatusCode();
-                switch (statusCode) {
-                    case CommonStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied, but this can be fixed
-                        // by showing the user a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            ResolvableApiException resolvable = (ResolvableApiException) e;
-                            resolvable.startResolutionForResult(getActivity(),
-                                    REQUEST_CHECK_SETTINGS);
-                        } catch (IntentSender.SendIntentException sendEx) {
-                            // Ignore the error.
-                        }
-                        break;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            // permission for position
-            case LOCATION_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    enableGoogleApiClient();
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.location_permission_notallowed_toast, Toast.LENGTH_LONG).show();
-                }
-                break;
-            }
-        }
-    }
     /**
      * Setups the toolbar
      */
@@ -258,6 +142,7 @@ public class EventWallFragment extends Fragment {
      * It fetches events from the store
      */
     public void fetchEvents() {
+
         if (NetworkCheker.getInstance().isNetworkAvailable(getContext())) {
             showWaitSpinner();
             mMainViewModel
@@ -363,6 +248,7 @@ public class EventWallFragment extends Fragment {
                                 }
                                 mOtherEventsSubscription = subscription;
                             }
+
                             @Override
                             public void onNext(List<Event> events) {
                                 if (events.size() != 0) {
@@ -435,6 +321,7 @@ public class EventWallFragment extends Fragment {
             mOtherEventsSubscription.cancel();
         }
     }
+
     /**
      * It shows the wait spinner
      */

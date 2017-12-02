@@ -109,7 +109,7 @@ public class EventModelImpl implements EventModel {
     }
 
     @Override
-    public void setLocation(EventLocation location) {
+    public synchronized void setLocation(EventLocation location) {
         this.currentLocation = location;
     }
 
@@ -179,10 +179,12 @@ public class EventModelImpl implements EventModel {
     public EventLocation getUserLocation() {
 
         // to keep the system safe, put DUBLIN as default position
-        EventLocation location = DUBLIN_POSITION_CENTER;
 
-        if (currentLocation != null)
-            location = currentLocation;
+        EventLocation location = currentLocation;
+
+
+        if (currentLocation == null)
+            location = DUBLIN_POSITION_CENTER;
 
         return location;
     }
