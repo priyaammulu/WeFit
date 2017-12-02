@@ -25,6 +25,7 @@ import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 
 /**
  * Created by lorenzo on 11/3/17.
+ *
  * This class is responsible to populate Attendances in the selected listview
  */
 public class AttendancesEventAdapter extends BaseAdapter {

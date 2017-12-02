@@ -344,7 +344,6 @@ public class EventWallFragment extends Fragment {
                             }
                             @Override
                             public void onNext(List<Event> events) {
-                                // TODO not tested, I need more events!!!
                                 if (events.size() != 0) {
                                     retrievedEvents.addAll(events);
                                     mAdapter.notifyDataSetChanged();

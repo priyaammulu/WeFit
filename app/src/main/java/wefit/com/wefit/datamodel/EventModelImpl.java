@@ -23,6 +23,7 @@ import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by lorenzo on 10/28/17.
+ * Author: Gioacchino, revision Alicia
  * This class is an implementation of EventModel. #refer to it for methods explanation.
  * OVERRIDDEN METHOD COMMENTS in the interface
  */

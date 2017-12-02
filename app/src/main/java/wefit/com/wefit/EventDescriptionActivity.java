@@ -712,7 +712,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
     public void showEventAbandonDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // TODO take the texts from the resources
         String title = getString(R.string.abandon_action_popup_title);
         String message = getString(R.string.abandon_popup_text);
         String positive = getString(R.string.confirm);

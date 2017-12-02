@@ -9,7 +9,7 @@ import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.pojo.User;
 
 /**
- * Created by lorenzo on 10/28/17.
+ * Author: Lorenzo Camaione
  * This interface provides operations that can be done on Event
  */
 public interface EventModel {
