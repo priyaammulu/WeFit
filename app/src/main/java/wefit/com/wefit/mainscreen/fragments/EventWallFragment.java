@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -134,12 +135,24 @@ public class EventWallFragment extends Fragment {
      * Checks for location permissions and retrieves it
      */
     public void provideLocation() {
-        if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION);
-        } else {
-            enableGoogleApiClient();
+
+        final LocationManager manager = (LocationManager) getApplicationContext().getSystemService( Context.LOCATION_SERVICE );
+
+        // check if the GPS is enabled
+        if (manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            if (ContextCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION);
+            } else {
+                enableGoogleApiClient();
+            }
         }
+        else {
+            // if the GPS is not enabled, position in dublin
+            Toast.makeText(getApplicationContext(), R.string.gps_not_available, Toast.LENGTH_LONG).show();
+            fetchEvents();
+        }
+
     }
 
     /**
@@ -147,18 +160,22 @@ public class EventWallFragment extends Fragment {
      */
     @SuppressLint("MissingPermission")
     public void enableGoogleApiClient() {
+
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(mLocationRequest);
         builder.setAlwaysShow(true);
+
         SettingsClient client = LocationServices.getSettingsClient(getActivity());
         Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
         task.addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+
                 LocationCallback mLocationCallback = new LocationCallback() {
                     @Override
                     public void onLocationResult(LocationResult locationResult) {
@@ -173,6 +190,7 @@ public class EventWallFragment extends Fragment {
 
 
                 };
+
                 FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
                 LocationRequest mLocationRequest = new LocationRequest();
                 mLocationRequest.setInterval(10000);
@@ -186,6 +204,8 @@ public class EventWallFragment extends Fragment {
         task.addOnFailureListener(getActivity(), new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+
+
                 int statusCode = ((ApiException) e).getStatusCode();
                 switch (statusCode) {
                     case CommonStatusCodes.RESOLUTION_REQUIRED:
@@ -209,6 +229,7 @@ public class EventWallFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
+            // permission for position
             case LOCATION_PERMISSION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0

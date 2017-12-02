@@ -95,5 +95,6 @@
     <string name="admin_label">admin</string>
     <string name="date_format_pattern">MMM</string>
     <string name="published_on_lagel">Published on:</string>
+    <string name="gps_not_available">Sorry, your GPS is not available!</string>
 
 </resources>

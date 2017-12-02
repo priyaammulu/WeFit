@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import javax.annotation.Nullable;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
@@ -22,7 +21,6 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.functions.Consumer;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.EventLocation;
 import wefit.com.wefit.utils.persistence.RemoteEventDao;
 
 /**

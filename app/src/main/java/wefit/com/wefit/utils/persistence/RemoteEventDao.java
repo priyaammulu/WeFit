@@ -2,11 +2,9 @@ package wefit.com.wefit.utils.persistence;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
 
 import io.reactivex.Flowable;
 import wefit.com.wefit.pojo.Event;
-import wefit.com.wefit.pojo.EventLocation;
 
 /**
  * Created by gioacchino on 13/11/2017.
