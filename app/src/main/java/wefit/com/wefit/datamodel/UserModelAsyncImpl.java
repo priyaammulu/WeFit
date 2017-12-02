@@ -12,6 +12,7 @@ import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by gioacchino on 14/11/2017.
+ * OVERRIDDEN METHOD COMMENTS in the interface
  */
 
 public class UserModelAsyncImpl implements UserModel {
@@ -86,6 +87,12 @@ public class UserModelAsyncImpl implements UserModel {
 
     }
 
+    /**
+     * Constructor
+     * @param loginHandler
+     * @param localUserDao
+     * @param remoteUserDao
+     */
     public UserModelAsyncImpl(Auth20Handler loginHandler, LocalUserDao localUserDao, RemoteUserDao remoteUserDao) {
         this.loginHandler = loginHandler;
         this.localUserDao = localUserDao;

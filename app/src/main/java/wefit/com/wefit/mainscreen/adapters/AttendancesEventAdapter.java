@@ -1,5 +1,6 @@
 package wefit.com.wefit.mainscreen.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,10 +29,27 @@ import wefit.com.wefit.utils.image.ImageBase64Marshaller;
  */
 public class AttendancesEventAdapter extends BaseAdapter {
 
+    /**
+     * Showed events
+     */
     private List<Event> events;
+
+    /**
+     * System context
+     */
     private Context context;
+
+    /**
+     * Current logged user
+     */
     private User mCurrentUser;
 
+    /**
+     * Constructor
+     * @param events events to show
+     * @param context sys context
+     * @param currentUser Current logged user
+     */
     public AttendancesEventAdapter(List<Event> events, Context context, User currentUser) {
         this.events = events;
         this.context = context;
@@ -89,19 +107,19 @@ public class AttendancesEventAdapter extends BaseAdapter {
         Category category = CategoryIconFactory.getInstance().getCategoryByID(event.getCategoryID());
         holder.mCategoryPic.setImageResource(category.getImage());
 
-        boolean belongs = false;
+        boolean belongs = false; // need to check if the event belongs to the logged user
         String ownershipTypeLabel = null;
 
-        // TODO retrieve from strings
-
+        // check if the event is private
         if (event.isPrivateEvent()) {
-            ownershipTypeLabel = "private";
+            ownershipTypeLabel = context.getString(R.string.private_event_list_label);
             belongs = true;
         }
         else {
 
+            // the user is the admin
             if (mCurrentUser.getId().equals(event.getAdminID())) {
-                ownershipTypeLabel = "admin";
+                ownershipTypeLabel = context.getString(R.string.admin_label);
                 belongs = true;
             }
 
@@ -114,10 +132,6 @@ public class AttendancesEventAdapter extends BaseAdapter {
             holder.ownershipLabel.setText(ownershipTypeLabel);
         }
 
-
-
-        //Picasso.with(context).load(event.getImage()).into(holder.mImageOrganizer);
-
         return convertView;
     }
 
@@ -129,7 +143,7 @@ public class AttendancesEventAdapter extends BaseAdapter {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        String month = new SimpleDateFormat("MMM").format(cal.getTime());
+        @SuppressLint("SimpleDateFormat") String month = new SimpleDateFormat(context.getString(R.string.date_format_pattern)).format(cal.getTime());
         return month.concat(" ").concat(day);
     }
 

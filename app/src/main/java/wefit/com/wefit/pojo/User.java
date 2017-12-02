@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Created by gioacchino on 31/10/2017.
+ * User Pojo, nothing more than that
  */
 
 public class User {
@@ -39,7 +40,6 @@ public class User {
     public void setId(String id) {
         this.id = id;
     }
-
 
 
     public String getFullName() {

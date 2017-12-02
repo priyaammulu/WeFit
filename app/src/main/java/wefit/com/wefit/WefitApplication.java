@@ -2,7 +2,6 @@ package wefit.com.wefit;
 
 import android.app.Application;
 
-import com.facebook.stetho.Stetho;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -35,16 +34,21 @@ import wefit.com.wefit.viewmodels.EventViewModel;
  */
 
 public class WefitApplication extends Application {
+
+    /**
+     * Handlers of the low level models
+     */
     private UserModel mUserModel;
     private EventModel mEventModel;
+
+    /**
+     * Weather utility
+     */
     private WeatherForecast forecastManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // TODO remove in the end (local storage debugging)
-        Stetho.initializeWithDefaults(this);
 
         // initialise remote persistence
         FirebaseApp.initializeApp(this);
@@ -56,8 +60,8 @@ public class WefitApplication extends Application {
         LocalEventDao localEventDao = new LocalSQLiteEventDao(this);
         LocalUserDao localUserDao = new LocalUserDaoImpl(this);
 
-        // utils
-        DefaultUserFiller.getInstance().setSysContext(this);
+        // Utilities
+        DefaultUserFiller.getInstance().init(this);
         DistanceManager distanceSorter = new DistanceManagerImpl();
         forecastManager = new OpenWeatherMapForecastImpl(getString(R.string.openweathermap_key));
 
@@ -66,23 +70,45 @@ public class WefitApplication extends Application {
         mEventModel = new EventModelImpl(remoteEventDao, remoteUserDao, localEventDao, mUserModel, distanceSorter);
     }
 
+    /**
+     * Retrieve the user ViewModel of the system
+     * @return User ViewModel
+     */
     public UserViewModel getUserViewModel() {
-        return new UserViewModel(getLoginModel());
+        return new UserViewModel(getUserModel());
     }
 
-    private UserModel getLoginModel() {
-        return mUserModel;
-    }
-
+    /**
+     * Retrieve the event ViewModel of the system
+     * @return Event ViewModel
+     */
     public EventViewModel getEventViewModel() {
-        return new EventViewModel(getMainModel());
+        return new EventViewModel(getEventModel());
     }
 
-    private EventModel getMainModel() {
-        return mEventModel;
-    }
-
+    /**
+     * Retrieve the weather Forecast utility of the system
+     * @return Forecast Manager
+     */
     public WeatherForecast getWeatherForecast() {
         return this.forecastManager;
     }
+
+
+    /**
+     * Event model getter
+     * @return Event model
+     */
+    private EventModel getEventModel() {
+        return mEventModel;
+    }
+
+    /**
+     * USer model getter
+     * @return User model
+     */
+    private UserModel getUserModel() {
+        return mUserModel;
+    }
+
 }

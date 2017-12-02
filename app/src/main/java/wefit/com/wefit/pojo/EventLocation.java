@@ -2,6 +2,7 @@ package wefit.com.wefit.pojo;
 
 /**
  * Created by lorenzo on 11/4/17.
+ * Location Pojo, nothing more than that
  */
 
 public class EventLocation {
@@ -14,7 +15,8 @@ public class EventLocation {
         this.longitude = longitude;
     }
 
-    public EventLocation() { }
+    public EventLocation() {
+    }
 
     public String getName() {
         return name;

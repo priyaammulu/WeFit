@@ -16,8 +16,9 @@ import wefit.com.wefit.utils.persistence.LocalEventDao;
 
 /**
  * Created by gioacchino on 13/11/2017.
+ * SQLite implementation of the local event store DAO.
+ * OVERRIDDEN METHOD COMMENTS in the interface
  */
-
 public class LocalSQLiteEventDao implements LocalEventDao {
 
     /**
@@ -148,8 +149,7 @@ public class LocalSQLiteEventDao implements LocalEventDao {
                     valuesToStore,
                     EventEntry._ID + "=" + eventToStore.getId(),
                     null);
-        }
-        else {
+        } else {
 
             // store and retrieve ID
             long newid = helper.getWritableDatabase().insert(EventEntry.TABLE_NAME, null, valuesToStore);
@@ -197,6 +197,12 @@ public class LocalSQLiteEventDao implements LocalEventDao {
         return retrievedEvent;
     }
 
+    /**
+     * Retrieve the event from the wrapping cursor
+     *
+     * @param cursor wrapping cursor
+     * @return unwrapped event
+     */
     private Event retrieveEvent(Cursor cursor) {
 
         Event retrievedEvent = new Event();
@@ -214,6 +220,7 @@ public class LocalSQLiteEventDao implements LocalEventDao {
         int categoryC = cursor.getColumnIndex(EventEntry.COLUMN_CATEGORY);
 
 
+        // assign each value to the appropriate attribute
         retrievedEvent.setId(cursor.getString(idC));
         retrievedEvent.setName(cursor.getString(nameC));
         retrievedEvent.setDescription(cursor.getString(descrC));
@@ -240,7 +247,9 @@ public class LocalSQLiteEventDao implements LocalEventDao {
 
     }
 
-    /* Inner class that defines the table contents */
+    /**
+     * Inner class that defines the content of the tables
+     */
     public static class EventEntry implements BaseColumns {
 
         /**
@@ -262,6 +271,9 @@ public class LocalSQLiteEventDao implements LocalEventDao {
         static final String COLUMN_CATEGORY = "category";
     }
 
+    /**
+     * Inner class that wraps the native SQLlite helper
+     */
     private class SQLiteHelper extends SQLiteOpenHelper {
 
         public SQLiteHelper(Context context) {

@@ -2,6 +2,7 @@ package wefit.com.wefit.pojo;
 
 /**
  * Created by lorenzo on 11/4/17.
+ * Category Pojo, nothing more than that
  */
 
 public class Category {

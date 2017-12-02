@@ -11,9 +11,11 @@ import wefit.com.wefit.pojo.EventLocation;
 
 /**
  * Created by gioacchino on 21/11/2017.
+ * OVERRIDDEN METHOD COMMENTS in the interface.
  */
 
 public class DistanceManagerImpl implements DistanceManager {
+
     @Override
     public List<Event> sortByDistanceFromLocation(EventLocation center, List<Event> eventsToSort, int distanceKmFilter) {
 
@@ -45,6 +47,13 @@ public class DistanceManagerImpl implements DistanceManager {
         return listWrappers;
     }
 
+    /**
+     * Wrap an event in the distance holder
+     *
+     * @param center      geographical position from which compute the distance
+     * @param eventToWrap event to wrap
+     * @return wrapped event. it has the distance from the center
+     */
     private DistanceHolder wrap(EventLocation center, Event eventToWrap) {
 
         double distance = this.computeDistance(center, eventToWrap.getEventLocation());
@@ -74,16 +83,35 @@ public class DistanceManagerImpl implements DistanceManager {
         return R * c;
     }
 
+    /**
+     * Utility class.
+     * It wraps an event and its distance from the center location
+     */
     private class DistanceHolder implements Comparable<DistanceHolder> {
 
+        /**
+         * Wrapped event
+         */
         Event event;
+
+        /**
+         * Distance from a specified location
+         */
         double distance;
 
-        public DistanceHolder(Event event, double distance) {
+        /**
+         * Constructor
+         * @param event Wrapped event
+         * @param distance  Distance from a specified location
+         */
+        DistanceHolder(Event event, double distance) {
             this.event = event;
             this.distance = distance;
         }
 
+        /**
+         * It allows to sort the DistanceHolder by distance
+         */
         @Override
         public int compareTo(@NonNull DistanceHolder holder) {
 

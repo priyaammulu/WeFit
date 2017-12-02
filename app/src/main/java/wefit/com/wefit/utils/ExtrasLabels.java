@@ -2,8 +2,8 @@ package wefit.com.wefit.utils;
 
 /**
  * Created by gioacchino on 25/11/2017.
+ * Utility class to have a "repository" for intent extras labels
  */
-
 public class ExtrasLabels {
 
     /**

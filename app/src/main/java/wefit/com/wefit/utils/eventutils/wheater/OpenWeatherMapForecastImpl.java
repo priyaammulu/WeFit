@@ -31,6 +31,7 @@ import wefit.com.wefit.pojo.EventLocation;
 /**
  * Created by gioacchino on 23/11/2017.
  * This class retrieves weather information
+ * OVERRIDDEN METHOD COMMENTS in the interface.
  */
 
 public class OpenWeatherMapForecastImpl implements WeatherForecast {
@@ -67,7 +68,6 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
     @Override
     public Flowable<Weather> getForecast(final EventLocation location, final long date) {
 
-
         URL associateURL = null;
 
         // creation of the HTTP request
@@ -103,13 +103,24 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
         }, BackpressureStrategy.BUFFER);
     }
 
+    /**
+     * Constructor
+     * @param apiKey OpenWeatherMap Application Key
+     */
     public OpenWeatherMapForecastImpl(String apiKey) {
         this.apiKey = apiKey;
     }
 
+    /**
+     * This async task
+     */
     private static class WeatherForecastDownloader extends AsyncTask<URL, Void, String> {
 
+        /**
+         * Date in UNIX format. The forecast is for this date.
+         */
         private final long secondsDate;
+
         /**
          * Used to send the callback
          */
@@ -153,14 +164,12 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
         protected void onPostExecute(String rawJSON) {
             super.onPostExecute(rawJSON);
 
-            // TODO translate raw json to readable result
-            Log.i("downloaded", rawJSON);
-
+            // translate raw json to readable result
             try {
 
                 // this map will contain the forecast for each hour
-                @SuppressLint("UseSparseArrays") // useless, because API 15 doesn't support it
-                        Map<Long, Integer> digestForecasts = new HashMap<>();
+                @SuppressLint("UseSparseArrays") // useless hint, because API 15 doesn't support it
+                Map<Long, Integer> digestForecasts = new HashMap<>();
 
                 // wrap the data in a json object
                 JSONObject wrappedObject = new JSONObject(rawJSON);
@@ -185,7 +194,7 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
                 int forecastID = digestForecasts.get(this.searchClosestUnixDate(secondsDate, listDates));
 
                 // need just the first number of the ID
-                forecastID = Integer.parseInt(String.valueOf(forecastID).substring(0,1));
+                forecastID = Integer.parseInt(String.valueOf(forecastID).substring(0, 1));
 
                 Weather forecastCondition;
 
@@ -217,7 +226,12 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
 
         }
 
-        public WeatherForecastDownloader(FlowableEmitter<Weather> flowableEmitter, long secondsDate) {
+        /**
+         * Constructor
+         * @param flowableEmitter RxJava observer
+         * @param secondsDate current date
+         */
+        WeatherForecastDownloader(FlowableEmitter<Weather> flowableEmitter, long secondsDate) {
             this.flowableEmitter = flowableEmitter;
             this.secondsDate = secondsDate;
         }
@@ -229,7 +243,7 @@ public class OpenWeatherMapForecastImpl implements WeatherForecast {
          * @param listDates list of available dates in seconds
          * @return closest date in listDates
          */
-        public long searchClosestUnixDate(long pivotDate, List<Long> listDates) {
+        long searchClosestUnixDate(long pivotDate, List<Long> listDates) {
 
             if (pivotDate < listDates.get(0)) {
                 return listDates.get(0);

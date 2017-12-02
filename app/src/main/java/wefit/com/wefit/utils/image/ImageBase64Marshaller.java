@@ -9,6 +9,8 @@ import java.io.ByteArrayOutputStream;
 
 /**
  * Created by gioacchino on 25/11/2017.
+ * This class performs marshalling and demarshalling (serialization) of the user pictures.
+ * This is necessary to store them in a coherent format on Firebase
  */
 
 public class ImageBase64Marshaller {

@@ -203,7 +203,7 @@ public class NewEventFragmentFirstPage extends Fragment {
                 // it will be set on the user current position
                 PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
-                // note for the group: this is legacy code
+                // Gioacchino's note for the group: this is legacy code
                 //LatLng southest = new LatLng(mUserLocation.getLatitude() - 0.00000001, mUserLocation.getLongitude() - 0.00000001);
                 //LatLng northest = new LatLng(mUserLocation.getLatitude() + 0.00000001, mUserLocation.getLongitude() + 0.00000001);
                 //LatLngBounds bounds = new LatLngBounds(southest, northest);

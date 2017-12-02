@@ -234,7 +234,7 @@ public class EventWallFragment extends Fragment {
     }
 
     /**
-     * It fetches events
+     * It fetches events from the store
      */
     public void fetchEvents() {
         if (NetworkCheker.getInstance().isNetworkAvailable(getContext())) {

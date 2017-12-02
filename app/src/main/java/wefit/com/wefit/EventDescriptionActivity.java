@@ -2,6 +2,7 @@ package wefit.com.wefit;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,7 +13,6 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,9 +42,10 @@ import wefit.com.wefit.utils.eventutils.wheater.WeatherIconFactory;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.EventViewModel;
 import wefit.com.wefit.viewmodels.UserViewModel;
+
 /**
- * Created by lorenzo on 10/28/17.
- * This activity presents a single event
+ * Created by Gioacchino Castorio on 10/28/17.
+ * This activity show the detail of an event
  */
 public class EventDescriptionActivity extends AppCompatActivity {
 
@@ -91,6 +92,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
     private Button mModifyEvent;
     private Button mAcceptModifyEvent;
     private ProgressDialog popupDialogProgress;
+
     /**
      * User View Model
      */
@@ -103,7 +105,6 @@ public class EventDescriptionActivity extends AppCompatActivity {
      * Weather forecast
      */
     private WeatherForecast weatherForecast;
-
 
 
     @Override
@@ -255,16 +256,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
         // show the action buttons depending on the ownership of the event
         setEventActionButtons();
 
-        showMapAndCalendarButtons(retrievedEvent);
+        showMapAndCalendarButtons();
 
-        handleWeatherForecast(retrievedEvent);
+        handleWeatherForecast();
 
-        retrieveAttendeesInfos(retrievedEvent);
+        retrieveAttendeesInformation();
 
 
     }
 
-    private void retrieveAttendeesInfos(final Event retrievedEvent) {
+    /**
+     * Retrieve the attendees' information in order to show them
+     */
+    private void retrieveAttendeesInformation() {
 
         // retrieve attendees and owner
         final List<String> attendeeIDs = new ArrayList<>();
@@ -272,19 +276,19 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
 
         if (NetworkCheker.getInstance().isNetworkAvailable(this)) {
-            if (!retrievedEvent.isPrivateEvent()) { // public event
+            if (!mRetrievedEvent.isPrivateEvent()) { // public event
 
                 // check if the user is the admin of the event
                 if (checkIsCurrentUserAdmin()) {
                     coupleAttendances.add(new Pair<>(this.mUserViewModel.retrieveCachedUser(), Boolean.TRUE));
                 } else {
-                    attendeeIDs.add(retrievedEvent.getAdminID());
+                    attendeeIDs.add(mRetrievedEvent.getAdminID());
 
                 }
 
                 // if there are other attendees, retrieve them
-                if (retrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
-                    attendeeIDs.addAll(retrievedEvent.getAttendingUsers().keySet());
+                if (mRetrievedEvent.getAttendingUsers().size() != 0 || attendeeIDs.size() != 0) {
+                    attendeeIDs.addAll(mRetrievedEvent.getAttendingUsers().keySet());
 
                     this.mEventViewModel.getAttendees(attendeeIDs).subscribe(new FlowableSubscriber<Map<String, User>>() {
                         @Override
@@ -300,13 +304,13 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
                             if (!checkIsCurrentUserAdmin()) {
                                 // add the admin as firs element
-                                coupleAttendances.add(new Pair<>(attendees.get(retrievedEvent.getAdminID()), Boolean.TRUE));
+                                coupleAttendances.add(new Pair<>(attendees.get(mRetrievedEvent.getAdminID()), Boolean.TRUE));
                             }
 
                             // add the other attendees
-                            for (String attendeeID : retrievedEvent.getAttendingUsers().keySet()) {
+                            for (String attendeeID : mRetrievedEvent.getAttendingUsers().keySet()) {
                                 coupleAttendances.add(
-                                        new Pair<>(attendees.get(attendeeID), retrievedEvent.getAttendingUsers().get(attendeeID))
+                                        new Pair<>(attendees.get(attendeeID), mRetrievedEvent.getAttendingUsers().get(attendeeID))
                                 );
                             }
 
@@ -340,27 +344,37 @@ public class EventDescriptionActivity extends AppCompatActivity {
         }
     }
 
-    private void showMapAndCalendarButtons(final Event retrievedEvent) {
+    /**
+     * Set the map and calendar action buttons buttons
+     * ref: https://stackoverflow.com/questions/4430088/get-selected-location-from-google-maps-activity
+     * ref: https://stackoverflow.com/questions/4430088/get-selected-location-from-google-maps-activity
+     */
+    private void showMapAndCalendarButtons() {
         // open maps to the location
         this.mOpenMapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                EventLocation eventLocation = retrievedEvent.getEventLocation();
+                EventLocation eventLocation = mRetrievedEvent.getEventLocation();
 
                 double latitude = eventLocation.getLatitude();
                 double longitude = eventLocation.getLongitude();
 
                 // Create a Uri from an intent string. Use the result to create an Intent.
-                Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude);
+                Uri googleMapsUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude);
 
                 // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, googleMapsUri);
                 // Make the Intent explicit by setting the Google Maps package
-                mapIntent.setPackage("com.google.android.apps.maps");
+                mapIntent.setPackage(getString(R.string.android_map_request_name));
 
                 // Attempt to start an activity that can handle the Intent
-                startActivity(mapIntent);
+                try {
+                    // try to add to gmaps
+                    startActivity(mapIntent);
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(getApplicationContext(), R.string.no_map_application_toast, Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -371,70 +385,82 @@ public class EventDescriptionActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(Intent.ACTION_EDIT);
-                intent.setType("vnd.android.cursor.item/event");
+                intent.setType(getString(R.string.android_map_request_name));
 
-                intent.putExtra(CalendarContract.Events.TITLE, retrievedEvent.getName());
-                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, retrievedEvent.getEventLocation().getName());
-                intent.putExtra(CalendarContract.Events.DESCRIPTION, retrievedEvent.getDescription());
+                intent.putExtra(CalendarContract.Events.TITLE, mRetrievedEvent.getName());
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, mRetrievedEvent.getEventLocation().getName());
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, mRetrievedEvent.getDescription());
 
                 intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                        retrievedEvent.getEventDate());
+                        mRetrievedEvent.getEventDate());
                 intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,
-                        retrievedEvent.getEventDate() + ONE_HOUR_MILLIS); // set for one hour
+                        mRetrievedEvent.getEventDate() + ONE_HOUR_MILLIS); // set for one hour
 
-                startActivity(intent);
+
+                try {
+                    // try to add to calendar
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(getApplicationContext(), R.string.calendar_not_intalled_toast, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void handleWeatherForecast(Event retrievedEvent) {
-        // hide weather forecast
+    /**
+     * Show weather forecast on the screen
+     */
+    private void handleWeatherForecast() {
+
+        // hide weather forecast if you cannot show the content
         this.mWeatherForecast.setVisibility(View.INVISIBLE);
 
-            // retrieve weather if the date is closer than 5 days
-            if ((retrievedEvent.getEventDate() - new Date().getTime()) < FIVE_DAYS_DISTANCE_MILLIS) {
+        // retrieve weather if the date is closer than 5 days
+        if ((mRetrievedEvent.getEventDate() - new Date().getTime()) < FIVE_DAYS_DISTANCE_MILLIS) {
 
-                if (NetworkCheker.getInstance().isNetworkAvailable(this)) {
-                    this.weatherForecast.getForecast(retrievedEvent).subscribe(new FlowableSubscriber<Weather>() {
-                        @Override
-                        public void onSubscribe(Subscription subscription) {
-                            subscription.request(Long.MAX_VALUE);
-                            weatherForecastRetrieve = subscription;
-                        }
+            if (NetworkCheker.getInstance().isNetworkAvailable(this)) {
+                this.weatherForecast.getForecast(mRetrievedEvent).subscribe(new FlowableSubscriber<Weather>() {
+                    @Override
+                    public void onSubscribe(Subscription subscription) {
+                        subscription.request(Long.MAX_VALUE);
+                        weatherForecastRetrieve = subscription;
+                    }
 
-                        @Override
-                        public void onNext(Weather weather) {
+                    @Override
+                    public void onNext(Weather weather) {
 
-                            // retrieve weather icon and set it
-                            int weatherIcon = WeatherIconFactory.getInstance().getWeatherIconByID(weather);
-                            mWeatherForecast.setImageResource(weatherIcon);
+                        // retrieve weather icon and set it
+                        int weatherIcon = WeatherIconFactory.getInstance().getWeatherIconByID(weather);
+                        mWeatherForecast.setImageResource(weatherIcon);
 
-                            // show the icon on screen
-                            mWeatherForecast.setVisibility(View.VISIBLE);
-                        }
+                        // show the icon on screen
+                        mWeatherForecast.setVisibility(View.VISIBLE);
+                    }
 
-                        @Override
-                        public void onError(Throwable throwable) {
+                    @Override
+                    public void onError(Throwable throwable) {
 
-                            Toast.makeText(getApplicationContext(), R.string.weather_error_toast_label, Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getApplicationContext(), R.string.weather_error_toast_label, Toast.LENGTH_LONG).show();
+                    }
 
-                        @Override
-                        public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Sorry, no internet, no forecast", Toast.LENGTH_LONG).show();
-                }
-
-
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.no_internet_no_forecast, Toast.LENGTH_LONG).show();
             }
 
+
+        }
 
 
     }
 
+    /**
+     * Show the action buttons used to join, abandon or edit an event
+     */
     private void setEventActionButtons() {
 
         // join event button
@@ -548,9 +574,12 @@ public class EventDescriptionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Show the attendance status of the retrieved attendees
+     * @param attendances Attendees info
+     */
     private void showAttendaces(List<Pair<User, Boolean>> attendances) {
 
-        // TODO spostare definizione stringhe
         final String ADMIN_LABEL = getString(R.string.admin_label);
         final String CONFIRMED_LABEL = getString(R.string.confirmed_label);
         final String NOT_CONFIRMED_LABEL = getString(R.string.not_confirmed_label);
@@ -606,7 +635,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                showAttendeeConfirmationDialog(view, attendance.first.getFullName(), attendance.first.getId());
+                                showAttendeeConfirmationDialog(view, attendance.first.getId());
                             }
                         });
 
@@ -622,10 +651,15 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Check if the logged user is the admin
+     * @return true if admin
+     */
     private boolean checkIsCurrentUserAdmin() {
 
         boolean isAdmin = false;
 
+        // admin if the event is private or if the user has the same ID of the adminID
         if (mRetrievedEvent.isPrivateEvent() || mRetrievedEvent.getAdminID().equals(this.mUserViewModel.retrieveCachedUser().getId())) {
             isAdmin = true;
         }
@@ -633,14 +667,18 @@ public class EventDescriptionActivity extends AppCompatActivity {
         return isAdmin;
     }
 
-    public void showAttendeeConfirmationDialog(final View attendeeRow, final String userName, final String attendeeID) {
+    /**
+     * Show a popup dialog. The admin can confirm or delete an attendance application
+     * @param attendeeRow Row in the layout attendee list
+     * @param attendeeID Id of the attendee
+     */
+    public void showAttendeeConfirmationDialog(final View attendeeRow, final String attendeeID) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // TODO take the texts from the resources
-        String title = "Action on attendee";
-        String message = "What do you want to do?";
-        String positive = "Confirm";
-        String negative = "Reject";
+        String title = getString(R.string.action_attendee_popup);
+        String message = getString(R.string.admin_attendee_action_request);
+        String positive = getString(R.string.confirm);
+        String negative = getString(R.string.reject);
 
 
         builder.setTitle(title);
@@ -652,8 +690,7 @@ public class EventDescriptionActivity extends AppCompatActivity {
                 //Log.i("confermato", userName);
                 mEventViewModel.confirmAttendee(mRetrievedEvent.getId(), attendeeID);
 
-                // show confirmed TODO stessa cosa del testo
-                ((TextView) attendeeRow.findViewById(R.id.attendee_status_txt)).setText("confirmed");
+                ((TextView) attendeeRow.findViewById(R.id.attendee_status_txt)).setText(R.string.confirmed_label);
                 // remove on click listener for the row
                 attendeeRow.setOnClickListener(null);
             }
@@ -669,14 +706,17 @@ public class EventDescriptionActivity extends AppCompatActivity {
         builder.show();
     }
 
+    /**
+     * Popup used by the user to abandon an event
+     */
     public void showEventAbandonDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // TODO take the texts from the resources
-        String title = "Abandon the event";
-        String message = "Are you sure you want to abandon this event?";
-        String positive = "Yes";
-        String negative = "No";
+        String title = getString(R.string.abandon_action_popup_title);
+        String message = getString(R.string.abandon_popup_text);
+        String positive = getString(R.string.confirm);
+        String negative = getString(R.string.reject);
 
 
         builder.setTitle(title);
@@ -740,6 +780,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Show a popup message if it is impossible to retrieve the requested event
+     */
     private void showRetrieveErrorPopupDialog() {
 
         if (this.popupDialogProgress != null) {
@@ -760,6 +803,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Show a popup message if it is impossible to connect to the internet
+     */
     private void showNoInternetConnectionPopup() {
 
         if (this.popupDialogProgress != null) {
@@ -780,6 +826,9 @@ public class EventDescriptionActivity extends AppCompatActivity {
         alert.show();
     }
 
+    /**
+     * Show a popup message if the user applies for an event, but still requires a confirmation
+     */
     private void showConfirmationNeedPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.need_for_confirmation_popup)

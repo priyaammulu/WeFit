@@ -1,5 +1,6 @@
 package wefit.com.wefit.mainscreen.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -82,15 +83,16 @@ public class EventWallAdapter extends BaseAdapter {
         holder.location.setText(event.getEventLocation().getName());
         holder.monthDay.setText(getMonthDay(new Date(event.getEventDate())));
         holder.time.setText(getTime(new Date(event.getEventDate())));
-        holder.published.setText("Published on: " + getDate(new Date(event.getPublicationDate())));
+
+        String publishedOn = context.getString(R.string.published_on_lagel) + getDate(new Date(event.getPublicationDate()));
+
+        holder.published.setText(publishedOn);
 
         holder.mEventImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(event.getImage()));
         holder.mUserImage.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(event.getAdmin().getPhoto()));
         holder.organizer.setText(event.getAdmin().getFullName());
 
         // if click on pic, show the user
-        // TODO control if it's too small
-
         View.OnClickListener showUserClicked = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +121,7 @@ public class EventWallAdapter extends BaseAdapter {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        String month = new SimpleDateFormat("MMM").format(cal.getTime());
+        @SuppressLint("SimpleDateFormat") String month = new SimpleDateFormat(context.getString(R.string.date_format_pattern)).format(cal.getTime());
         return month.concat(" ").concat(day);
     }
 

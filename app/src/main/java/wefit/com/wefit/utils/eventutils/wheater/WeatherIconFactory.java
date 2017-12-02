@@ -7,7 +7,8 @@ import wefit.com.wefit.R;
 
 /**
  * Created by gioacchino on 24/11/2017.
- * This Factory is responsible to manage access to Weather Icon
+ * This Factory is responsible to manage the access to Weather Icon
+ * SINGLETON OBJECT
  */
 
 public class WeatherIconFactory {
@@ -20,9 +21,11 @@ public class WeatherIconFactory {
         return ourInstance;
     }
 
+    /**
+     * Constructor
+     */
     private WeatherIconFactory() {
 
-        // TODO change the icons
         this.availableWeathers.put(Weather.SUNNY, R.drawable.ic_sunny_weather);
         this.availableWeathers.put(Weather.RAINY, R.drawable.ic_rain);
         this.availableWeathers.put(Weather.SNOWY, R.drawable.ic_snow);
@@ -31,7 +34,9 @@ public class WeatherIconFactory {
     }
 
     /**
-     * Retrieve the weather icon knowing the ID
+     * Retrieve the weather icon, knowing the ID
+     * @param weatherID weather ID
+     * @return resouce ID of the icon
      */
     public int getWeatherIconByID(Weather weatherID) {
         return this.availableWeathers.get(weatherID);

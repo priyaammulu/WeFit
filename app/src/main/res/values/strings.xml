@@ -11,8 +11,6 @@
     <string name="postedby_text">posted by</string>
     <string name="postedby_label" />
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="event_description_label">Event Description</string>
     <string name="no_events_around_label">Sorry, it seems that there are no events around!</string>
     <string name="add_event_suggestion_label">Press + to add one</string>
@@ -29,7 +27,7 @@
     <string name="landmark_icon_descr">Landmark icon</string>
     <string name="loading_popup_message_spinner">Loading. Please wait…</string>
     <string name="error_message_download_resources">Something went wrong while retrieving the data! Sorry…</string>
-    <string name="ok_button">Ok</string>
+    <string name="ok_button">OK</string>
     <string name="weather_error_toast_label">Ouch, no weather infos available</string>
     <string name="accept_edit_label_btn">Accept edit</string>
     <string name="description_type_modify_hint">Type a description here!</string>
@@ -61,7 +59,6 @@
     <string name="bio_forgot_toast">Hey, you forgot your bio!</string>
     <string name="location_permission_notallowed_toast">Hey, we respect your privacy. We selected Dublin as your location.</string>
     <string name="no_internet_popup_label">No internet connection!</string>
-    <string name="admin_label">admin</string>
     <string name="confirmed_label">confirmed</string>
     <string name="not_confirmed_label">NOT confirmed</string>
     <string name="recconnecting_request">No internet connection. Once reconnected it could take a while to recontact the server</string>
@@ -73,5 +70,30 @@
     <string name="contact_email_object">A WeFit user want to contact you</string>
     <string name="email_content_type">text/plain</string>
     <string name="need_for_confirmation_popup">Remember that the publisher has to confirm you. Be patient!</string>
+    <string name="wefit_logo">WeFit Logo</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="facebook_cancel_string">Please, don\'t be shy</string>
+    <string name="facebook_login_error_string">Ops, facebook is nuts</string>
+    <string name="google_login_error_popup">Gosh, something went wrong!</string>
+    <string name="login_firebase_error">Gosh, the WeFit server seems to have an issue!</string>
+    <string name="email_not_confirmed_popup">Hey, email not confirmed!</string>
+    <string name="loading_text">Loading. Please wait…</string>
+    <string name="message_mail_user">Hi %1$s, I\'m %1$s from WeFit</string>
+    <string name="mail_uri_protocol">mailto:</string>
+    <string name="android_map_request_name">com.google.android.apps.maps</string>
+    <string name="calendar_request_name">vnd.android.cursor.item/event</string>
+    <string name="calendar_not_intalled_toast">There is no calendar in the system</string>
+    <string name="no_map_application_toast">There is no map application</string>
+    <string name="no_internet_no_forecast">Sorry, no internet, no forecast</string>
+    <string name="action_attendee_popup">Action on attendee</string>
+    <string name="admin_attendee_action_request">What do you want to do?</string>
+    <string name="reject">Reject</string>
+    <string name="abandon_action_popup_title">Abandon the event</string>
+    <string name="abandon_popup_text">Are you sure you want to abandon this event?</string>
+    <string name="private_event_list_label">private</string>
+    <string name="admin_label">admin</string>
+    <string name="date_format_pattern">MMM</string>
+    <string name="published_on_lagel">Published on:</string>
 
 </resources>

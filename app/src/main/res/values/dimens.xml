@@ -10,4 +10,5 @@
     <dimen name="backbutton_margin_left">20dp</dimen>
     <dimen name="topbar_button_margin_right">20dp</dimen>
     <dimen name="topbar_height">60dp</dimen>
+    <dimen name="button_login_width">250dp</dimen>
 </resources>

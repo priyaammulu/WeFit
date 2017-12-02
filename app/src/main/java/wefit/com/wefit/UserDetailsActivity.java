@@ -1,5 +1,6 @@
 package wefit.com.wefit;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -26,10 +27,22 @@ import wefit.com.wefit.utils.calendar.CalendarFormatter;
 import wefit.com.wefit.utils.image.ImageBase64Marshaller;
 import wefit.com.wefit.viewmodels.UserViewModel;
 
+/**
+ * Created by Gioacchino Castorio.
+ * This activity shows the PUBLIC information (detail) of a selected user.
+ * It allows the user to contact him/her by Email
+ * (it is not possible if the selected user is the logged one)
+ */
 public class UserDetailsActivity extends AppCompatActivity {
 
+    /**
+     * Reference to the underlying infrastructure
+     */
     private UserViewModel mUserViewModel;
 
+    /**
+     * Reference to the retrieved user
+     */
     private User mRetrievedUser;
 
     /**
@@ -45,6 +58,9 @@ public class UserDetailsActivity extends AppCompatActivity {
     private TextView mBirthDate;
     private TextView mUserBio;
 
+    /**
+     * It simply is the ref to the popup spinner
+     */
     private ProgressDialog popupDialogProgress;
 
 
@@ -56,8 +72,10 @@ public class UserDetailsActivity extends AppCompatActivity {
         // it will be shown until the event is fully loaded
         this.popupDialogProgress = ProgressDialog.show(this, null, getString(R.string.loading_popup_message_spinner), true);
 
+        // retrieve the user viewmodel
         this.mUserViewModel = ((WefitApplication) getApplication()).getUserViewModel();
 
+        // retrieve the user's ID from the passed info
         Intent receivedIntent = this.getIntent();
         String userID = receivedIntent.getStringExtra(ExtrasLabels.USER_ID);
 
@@ -67,6 +85,8 @@ public class UserDetailsActivity extends AppCompatActivity {
             mUserViewModel.retrieveUserByID(userID).subscribe(new FlowableSubscriber<User>() {
                 @Override
                 public void onSubscribe(Subscription subscription) {
+
+                    // save the observer registration, in order to dismiss it if there are problems
                     subscription.request(1L);
                     retrieveUserSubscription = subscription;
                 }
@@ -77,6 +97,8 @@ public class UserDetailsActivity extends AppCompatActivity {
                     // memorize the retrieved user
                     mRetrievedUser = user;
 
+                    // show the layout content
+                    // this is a deferred operation in order to download the information first
                     setupLayout();
                 }
 
@@ -99,6 +121,10 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Show the layout on the activity
+     * This is a deferred operation in order to download the information first
+     */
     private void setupLayout() {
 
         stopSpinner();
@@ -107,6 +133,9 @@ public class UserDetailsActivity extends AppCompatActivity {
         fillActivity(); // add user infos
     }
 
+    /**
+     * Bind each layout component to its own ref
+     */
     private void bindActivityComponents() {
 
         mUserPic = (ImageView) findViewById(R.id.retrieved_profile_user_pic);
@@ -114,15 +143,8 @@ public class UserDetailsActivity extends AppCompatActivity {
         mBirthDate = (TextView) findViewById(R.id.retrieved_birth_date);
         mUserBio = (TextView) findViewById(R.id.retrieved_user_bio);
 
-        ImageView mContactButton = (ImageView) findViewById(R.id.user_contact_button);
-
-        if (mRetrievedUser.getId().equals(mUserViewModel.retrieveCachedUser().getId())) {
-            // the user cannot contact himself
-            mContactButton.setVisibility(View.GONE);
-        }
-
+        // back-button on topbar
         ImageView mBackbutton = (ImageView) findViewById(R.id.user_details_backbutton);
-
         mBackbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,29 +152,44 @@ public class UserDetailsActivity extends AppCompatActivity {
             }
         });
 
+
+        // contact button on top-bar
+        ImageView mContactButton = (ImageView) findViewById(R.id.user_contact_button);
+        if (mRetrievedUser.getId().equals(mUserViewModel.retrieveCachedUser().getId())) {
+            // the user cannot contact himself
+            mContactButton.setVisibility(View.GONE);
+        }
         mContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // send an email to the user
-                String[] TO = {mRetrievedUser.getEmail()};
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
 
-                emailIntent.setData(Uri.parse("mailto:"));
+                // send an email to the user
+                String[] TO = {mRetrievedUser.getEmail()};
+
+                // create an email intent specifying the header
+                // unfortunately it is not possible to specify the sender
+                emailIntent.setData(Uri.parse(getString(R.string.mail_uri_protocol)));
                 emailIntent.setType(getString(R.string.email_content_type));
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_email_object) );
 
-                // TOO not possible to extract
-                String mailBody = "Hi %s, I'm %s from WeFit";
 
-                String filledMailBody = String.format(Locale.ENGLISH, mailBody,
+                @SuppressLint("StringFormatMatches")
+                /* This is a false warning, because the string has been manually formatted
+                * This was necessary because we have to move the definition of the message in the "strings" file
+                */
+                String filledMailBody = String.format(
+                        Locale.ENGLISH,
+                        getString(R.string.message_mail_user),
                         mRetrievedUser.getFullName(),
                         mUserViewModel.retrieveCachedUser().getFullName());
 
                 emailIntent.putExtra(Intent.EXTRA_TEXT, filledMailBody);
 
                 try {
+                    // try to open an email client
                     startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email_picker_title)));
                 } catch (ActivityNotFoundException ex) {
                     Toast.makeText(getApplicationContext(), R.string.toat_email_user_agent_not_installed, Toast.LENGTH_SHORT).show();
@@ -163,6 +200,9 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Fill the activity with the user's retrieved info
+     */
     private void fillActivity() {
 
         mUserPic.setImageBitmap(ImageBase64Marshaller.decodeBase64BitmapString(mRetrievedUser.getPhoto()));
@@ -172,6 +212,9 @@ public class UserDetailsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Show it if it's impossible to retrieve the user
+     */
     private void showRetrieveErrorPopupDialog() {
 
         this.popupDialogProgress.dismiss();
@@ -199,12 +242,18 @@ public class UserDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Stop the loading spinner
+     */
     private void stopSpinner() {
         if (popupDialogProgress != null)
             popupDialogProgress.dismiss();
         popupDialogProgress = null;
     }
 
+    /**
+     * Show it if there's no internet connection
+     */
     private void showNoInternetConnectionPopup() {
 
         stopSpinner();

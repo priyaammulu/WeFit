@@ -13,6 +13,8 @@ import wefit.com.wefit.utils.persistence.LocalUserDao;
 
 /**
  * Created by gioacchino on 14/11/2017.
+ * SQLite implementation of the logged user cache
+ * OVERRIDDEN METHOD COMMENTS in the interface
  */
 
 public class LocalUserDaoImpl implements LocalUserDao {
@@ -28,7 +30,6 @@ public class LocalUserDaoImpl implements LocalUserDao {
     private static final String ID_FIELD = "id";
     private static final String NAME_FIELD = "name";
     private static final String CONTACT_FIELD = "contact";
-    private static final String GENDER_FIELD = "gender";
     private static final String IMAGE_FIELD = "image";
     private static final String BIO_FIELD = "bio";
     private static final String BIRTH_FIELD = "birthdate";

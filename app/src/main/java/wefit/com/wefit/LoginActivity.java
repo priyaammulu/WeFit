@@ -39,11 +39,20 @@ import wefit.com.wefit.pojo.User;
 import wefit.com.wefit.utils.NetworkCheker;
 import wefit.com.wefit.viewmodels.UserViewModel;
 /**
- * Created by lorenzo on 10/28/17.
- * This activity handles login
+ * Created by Lorenzo Camaione on 10/28/17. Edited by Gioacchino Castorio
+ * This activity Handles the login procedure. As this uses proprietary interfaces (Google and Facebook)
+ * this code was created using the following documentation
+ *
+ * https://developers.facebook.com/docs/facebook-login/android/
+ * https://firebase.google.com/docs/auth/android/google-signin
+ * https://firebase.google.com/docs/auth/android/facebook-login
+ * https://stackoverflow.com/questions/35783053/show-account-chooser-every-time-with-googlesigninapi
  */
 public class LoginActivity extends AppCompatActivity {
 
+    /**
+     * Code for the Google auth login response
+     */
     private static final int GOOGLE_REQ_LOGIN_CODE = 1;
 
     /**
@@ -76,6 +85,9 @@ public class LoginActivity extends AppCompatActivity {
      */
     private FirebaseAuth mAuth;
 
+    /**
+     * It simply is the ref to the popup spinner
+     */
     private ProgressDialog popupDialogProgress;
 
 
@@ -103,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
         setupFacebookLogin();
 
 
+        // show layout
         setContentView(R.layout.activity_login);
 
 
@@ -164,6 +177,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                // sign out to be sure that there are not cached data
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+
+                // check if the network is available
                 if (NetworkCheker.getInstance().isNetworkAvailable(getApplicationContext())) {
                     Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                     startActivityForResult(signInIntent, GOOGLE_REQ_LOGIN_CODE);
@@ -239,16 +256,14 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onCancel() {
-            // TODO mettere in inglese!
             stopSpinner();
-            Toast.makeText(getApplicationContext(), "User, don't be shy", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.facebook_cancel_string, Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onError(FacebookException error) {
-            // TODO english
             stopSpinner();
-            Toast.makeText(getApplicationContext(), "Ops, facebook is nuts", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.facebook_login_error_string, Toast.LENGTH_LONG).show();
         }
 
     }
@@ -265,9 +280,8 @@ public class LoginActivity extends AppCompatActivity {
             handleGoogleAccessTokenForFirebase(result.getSignInAccount());
 
         } else { // error handling
-            // TODO mettere in inglese!
             stopSpinner();
-            Toast.makeText(this, "Ops, qualcosa è andato storto", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.google_login_error_popup, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -317,7 +331,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             stopSpinner();
-                            Toast.makeText(getApplicationContext(), "Ops, server problems during login", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.login_firebase_error, Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -326,8 +340,8 @@ public class LoginActivity extends AppCompatActivity {
 
 
     /**
-     * Launch the Main activity
-     * Use after the login
+     * This allows to go to the main activity.
+     * Use it after the login process
      */
     private void startMainActivity() {
 
@@ -337,24 +351,32 @@ public class LoginActivity extends AppCompatActivity {
         if (this.loginViewModel.isAuth()) {
             startActivity(new Intent(this, MainActivity.class));
         } else {
-            // TODO mettere in inglese!
-            Toast.makeText(this, "Hey, email not confirmed!", Toast.LENGTH_LONG).show();
+            // this may not happen, because the provided users are confirmed
+            Toast.makeText(this, R.string.email_not_confirmed_popup, Toast.LENGTH_LONG).show();
         }
 
     }
 
+    /**
+     * Show a waiting spinner on the screen
+     */
     private void showWaitSpinner() {
-        // tODO text from repo
         popupDialogProgress = ProgressDialog.show(this, "",
-                "Loading. Please wait...", true);
+                getString(R.string.loading_text), true);
     }
 
+    /**
+     * Stop the spinner
+     */
     private void stopSpinner() {
         if (popupDialogProgress != null)
             popupDialogProgress.dismiss();
         popupDialogProgress = null;
     }
 
+    /**
+     * If there is no internet connection show this
+     */
     private void showNoInternetConnectionToast() {
 
         stopSpinner();

@@ -27,17 +27,28 @@ import wefit.com.wefit.utils.persistence.RemoteEventDao;
 
 /**
  * Created by gioacchino on 22/11/2017.
+ * Firebase implementation of the event DAO
+ * OVERRIDDEN METHOD COMMENTS in the interface
  */
 
 public class FirebaseEventDao implements RemoteEventDao {
 
 
-    public static final String DESCRIPTION_FIELD = "description";
+    /**
+     * Description field in the event store
+     */
+    private static final String DESCRIPTION_FIELD = "description";
+
     /**
      * Holds the ref to the data store
      */
     private DatabaseReference mEventStorage;
 
+    /**
+     * Constructor
+     * @param firebaseDatabase reference to the firebase server
+     * @param eventStoreName name of the event document in firebase
+     */
     public FirebaseEventDao(FirebaseDatabase firebaseDatabase, String eventStoreName) {
 
         // access to the remote user store
@@ -205,14 +216,30 @@ public class FirebaseEventDao implements RemoteEventDao {
         this.mEventStorage.child(eventID).child("attendingUsers").child(userID).removeValue();
     }
 
+    /**
+     * This inner class is used as callback function in order to handle the retrieved events
+     */
     private class LoadEventsAsync implements FlowableOnSubscribe<List<Event>> {
 
+        /**
+         * Number of requested results
+         */
         private int mNumberResults = 0;
+
+        /**
+         * Value of the anchor
+         * This is an offset from the document start
+         */
         private int mAnchor;
 
-        LoadEventsAsync(int numResults, int anchorID) {
+        /**
+         * Creation of the data retrieve callback
+         * @param numResults number of requested results
+         * @param anchor pagination anchor
+         */
+        LoadEventsAsync(int numResults, int anchor) {
             this.mNumberResults = numResults;
-            this.mAnchor = anchorID;
+            this.mAnchor = anchor;
         }
 
         @Override
@@ -221,7 +248,7 @@ public class FirebaseEventDao implements RemoteEventDao {
             mEventStorage.orderByKey();
 
             if (mAnchor != 0) {
-                mEventStorage.limitToFirst(mAnchor); // TODO rivedere perché non funziona
+                mEventStorage.limitToFirst(mAnchor);
             } else {
                 mEventStorage.limitToFirst(mNumberResults);
             }

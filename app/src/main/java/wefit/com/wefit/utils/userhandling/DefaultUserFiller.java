@@ -7,6 +7,9 @@ import wefit.com.wefit.pojo.User;
 
 /**
  * Created by gioacchino on 26/11/2017.
+ * Utility class used to fill the default info of a just-registered user.
+ * This was necessary as the team did not exploited the advanced features of Firebase
+ * SINGLETON CLASS
  */
 
 public class DefaultUserFiller {
@@ -21,10 +24,19 @@ public class DefaultUserFiller {
     private DefaultUserFiller() {
     }
 
-    public void setSysContext(Context sysContext) {
-        this.sysContext = sysContext;
+    /**
+     * Set the system context to access all the required services
+     * @param applicationContext System context
+     */
+    public void init(Context applicationContext) {
+        this.sysContext = applicationContext;
     }
 
+    /**
+     * Filled the user with the default info
+     * @param newUser empty user
+     * @return filled user
+     */
     public User fillNewUserWithDefaultValues(User newUser) {
         
         String defaultImage = sysContext.getString(R.string.user_default_image);

@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         bindLayoutComponents();
         setFragments();
     }
+
     /**
      * It binds UI layout to properties
      */
@@ -143,7 +144,11 @@ public class MainActivity extends AppCompatActivity implements FragmentsInteract
         stack.push(mainFragment);
     }
 
-    // ref: https://stackoverflow.com/questions/16461483/preserving-fragment-state
+    /**
+     * Change fragment
+     * ref: https://stackoverflow.com/questions/16461483/preserving-fragment-state
+     * @param fragment current fragment
+     */
     public void fragmentTransaction(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()

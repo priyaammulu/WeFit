@@ -14,18 +14,21 @@ import wefit.com.wefit.utils.userhandling.DefaultUserFiller;
 
 /**
  * Created by gioacchino on 14/11/2017.
+ * Auth2.0 Firebase implementation (using Facebook and Google)
+ * OVERRIDDEN METHOD COMMENTS in the interface.
  */
 
 public class Auth20FirebaseHandlerImpl implements Auth20Handler {
 
+    /**
+     * Firebase auth service
+     */
     private FirebaseAuth mFirebaseAuth;
-    private RemoteUserDao mUserDao;
 
-    @Override
-    public void signIn() {
-        // nothing, managed by the view
-        // TODO maybe we should modify this
-    }
+    /**
+     * Firebase DAO
+     */
+    private RemoteUserDao mUserDao;
 
     @Override
     public boolean isAuth() {
@@ -56,7 +59,7 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
                         // if the user is new
                         if (loggedUser.getId() == null) {
 
-                            // TODO assign it default values
+                            // send a confirmation mail to the newly registered users
                             firebaseUser.sendEmailVerification();
 
                             loggedUser.setId(firebaseUser.getUid());
@@ -78,18 +81,29 @@ public class Auth20FirebaseHandlerImpl implements Auth20Handler {
         }, BackpressureStrategy.BUFFER);
     }
 
-    public Auth20FirebaseHandlerImpl(FirebaseAuth mFirebaseAuth, RemoteUserDao mUserDao) {
-        this.mFirebaseAuth = mFirebaseAuth;
-        this.mUserDao = mUserDao;
+    /**
+     * Constructor
+     * @param firebase Ref to firebase
+     * @param userDao User DAO
+     */
+    public Auth20FirebaseHandlerImpl(FirebaseAuth firebase, RemoteUserDao userDao) {
+        this.mFirebaseAuth = firebase;
+        this.mUserDao = userDao;
     }
 
+
+    /**
+     * Get the contact of the user
+     * @return user email or telephone
+     */
     private String getContact() {
 
         FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
 
         // the user is logged with an email or a phone number
-        String contact = firebaseUser.getEmail();
+        String contact = firebaseUser != null ? firebaseUser.getEmail() : null;
         if (contact == null) {
+            assert firebaseUser != null;
             contact = firebaseUser.getPhoneNumber();
         }
 

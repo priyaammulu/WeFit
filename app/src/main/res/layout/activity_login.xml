@@ -5,36 +5,38 @@
     android:background="@color/white"
     android:theme="@style/AppTheme.NoActionBar">
 
-    <ImageView
-        android:id="@+id/logoSVG"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginBottom="170dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="70dp"
-        android:layout_marginTop="30dp"
-        android:src="@drawable/ic_launcher" />
-
+        <ImageView
+            android:id="@+id/logoSVG"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginBottom="170dp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginTop="30dp"
+            android:src="@drawable/ic_launcher"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/wefit_logo" />
 
 
     <Button
         android:id="@+id/facebook_login_btn"
-        android:layout_width="250dp"
+        android:layout_width="@dimen/button_login_width"
         android:layout_height="wrap_content"
         android:layout_above="@+id/google_login_btn"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
         android:background="@drawable/my_facebook_button"
         android:drawableLeft="@drawable/ic_facebook"
+        android:drawableStart="@drawable/ic_facebook"
         android:padding="15dp"
-        android:text="   login with facebook  "
+        android:text="@string/login_with_facebook"
         android:textAllCaps="false"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 
     <Button
         android:id="@+id/google_login_btn"
-        android:layout_width="250dp"
+        android:layout_width="@dimen/button_login_width"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -42,9 +44,10 @@
         android:background="@drawable/my_google_button"
         android:drawableLeft="@drawable/ic_google"
         android:padding="15dp"
-        android:text="  login with google  "
+        android:text="@string/login_with_google"
         android:textAllCaps="false"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:drawableStart="@drawable/ic_google" />
 
 
 </RelativeLayout>

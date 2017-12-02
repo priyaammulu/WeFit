@@ -9,9 +9,10 @@ import java.util.Map;
 
 /**
  * Created by lorenzo on 11/3/17.
+ * Event Pojo, nothing more than that
  */
 
-public class Event implements Comparable<Event>{
+public class Event implements Comparable<Event> {
 
     private String id;
 
@@ -54,11 +55,13 @@ public class Event implements Comparable<Event>{
     public Event() {
     }
 
-    @Exclude public boolean isPrivateEvent() {
+    @Exclude
+    public boolean isPrivateEvent() {
         return privateEvent;
     }
 
-    @Exclude public void setPrivateEvent(boolean privateEvent) {
+    @Exclude
+    public void setPrivateEvent(boolean privateEvent) {
         this.privateEvent = privateEvent;
     }
 
@@ -134,11 +137,13 @@ public class Event implements Comparable<Event>{
         this.image = image;
     }
 
-    @Exclude public User getAdmin() {
+    @Exclude
+    public User getAdmin() {
         return admin;
     }
 
-    @Exclude public void setAdmin(User admin) {
+    @Exclude
+    public void setAdmin(User admin) {
         this.admin = admin;
     }
 

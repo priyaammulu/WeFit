@@ -23,10 +23,15 @@ import wefit.com.wefit.utils.persistence.RemoteUserDao;
 
 /**
  * Created by gioacchino on 13/11/2017.
+ * Firebase implementation of the user DAO
+ * OVERRIDDEN METHOD COMMENTS in the interface.
  */
 
 public class FirebaseUserDao implements RemoteUserDao {
 
+    /**
+     * Reference to Firebase
+     */
     private DatabaseReference mUserStorage;
 
     @Override
@@ -84,6 +89,11 @@ public class FirebaseUserDao implements RemoteUserDao {
 
     }
 
+    /**
+     * Constructor
+     * @param firebaseDatabase reference to the firebase server
+     * @param userStoreName name of the user document in firebase
+     */
     public FirebaseUserDao(FirebaseDatabase firebaseDatabase, String userStoreName) {
 
         // access to the remote user store
@@ -91,6 +101,9 @@ public class FirebaseUserDao implements RemoteUserDao {
 
     }
 
+    /**
+     * This inner class is used as callback function in order to handle the retrieved user
+     */
     private class UserLoaderProvider implements FlowableOnSubscribe<User> {
 
         private String userID;
@@ -129,7 +142,11 @@ public class FirebaseUserDao implements RemoteUserDao {
 
         }
 
-        public UserLoaderProvider(String userID) {
+        /**
+         * Creation of the user retrieve callback
+         * @param userID ID of the user to retrieve
+         */
+        UserLoaderProvider(String userID) {
             this.userID = userID;
         }
     }

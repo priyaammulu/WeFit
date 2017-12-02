@@ -8,7 +8,8 @@ import java.util.Locale;
 
 /**
  * Created by gioacchino on 27/11/2017.
- * This helper class formats Calendar instances
+ * This helper class formats Calendar instances.
+ * STATIC CLASS
  */
 
 public class CalendarFormatter {
@@ -20,7 +21,9 @@ public class CalendarFormatter {
 
     /**
      * It formats a Date in order to retrieve a String containing the month and the day
+     *
      * @param dateMillis the date to format
+     * @return Formatted time string
      */
     public static String getMonthDay(long dateMillis) {
         Calendar cal = Calendar.getInstance();
@@ -29,16 +32,22 @@ public class CalendarFormatter {
         String month = new SimpleDateFormat(MONTH_DATE_FORMAT, DATE_LOCALE).format(cal.getTime());
         return month.concat(" ").concat(day);
     }
+
     /**
      * It formats a Date in order to retrieve a String containing the date in English format
+     *
      * @param dateMillis the date to format
+     * @return Formatted time string
      */
     public static String getDate(long dateMillis) {
         return SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG, DATE_LOCALE).format(new Date(dateMillis));
     }
+
     /**
      * It formats a Date in order to retrieve a String containing the time expressed in hours and minutes
+     *
      * @param dateMillis the date to format
+     * @return Formatted time string
      */
     public static String getTime(long dateMillis) {
         return DateFormat.getTimeInstance(DateFormat.SHORT, DATE_LOCALE).format(new Date(dateMillis));
